@@ -1,4 +1,4 @@
-from django.http import HttpResponse
+from django.shortcuts import render
 
 def index(request):
-    return HttpResponse("You have reached the homepage of the CUCC")
+    return render(request, 'StaticPages/index.html')
