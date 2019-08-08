@@ -16,6 +16,7 @@ urlpatterns = [
 	# Gear Section
 
 	# Meets Section
+	path('Meets/Calendar/', views.MeetsCalendar, name='MeetsCalendar'),
 
 	# Get Involved Section
 

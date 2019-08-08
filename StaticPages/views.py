@@ -22,5 +22,7 @@ def AboutConstitutionSafety(request):
 # Gear Section
 
 # Meets Section
+def MeetsCalendar(request):
+    return render(request, 'StaticPages/Meets/Calendar.html')
 
 # Get Involved Section
