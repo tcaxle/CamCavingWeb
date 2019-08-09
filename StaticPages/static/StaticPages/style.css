@@ -21,6 +21,8 @@
 .w3-hover-text-theme:hover {color:#578ca9 !important}
 .w3-hover-border-theme:hover {border-color:#578ca9 !important}
 
+body {background-color: #2b4654;}
+
 hr {
   display: block;
   margin-top: 0.5em;
