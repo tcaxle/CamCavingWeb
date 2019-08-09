@@ -23,6 +23,8 @@
 
 body {background-color: #2b4654;}
 
+p {text-align: justify;}
+
 hr {
   display: block;
   margin-top: 0.5em;
