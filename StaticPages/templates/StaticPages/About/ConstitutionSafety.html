@@ -1,4 +1,5 @@
 {% extends 'StaticPages/base.html' %}
+{% load static %}
 
 {% block title %}
   <title>CUCC | About | Contitution & Safety</title>
@@ -30,7 +31,7 @@
   <p>CUCC has an excellent safety record, due largely to the great base of experience within the Club's older members which is passed down each year.</p>
   <p>Great care is taken to fully train new cavers, use safe practices underground and to regularly inspect and maintain safety-critical equipment.</p>
   <p>The following formal documents relate to CUCC's safety policy and associated procedures.</p>
-  <div class="w3-panel w3-red">
-    <p>PLACEHOLDER: Policy Documents (past & present)</p>
-  </div>
+  <ul>
+    <li><a href="{% static 'StaticPages/docs/Constitution2019.pdf' %}">Constitution (2019) (pdf)</a></li>
+  </ul>
 {% endblock %}

@@ -1,4 +1,5 @@
 {% extends 'StaticPages/base.html' %}
+{% load static %}
 
 {% block title %}
   <title>CUCC | About | Meets: Format & Cost</title>
@@ -115,9 +116,7 @@
 
 {% block side-content %}
   <h2>Checklists for Caving Meets</h2>
-  <div class="w3-panel w3-red">
-    <p>PLACEHOLDER: Link to Checklists and Fresher's Guide Docs/Pages</p>
-  </div>
+  <p>Please read our <a href="{% static 'StaticPages/docs/GuideForNoviceCavers.pdf' %}">Guide for Novice Cavers (pdf)</a> for a list of what to bring with you on caving weekends.</p>
 
   <h2>FAQ</h2>
   <ul>
