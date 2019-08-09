@@ -1,156 +1,59 @@
-<!DOCTYPE html>
-<html lang="en">
-<title>CUCC | Home</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<!-- W3.CSS Import -->
+{% extends 'StaticPages/base.html' %}
 {% load static %}
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" type="text/css" href="{% static 'StaticPages/style.css' %}">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
-<style>
-html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
-.w3-sidebar {
-  z-index: 3;
-  width: 250px;
-  top: 43px;
-  bottom: 0;
-  height: inherit;
-}
-</style>
+{% block title %}
+  <title>CUCC | Home</title>
+{% endblock %}
 
-<body>
-
-<!-- Navbar -->
-<div class="w3-bar w3-theme-dark 2w3-left-align w3-large">
-  <a href="#" class="w3-bar-item w3-button w3-theme-d4 w3-hover-black">CUCC</a>
-  <div class="w3-dropdown-hover">
-    <button class="w3-button w3-hover-black">About</button>
-    <div class="w3-dropdown-content w3-bar-block">
-      <a href="{% url 'AboutMeetsFormatCost' %}" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">Meets: Format & Costs</a>
-      <a href="{% url 'AboutTackleStore' %}" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">The Tackle Store</a>
-      <a href="{% url 'AboutLibrary' %}" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">The Caving Library</a>
-      <a href="{% url 'AboutConstitutionSafety' %}" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">Constituion & Safety Policy</a>
-    </div>
-  </div>
-  <div class="w3-dropdown-hover">
-    <button class="w3-button w3-hover-black">Meets</button>
-    <div class="w3-dropdown-content w3-bar-block">
-      <a href="{% url 'MeetsCalendar' %}" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">Calendar & Upcoming Meets</a>
-      <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">Caving Meets</a>
-      <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">Social Meets</a>
-      <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">Training Meets</a>
-      <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">Trip Logs & Photos</a>
-    </div>
-  </div>
-  <div class="w3-dropdown-hover">
-    <button class="w3-button w3-hover-black">Gear</button>
-    <div class="w3-dropdown-content w3-bar-block">
-      <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">Hiring Gear</a>
-      <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">Personal Gear</a>
-    </div>
-  </div>
-  <div class="w3-dropdown-hover">
-    <button class="w3-button w3-hover-black">Contact</button>
-    <div class="w3-dropdown-content w3-bar-block">
-      <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">Mailing Lists</a>
-      <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">The Committee</a>
-      <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">Contact Details</a>
-    </div>
-  </div>
-  <div class="w3-dropdown-hover">
-    <button class="w3-button w3-hover-black">Get Involved!</button>
-    <div class="w3-dropdown-content w3-bar-block">
-      <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">How to Join</a>
-      <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">Mailing Lists</a>
-      <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">Pub Meets</a>
-      <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">Freshers' Zone</a>
-    </div>
-  </div>
-  <a href="#" class="w3-bar-item w3-button w3-hover-black w3-right w3-hover-black">Sign Up</a>
-  <a href="#" class="w3-bar-item w3-button w3-hover-black w3-right w3-hover-black">Log In</a>
-</div>
-
-<!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
-<div class="w3-main w3-theme-dark">
-
-  <div class="w3-row">
-    <div class="w3-third w3-container w3-theme-d4">
-      <h1>Local Links</h1>
-      <p>In the first section of the first column, we put local links to useful areas.</p>
-      <h2>Actions</h2>
-      <p>In the second section of the first column is put page-specific <button class="w3-button w3-theme-dark w3-hover-black">Actions</button> (if there are any).</p>
-
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-    </div>
-    <div class="w3-twothird w3-container w3-white">
-      <h1>Website Layout Format</h1>
-      <p>This website uses a one-thid:two-third ratio adaptive format for the main text.</p>
-      <h2>Main Content</h2>
-      <p>The main content for each page goes in this space.</p>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-      <h2>Heading 2</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-      <h2>Heading 2</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-      <h2>Heading 2</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-      <h2>Heading 2</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-    </div>
+{% block main-content %}
+  <h1>Cambridge University Caving Club</h1>
+  <p>For more than 70 years, the CUCC have been introducing people to the underworld. Some have never visited a cave and most want to experience something wholly new. The challenge and sense of adventure posed by caving are varied. In rough order of difficulty, challenges include: scrambling, free climbing, climbing ladders, moving vertically on ropes using SRT, and overcoming vertical re-belays, deviation and knots.</p>
+  <p>Once you feel competent with it (which takes very different periods for each person) the following further challenges await: helping a leader to derig, rigging already bolted pitches, navigating your way using surveys, surveying newly discovered cave by using measuring instruments and computer software, bolting both by hand and with drills, and leading groups.</p>
+  <p>The CUCC organises caving trips every other weekend during Full Term time, so there is plenty of choice for you to try. Longer trips take place during the rest of the year. A one week trip is organised in Easter to somewhere in Europe, usually to Ardeche in France, and an expedition happens every Summer to explore new caves in Austria (<a href="http://expo.survex.com/">http://expo.survex.com</a>). These longer trips take place in great environments, so there is plenty of choice for other outdoor activities as well, such as cycling, hiking, and climbing.</p>
+  <p>In addition to physical fitness and vertical progression techniques, caving can help you develop your endurance, focus, team working, decision capacity, planning and organising, pacing yourself, orientation, identifying and minimising risks, etc. And once you get experience moving up, down and through caves, you could seek for a whole new range of activities to keep excitement up: exploration and topography, photography, rescue techniques, bio & geospeleology, speleo-anthropology... so it's not just about getting muddy!</p>
+  <p>And CUCC is not just about caving: while in Cambridge there are plenty of activities and socials which are regularly announced on the mailing list and Facebook Page, including pub meets, training sessions, curry nights, talks, other outdoor activities.</p>
+  <p>In any case, the website offers a whole range of information including:</p>
+  <ul>
+    <li>Calendar of when/where caving meets & social events are happening</li>
+    <li>Details on caving trips / gear / cost etc.</li>
+    <li>As well as lots of photos to get you excited</li>
+  </ul>
+  <div class="w3-panel w3-red">
+    <p>PLACEHOLDER: Links to Above Items Needed</p>
   </div>
 
+  <h1>Featured Items</h1>
+  <p>Here will go blog objects with the "featured" tag.</p>
+  <p>These may be trip reports, photos, upcoming events, or articles.</p>
 
-  <!-- Pagination
-  <div class="w3-center w3-padding-32">
-    <div class="w3-bar">
-      <a class="w3-button w3-black" href="#">1</a>
-      <a class="w3-button w3-hover-black" href="#">2</a>
-      <a class="w3-button w3-hover-black" href="#">3</a>
-      <a class="w3-button w3-hover-black" href="#">4</a>
-      <a class="w3-button w3-hover-black" href="#">5</a>
-      <a class="w3-button w3-hover-black" href="#">»</a>
-    </div>
+  <h2>Item 1</h2>
+  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+
+  <h2>Item 2</h2>
+  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+
+  <h2>Item 3</h2>
+  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+{% endblock %}
+
+{% block side-content %}
+  <p></p>
+  <div class="w3-card">
+    <img src="{% static "StaticPages/images/CoverPhoto.jpg" %}" class="w3-image" alt="Photo by Mark Shinwell">
   </div>
--->
 
-  <footer id="myFooter">
-    <div class="w3-container w3-theme-d4 w3-padding-32 w3-center">
-      <h4>Cambridge University Caving Club</h4>
-    </div>
+  <h2>About</h2>
+  <p>You have reached the homepage of the <b>Cambridge University Caving Club (CUCC).</b> Please feel free to browse the site to find out more about who we are.</p>
 
-  </footer>
+  <h2>History</h2>
+  <p>The CUCC was founded in 1949 as an undergraduate club. Since then, it has grown to include people of all walks of life.</p>
+  <blockquote class="w3-panel w3-leftbar w3-theme-l4 w3-card">
+   <p>
+   <i>"The membership of the Club shall be open to all past and present members of the  University  of  Cambridge,  students  pursuing  a  course  of  full-time  study  at a college of higher education in Cambridge or at a research institute approvedby the University of Cambridge,  employees of the University of Cambridge or of a college of higher education in Cambridge, and other people accepted by the committee, regardless of religion, nationality, ethnicity, gender, sexual orientation, stature, lardiness or lack of personal hygiene."</i></p>
+   <p>Excerpt from the CUCC Constituion</p>
+  </blockquote>
 
-<!-- END MAIN -->
-</div>
-
-<script>
-// Get the Sidebar
-var mySidebar = document.getElementById("mySidebar");
-
-// Get the DIV with overlay effect
-var overlayBg = document.getElementById("myOverlay");
-
-// Toggle between showing and hiding the sidebar, and add overlay effect
-function w3_open() {
-  if (mySidebar.style.display === 'block') {
-    mySidebar.style.display = 'none';
-    overlayBg.style.display = "none";
-  } else {
-    mySidebar.style.display = 'block';
-    overlayBg.style.display = "block";
-  }
-}
-
-// Close the sidebar with the close button
-function w3_close() {
-  mySidebar.style.display = "none";
-  overlayBg.style.display = "none";
-}
-</script>
-
-</body>
-</html>
+  <h2>Join us!</h2>
+  <p>If you like the sound of caving and adventure, or are an experienced caver new to the Cambridge area, then you are more than welcome to join us. Contact details can be found in the links above, but the best way to get involved is to come to the pubmeet.</p>
+  <p>We meet every Tuesday night at 21:00. Usually, we can be found in the Elm Tree (near Parkers Piece). Come along and join us for a drink, get to know the club, and see what we're up to!</p>
+{% endblock %}

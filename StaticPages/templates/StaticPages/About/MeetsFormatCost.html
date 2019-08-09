@@ -1,156 +1,130 @@
-<!DOCTYPE html>
-<html lang="en">
-<title>CUCC | About | Meets</title>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+{% extends 'StaticPages/base.html' %}
 
-<!-- W3.CSS Import -->
-{% load static %}
-<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-<link rel="stylesheet" type="text/css" href="{% static 'StaticPages/style.css' %}">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+{% block title %}
+  <title>CUCC | About | Meets: Format & Cost</title>
+{% endblock %}
 
-<style>
-html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
-.w3-sidebar {
-  z-index: 3;
-  width: 250px;
-  top: 43px;
-  bottom: 0;
-  height: inherit;
-}
-</style>
+{% block main-content %}
+  <h1>Caving Meets Format</h1>
+  <p>There are four main stages of a standard CUCC Caving Meet:</p>
+  <ul>
+    <li>Planning:</li>
+    <ul>
+      <li>The committe, meets secretary, or other members of the club decide they would like to go caving.</li>
+      <li>They decide on the dates and location of the meet.</li>
+      <li>They book a caving hut or other suitable accomodation.</li>
+      <li>They publish their intentions to the rest of the club.</li>
+      <li>Other club members sign up for the trip until the trip is full.</li>
+    </ul>
+    <li>Packing:</li>
+    <ul>
+      <li>The participating members meet at the Tackle Store, usually on the Thursday evening before the weekend of the trip.</li>
+      <li>They bring all of their necessary personal gear with them, and pack their bags at the Tackle Store ready to leave the following day.</li>
+      <li>They also pack any necessary club kit, such as ropes or ladders.</li>
+      <li>Committee members (defaults to the Tackle Master) issue gear for hire to people who do not possess their own.</li>
+      <li>All club-owned gear that is taken is logged in the relevant system.</li>
+    </ul>
+    <li>The Meet:</li>
+    <ul>
+      <li>The participating members arrive, once more, at the Tackle Store. This time, on Friday evening (usually around 18:00-19:00).</li>
+      <li>They gather their gear and pile it into the boot of whichever car they are travelling in.</li>
+      <li>Once everyone has finished faffing, they all set off in the relevant cars to drive across the country to the Caving Hut.</li>
+      <li>They arrive at the hut late on Friday night.</li>
+      <li>Most weekends consist of two trips: Saturday and Sunday.</li>
+      <li><b>Saturday:</b> this tends to be when longer and more daring trips take place. Members wake up, eat a large breakfast (to account for the difficulty of bringing lunch into caves), leave their callout, and head out to explore boundless caverns. They return to the hut after their trip and, once everyone is safely out of the cave and callouts cancelled, repeat the format of Friday night.</li>
+      <li><b>Sunday:</b> due to time limitations, Sunday is usually the day for shorter and more relaxed trips. This allows for a return to Cambridge at a not too unreasonable hour.</li>
+      <li>Once everyone is back in Cambridge (usually, we return to the Tackle Store), they part ways.</li>
+    </ul>
+    <li>The Aftermath</li>
+    <ul>
+      <li>On an evening soon after the weekend (usually Tuesday at 19:00 ish before the Pubmeet), the participating members (and anyone else they can persuade to turn up) gather once more at the Tackle Store.</li>
+      <li>Anyone who hired equipment brings it with them (all fabric items having been washed) to return to the Store.</li>
+      <li>All rope that was taken underground is uncoiled, inspected, washed, chained, and hung up on the pegs, as per the Tackle Store Guidelines.</li>
+      <li>Members who store peronal equipment in the Tackle Store Attic may put it back at their leisure.</li>
+    </ul>
+  </ul>
 
-<body>
+  <h1>Costs</h1>
+  <p>Caving in the UK requires public liability insurance provided by the British caving association, who operate on the calendar year. As such club membership is also run Jan - Dec.</p>
+  <p>As a novice the club will generously subsidise you for your first term's insurance when you become a member. <b>This means that your first trip will cost £10 extra.</b></p>
 
-<!-- Navbar -->
-<div class="w3-bar w3-theme-dark 2w3-left-align w3-large">
-  <a href="{% url 'index' %}" class="w3-bar-item w3-button w3-theme-d4 w3-hover-black">CUCC</a>
-  <div class="w3-dropdown-hover">
-    <button class="w3-button w3-hover-black">About</button>
-    <div class="w3-dropdown-content w3-bar-block">
-      <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">Meets: Format & Costs</a>
-      <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">The Tackle Store</a>
-      <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">The Caving Library</a>
-      <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">Constituion & Safety Policy</a>
-    </div>
-  </div>
-  <div class="w3-dropdown-hover">
-    <button class="w3-button w3-hover-black">Meets</button>
-    <div class="w3-dropdown-content w3-bar-block">
-      <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">Calendar & Upcoming Meets</a>
-      <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">Caving Meets</a>
-      <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">Social Meets</a>
-      <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">Training Meets</a>
-      <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">Trip Logs & Photos</a>
-    </div>
-  </div>
-  <div class="w3-dropdown-hover">
-    <button class="w3-button w3-hover-black">Gear</button>
-    <div class="w3-dropdown-content w3-bar-block">
-      <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">Hiring Gear</a>
-      <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">Personal Gear</a>
-    </div>
-  </div>
-  <div class="w3-dropdown-hover">
-    <button class="w3-button w3-hover-black">Contact</button>
-    <div class="w3-dropdown-content w3-bar-block">
-      <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">Mailing Lists</a>
-      <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">The Committee</a>
-      <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">Contact Details</a>
-    </div>
-  </div>
-  <div class="w3-dropdown-hover">
-    <button class="w3-button w3-hover-black">Get Involved!</button>
-    <div class="w3-dropdown-content w3-bar-block">
-      <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">How to Join</a>
-      <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">Mailing Lists</a>
-      <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">Pub Meets</a>
-      <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black">Freshers' Zone</a>
-    </div>
-  </div>
-  <a href="#" class="w3-bar-item w3-button w3-hover-black w3-right w3-hover-black">Sign Up</a>
-  <a href="#" class="w3-bar-item w3-button w3-hover-black w3-right w3-hover-black">Log In</a>
-</div>
-
-<!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
-<div class="w3-main w3-theme-dark">
-
-  <div class="w3-row">
-    <div class="w3-third w3-container w3-theme-d4">
-      <h1>Local Links</h1>
-      <p>In the first section of the first column, we put local links to useful areas.</p>
-      <h2>Actions</h2>
-      <p>In the second section of the first column is put page-specific <button class="w3-button w3-theme-dark w3-hover-black">Actions</button> (if there are any).</p>
-
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-    </div>
-    <div class="w3-twothird w3-container w3-white">
-      <h1>About Meets: Format and Costs</h1>
-      <p>This website uses a one-thid:two-third ratio adaptive format for the main text.</p>
-      <h2>Main Content</h2>
-      <p>The main content for each page goes in this space.</p>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-      <h2>Heading 2</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-      <h2>Heading 2</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-      <h2>Heading 2</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-      <h2>Heading 2</h2>
-      <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-    </div>
+  <h2>Membership Fees</h2>
+  <div class="w3-responsive">
+    <table class="w3-table-all">
+      <thead>
+        <tr class="w3-theme-d3">
+          <th>Type</th>
+          <th>Period</th>
+          <th>Student Rate</th>
+          <th>Non-Student Rate</th>
+        </tr>
+      </thead>
+      <tr class="w3-theme-l3">
+        <td>Newcomer Deal</td>
+        <td>3 Months Insurance (Oct - Dec)</td>
+        <td>£10</td>
+        <td>£10</td>
+      </tr>
+      <tr class="w3-theme-l4">
+        <td>Club Membership</td>
+        <td>1 Year (Jan - Dec)</td>
+        <td>£10</td>
+        <td>£10</td>
+      </tr>
+      <tr class="w3-theme-l3">
+        <td>Insurance</td>
+        <td>1 Year (Jan - Dec)</td>
+        <td>£8</td>
+        <td>£17</td>
+      </tr>
+    </table>
   </div>
 
+  <h2>Meet Fees</h2>
+  <p>For caving (weekend) meets, <b>the cost is £35.00</b>. This includes transport, accomodation, two breakfasts, and tea on Saturday night.</p>
+  <p>For other meets, such as the Pubmeet or Climbing Socials, Members are expected to cover their own costs at their discretion.</p>
 
-  <!-- Pagination
-  <div class="w3-center w3-padding-32">
-    <div class="w3-bar">
-      <a class="w3-button w3-black" href="#">1</a>
-      <a class="w3-button w3-hover-black" href="#">2</a>
-      <a class="w3-button w3-hover-black" href="#">3</a>
-      <a class="w3-button w3-hover-black" href="#">4</a>
-      <a class="w3-button w3-hover-black" href="#">5</a>
-      <a class="w3-button w3-hover-black" href="#">»</a>
-    </div>
+  <h2>Equipment Hire Fees</h2>
+  <p>Gear renatl fees are per day of use underground. Access to communal club kit (rope, krabs, etc.) is included in your membership fee.</p>
+  <div class="w3-responsive">
+    <table class="w3-table-all">
+      <thead>
+        <tr class="w3-theme-d3">
+          <th>Item</th>
+          <th>Cost</th>
+        </tr>
+      </thead>
+      <tr class="w3-theme-l3">
+        <td>Light</td>
+        <td>£0.50</td>
+      </tr>
+      <tr class="w3-theme-l4">
+        <td>Undersuit, Oversuit, Helmet, Wellies Kneepads, and Belt</td>
+        <td>£1.50 total</td>
+      </tr>
+      <tr class="w3-theme-l3">
+        <td>SRT kit with Harness</td>
+        <td>£1.00</td>
+      </tr>
+    </table>
   </div>
--->
 
-  <footer id="myFooter">
-    <div class="w3-container w3-theme-d4 w3-padding-32 w3-center">
-      <h4>Cambridge University Caving Club</h4>
-    </div>
+  <h2>Questions?</h2>
+  <p>Please contact the Junior Treasurer.</p>
+{% endblock %}
 
-  </footer>
+{% block side-content %}
+  <h2>Checklists for Caving Meets</h2>
+  <div class="w3-panel w3-red">
+    <p>PLACEHOLDER: Link to Checklists and Fresher's Guide Docs/Pages</p>
+  </div>
 
-<!-- END MAIN -->
-</div>
-
-<script>
-// Get the Sidebar
-var mySidebar = document.getElementById("mySidebar");
-
-// Get the DIV with overlay effect
-var overlayBg = document.getElementById("myOverlay");
-
-// Toggle between showing and hiding the sidebar, and add overlay effect
-function w3_open() {
-  if (mySidebar.style.display === 'block') {
-    mySidebar.style.display = 'none';
-    overlayBg.style.display = "none";
-  } else {
-    mySidebar.style.display = 'block';
-    overlayBg.style.display = "block";
-  }
-}
-
-// Close the sidebar with the close button
-function w3_close() {
-  mySidebar.style.display = "none";
-  overlayBg.style.display = "none";
-}
-</script>
-
-</body>
-</html>
+  <h2>FAQ</h2>
+  <ul>
+    <li><b>Q: How much will my first weekend meet cost me?</b><br> A: £49 (£35 Standard Fee + £10 Insurance + £1 Light + £3 Caving Clothing)</li>
+    <li><b>Q: How much time does a weekend meet take up?</b><br> A: The whole weekend (Friday night - Sunday night) plus two short evening sessions (half-hour to an hour) at The Tackle Store.</li>
+    <li><b>Q: How much will subsequent weekend meets cost me?</b><br> A: £39 (£35 Standard Fee + £1 Light + £3 Caving Clothing)</li>
+    <li><b>Q: Where do we stay for the weekend?</b><br> A: In Caving Huts. These are similar to youth hostels, but are situated near to popular caving areas in the UK.</li>
+    <li><b>Q: How do we get to the Caving Huts?</b><br> A: In Cars. Members of the club who own cars drive members of the club who do not. On rare occasions, when we don't have enough drivers, we hire vehicles.</li>
+  </ul>
+{% endblock %}

@@ -1,1 +1,45 @@
-<title>CUCC | About | Library</title>
+{% extends 'StaticPages/base.html' %}
+{% load static %}
+
+{% block title %}
+  <title>CUCC | About | Library</title>
+{% endblock %}
+
+{% block main-content %}
+  <h1>The CUCC Library</h1>
+  <p>CUCC has a collectio of books, journals, and club archives that are kept in Pembroke College</p>
+
+  <h2>Using the Library</h2>
+  <p>Club members are welcome to borrow books or journals from the library (with the exception of guidebooks, which are not usually borrowable by individuals, as they are needed for club meets). When borrowing books please ensure that you fill in the loan book and return the volume within a fortnight - other people may want the same book, especially in the case of techniques manuals. Non-club members wishing to use the library should contact the librarian.</p>
+
+  <h2>Catalogues</h2>
+  The catalogues are currently being updated. The catalogue of books is complete - so please pass any new additions to the librarian so that they can be properly catalogued too. The cataloguing of journals is ongoing....
+  <div class="w3-panel w3-red">
+    <p>PLACEHOLDER: Library Book and Journal Catalogues</p>
+  </div>
+
+  <h2>Cambridge Underground: The CUCC Journal</h2>
+  <p>In days gone by, the CUCC would publish a journal of their comings and goings in and around the caves of the world. Sadly, a dip in membership caused the loss of this tradition. It is the hope of the author of this website (T. Crossley, 2019) that it will go some of the way to replacing that lost asset. If time and motivation can be found, we may even produce the journal once more (with the help of the revived trip blogging system).</p>
+  <p>The last issue was in 2012, and can be read online <a href="https://issuu.com/aiora.zabala/docs/cambridgeunderground2012_royalsize">here</a>.</p>
+
+  <h2>Missing Books</h2>
+  <p>Previous library inventories were done in 1993 and partially done in 1998. Books that were listed in those but are now not in the library are listed here. If you have any of these, or know where they might be, please let the librarian know.</p>
+
+  <h2>Scanned Volumes</h2>
+  <p>While we have scanned images of all the club journals, we have not yet got a collection of scanned logbooks.</p>
+{% endblock %}
+
+{% block side-content %}
+  <h2>Location & Access</h2>
+  <p>The CUCC library is situated in Pembroke College, on M staircase:</p>
+  <iframe class="w3-card" width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.openstreetmap.org/export/embed.html?bbox=0.1164829730987549%2C52.201089069348704%2C0.1200234889984131%2C52.202566914957295&amp;layer=mapnik&amp;marker=52.20182799829615%2C0.11825323104858398" style="border: 1px solid black"></iframe><br/><small><a href="https://www.openstreetmap.org/?mlat=52.20183&amp;mlon=0.11825#map=19/52.20183/0.11825">View Larger Map</a></small>
+  <p>The key is kept at the Porter's Lodge; ask for the "Caving Club Library" key, the porter will look at you blankly but eventually find it.</p>
+  <div class="w3-card">
+    <img src="{% static "StaticPages/images/LibraryLock.jpg" %}" class="w3-image" alt="Photo by Mark Shinwell">
+  </div>
+  <p>To get there from the Porters' Lodge go straight ahead along the left side of the court and through an arch past the hall and kitchens. Continue ahead to M staricase at the opposite side of the next court. Go up the spiral staricase just inside the door to the 2nd (top) floor, then follow the corridor round to the left and through a door. The library is in two padlocked cupboards immediately on your right - identified by a tiny label saying 'CUCC'. The left hand cupboard contains Journals and Guidebooks. The right hand cupboard contains other literature.</p>
+  <div class="w3-card">
+    <img src="{% static "StaticPages/images/Library.jpg" %}" class="w3-image" alt="Photo by Mark Shinwell">
+  </div>
+  <p></p>
+{% endblock %}
