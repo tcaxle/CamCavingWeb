@@ -1,35 +1,32 @@
 {% extends 'StaticPages/base.html' %}
+{% load static %}
 
 {% block title %}
   <title>CUCC | Home</title>
 {% endblock %}
 
 {% block main-content %}
-  <h1>Main Content</h1>
-  <p>This is the block called "main-content"</p>
-  <h1>Website Layout Format</h1>
-  <p>This website uses a one-thid:two-third ratio adaptive format for the main text.</p>
-  <h2>Main Content</h2>
-  <p>The main content for each page goes in this space.</p>
+  <h1>Cambridge University Caving Club</h1>
+  <div class="w3-card">
+    <img src="{% static "StaticPages/images/CoverPhoto.jpg" %}" class="w3-image" alt="Photo by Mark Shinwell">
+  </div>
+  <h1>Featured Items</h1>
+  <p>Here will go blog objects with the "featured" tag.</p>
+  <p>These may be trip reports, photos, upcoming events, or articles.</p>
+  <h2>Item 1</h2>
   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-  <h2>Heading 2</h2>
+  <h2>Item 2</h2>
   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-  <h2>Heading 2</h2>
+  <h2>Item 3</h2>
   <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-  <h2>Heading 2</h2>
-  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-  <h2>Heading 2</h2>
-  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-  <h2>Test Block Content</h2>
-  <p>Testing the Inheritance System</p>
 {% endblock %}
 
 {% block side-content %}
-  <h1>Side-Content</h1>
-  <p>This is the block called "side-content"</p>
-  <h1>Local Links</h1>
-  <p>In the first section of the first column, we put local links to useful areas.</p>
-  <h2>Actions</h2>
-  <p>In the second section of the first column is put page-specific <button class="w3-button w3-theme-dark w3-hover-black">Actions</button> (if there are any).</p>
-  <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
+  <h2>About</h2>
+  <p>You have reached the homepage of the <b>Cambridge University Caving Club (CUCC).</b> Please feel free to browse the site to find out more about who we are.</p>
+  <h2>History</h2>
+  <p>The CUCC was founded in 1949 as an undergraduate club. Since then, it has grown to include people of all walks of life and membership is - according to our constituion - open to "all past and present members ofthe  University  of  Cambridge,  students  pursuing  a  course  of  full-time  study  ata college of higher education in Cambridge or at a research institute approvedby the University of Cambridge,  employees of the University of Cambridge orof a college of higher education in Cambridge, and other people accepted by thecommittee, regardless of religion, nationality, ethnicity, gender, sexual orientation,stature, lardiness or lack of personal hygiene."</p>
+  <h2>Join us!</h2>
+  <p>If you like the sound of caving and adventure, or are an experienced caver new to the Cambridge area, then you are more than welcome to join us. Contact details can be found in the links above, but the best way to get involved is to come to the pubmeet.</p>
+  <p>We meet every Tuesday night at 21:00. Usually, we can be found in the Elm Tree (near Parkers Piece). Come along and join us for a drink, get to know the club, and see what we're up to!</p>
 {% endblock %}
