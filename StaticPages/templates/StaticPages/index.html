@@ -14,13 +14,10 @@
   <p>And CUCC is not just about caving: while in Cambridge there are plenty of activities and socials which are regularly announced on the mailing list and Facebook Page, including pub meets, training sessions, curry nights, talks, other outdoor activities.</p>
   <p>In any case, the website offers a whole range of information including:</p>
   <ul>
-    <li>Calendar of when/where caving meets & social events are happening</li>
-    <li>Details on caving trips / gear / cost etc.</li>
-    <li>As well as lots of photos to get you excited</li>
+    <li><a href="{% url 'MeetsCalendar' %}">Calendar of when/where caving meets & social events are happening</a></li>
+    <li><a href="{% url 'AboutMeetsFormatCost' %}">Details on caving trips / gear / cost etc.</a></li>
+    <li><a href="{% url 'MeetsBlog' %}">As well as lots of photos to get you excited</a></li>
   </ul>
-  <div class="w3-panel w3-red">
-    <p>PLACEHOLDER: Links to Above Items Needed</p>
-  </div>
 
   <div class="w3-content w3-section w3-card-4" style="max-width:800px">
     <img class="mySlides" src="{% static "StaticPages/images/HomeSlideShow/1.jpg" %}" style="width:100%">
@@ -87,7 +84,7 @@
 {% block side-content %}
   <p></p>
   <div class="w3-card">
-    <img src="{% static "StaticPages/images/CoverPhoto.jpg" %}" class="w3-image" alt="Photo by Mark Shinwell">
+    <img src="{% static "StaticPages/images/CoverPhoto.jpg" %}" class="w3-image w3-hide-small" alt="Photo by Mark Shinwell">
   </div>
 
   <h2>About</h2>

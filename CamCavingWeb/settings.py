@@ -27,7 +27,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = [u'tcac2.user.srcf.net']
 
-
 # Application definition
 
 INSTALLED_APPS = [
