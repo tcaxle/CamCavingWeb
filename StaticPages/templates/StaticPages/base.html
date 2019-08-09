@@ -26,7 +26,7 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
 
 <body>
 
-  
+
 
 <!-- Navbar -->
 <div class="w3-bar w3-theme-d4 w3-large w3-card-4 w3-mobile">
@@ -73,7 +73,30 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
       <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Freshers' Zone</a>
     </div>
   </div>
+  <!-- Non Modal Login Link
   <a href="#" class="w3-bar-item w3-button w3-hover-black w3-right w3-hover-black w3-mobile"><i class="fas fa-sign-in-alt"></i> <span class=" w3-hide-medium">Register/Login</span></a>
+  -->
+  <!-- Modal Login Form -->
+  <button onclick="document.getElementById('id01').style.display='block'" class="w3-bar-item w3-button w3-hover-black w3-right w3-hover-black w3-mobile"><i class="fas fa-sign-in-alt"></i> <span class=" w3-hide-medium">Register/Login</span></button>
+  <div id="id01" class="w3-modal">
+    <div class="w3-modal-content w3-card-4 w3-animate-zoom w3-theme-d4" style="max-width:600px">
+      <form class="w3-container" action="/action_page.php">
+        <div class="w3-section">
+          <label><b>Username</b></label>
+          <input class="w3-input w3-border w3-margin-bottom w3-theme-l4" type="text" placeholder="Enter Username" name="usrname" required>
+          <label><b>Password</b></label>
+          <input class="w3-input w3-border w3-theme-l4" type="password" placeholder="Enter Password" name="psw" required>
+          <button class="w3-button w3-col w3-section w3-padding w3-theme-d1 w3-hover-green" style="width:45%" type="submit">Login</button>
+          <button class="w3-button w3-col w3-right w3-section w3-padding w3-theme-d1 w3-hover-green" style="width:45%" type="button">Register</button>
+        </div>
+      </form>
+      <div class="w3-container w3-border-top w3-padding-16 w3-theme-d3">
+        <button onclick="document.getElementById('id01').style.display='none'" type="button" class="w3-button w3-theme-d1 w3-hover-red">Cancel</button>
+        <span class="w3-right w3-padding w3-hide-small">Forgot <a href="#">password?</a></span>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <!-- Main content. Side bars are hidden when medium and small. Content goes vertical when small. -->
