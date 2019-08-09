@@ -28,9 +28,9 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
 
 <!-- Navbar -->
 <div class="w3-bar w3-theme-d4 w3-large w3-card-4 w3-mobile">
-  <a href="{% url 'index' %}" class="w3-bar-item w3-button w3-theme-d4 w3-hover-black w3-mobile"><i class="fas fa-home"></i> CUCC</a>
+  <a href="{% url 'index' %}" class="w3-bar-item w3-button w3-theme-d4 w3-hover-black w3-mobile"><i class="fas fa-home"></i> <span class=" w3-hide-medium">CUCC</span></a>
   <div class="w3-dropdown-hover w3-mobile">
-    <button class="w3-button w3-hover-black">About <i class="fa fa-caret-down"></i></button>
+    <button class="w3-button w3-hover-black"><i class="fas fa-info-circle"></i> <span class=" w3-hide-medium">About</span> <i class="fa fa-caret-down"></i></button>
     <div class="w3-dropdown-content w3-bar-block w3-card">
       <a href="{% url 'AboutMeetsFormatCost' %}" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Meets: Format & Costs</a>
       <a href="{% url 'AboutTackleStore' %}" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">The Tackle Store</a>
@@ -39,7 +39,7 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
     </div>
   </div>
   <div class="w3-dropdown-hover w3-mobile">
-    <button class="w3-button w3-hover-black">Meets <i class="fa fa-caret-down"></i></button>
+    <button class="w3-button w3-hover-black"><i class="fas fa-calendar-alt"></i> <span class=" w3-hide-medium">Meets</span> <i class="fa fa-caret-down"></i></button>
     <div class="w3-dropdown-content w3-bar-block w3-card">
       <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Calendar & Upcoming Meets</a>
       <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Caving Meets</a>
@@ -49,14 +49,13 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
     </div>
   </div>
   <div class="w3-dropdown-hover w3-mobile">
-    <button class="w3-button w3-hover-black">Gear <i class="fa fa-caret-down"></i></button>
+    <button class="w3-button w3-hover-black"><i class="fas fa-hard-hat"></i> <span class=" w3-hide-medium">Gear</span> <i class="fa fa-caret-down"></i></button>
     <div class="w3-dropdown-content w3-bar-block w3-card">
-      <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Hiring Gear</a>
       <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Personal Gear</a>
     </div>
   </div>
   <div class="w3-dropdown-hover w3-mobile">
-    <button class="w3-button w3-hover-black">Contact <i class="fa fa-caret-down"></i></button>
+    <button class="w3-button w3-hover-black"><i class="fas fa-address-card"></i> <span class=" w3-hide-medium">Contact</span> <i class="fa fa-caret-down"></i></button>
     <div class="w3-dropdown-content w3-bar-block w3-card">
       <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Mailing Lists</a>
       <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">The Committee</a>
@@ -64,7 +63,7 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
     </div>
   </div>
   <div class="w3-dropdown-hover w3-mobile">
-    <button class="w3-button w3-hover-black">Get Involved! <i class="fa fa-caret-down"></i></button>
+    <button class="w3-button w3-hover-black"><i class="fas fa-paper-plane"></i> <span class=" w3-hide-medium">Get Involved!</span> <i class="fa fa-caret-down"></i></button>
     <div class="w3-dropdown-content w3-bar-block w3-card">
       <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">How to Join</a>
       <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Mailing Lists</a>
@@ -72,11 +71,10 @@ html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
       <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Freshers' Zone</a>
     </div>
   </div>
-  <a href="#" class="w3-bar-item w3-button w3-hover-black w3-right w3-hover-black w3-mobile">Sign Up</a>
-  <a href="#" class="w3-bar-item w3-button w3-hover-black w3-right w3-hover-black w3-mobile">Log In</a>
+  <a href="#" class="w3-bar-item w3-button w3-hover-black w3-right w3-hover-black w3-mobile"><i class="fas fa-sign-in-alt"></i> <span class=" w3-hide-medium">Register/Login</span></a>
 </div>
 
-<!-- Main content: shift it to the right by 250 pixels when the sidebar is visible -->
+<!-- Main content. Side bars are hidden when medium and small. Content goes vertical when small. -->
 <div class="w3-main w3-theme-dark">
 
   <div class="w3-row">
