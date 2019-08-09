@@ -10,7 +10,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="{% static "StaticPages/favicon/favicon-32x32.png" %}">
   <link rel="icon" type="image/png" sizes="16x16" href="{% static "StaticPages/favicon/favicon-16x16.png" %}">
   <link rel="manifest" href="{% static "StaticPages/favicon/site.webmanifest" %}">
-  
+
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -50,35 +50,35 @@
       <div class="w3-dropdown-hover w3-mobile">
         <button class="w3-button w3-hover-black"><i class="fas fa-calendar-alt"></i> <span class=" w3-hide-medium">Meets</span> <i class="fa fa-caret-down"></i></button>
         <div class="w3-dropdown-content w3-bar-block w3-card-4">
-          <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Calendar & Upcoming Meets</a>
-          <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Caving Meets</a>
-          <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Social Meets</a>
-          <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Training Meets</a>
-          <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Trip Logs & Photos</a>
+          <a href="{% url 'MeetsCalendar' %}" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Calendar & Upcoming Meets</a>
+          <a href="{% url 'AboutMeetsFormatCost' %}" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Caving Meets</a>
+          <a href="{% url 'MeetsSocial' %}" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Social Meets</a>
+          <a href="{% url 'MeetsTraining' %}" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Training Meets</a>
+          <a href="{% url 'MeetsPub' %}" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Pub Meets</a>
+          <a href="{% url 'MeetsBlog' %}" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Trip Logs & Photos</a>
         </div>
       </div>
       <div class="w3-dropdown-hover w3-mobile">
         <button class="w3-button w3-hover-black"><i class="fas fa-hard-hat"></i> <span class=" w3-hide-medium">Gear</span> <i class="fa fa-caret-down"></i></button>
         <div class="w3-dropdown-content w3-bar-block w3-card-4">
-          <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Personal Gear</a>
-          <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Club Gear</a>
+          <a href="{% url 'GearPersonal' %}" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Personal Gear</a>
+          <a href="{% url 'GearClub' %}" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Club Gear</a>
         </div>
       </div>
       <div class="w3-dropdown-hover w3-mobile">
         <button class="w3-button w3-hover-black"><i class="fas fa-address-card"></i> <span class=" w3-hide-medium">Contact</span> <i class="fa fa-caret-down"></i></button>
         <div class="w3-dropdown-content w3-bar-block w3-card-4">
-          <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Mailing Lists</a>
-          <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">The Committee</a>
-          <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Contact Details</a>
+          <a href="{% url 'ContactMailingList' %}" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Mailing Lists</a>
+          <a href="{% url 'ContactCommittee' %}" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">The Committee</a>
         </div>
       </div>
       <div class="w3-dropdown-hover w3-mobile">
         <button class="w3-button w3-hover-black"><i class="fas fa-paper-plane"></i> <span class=" w3-hide-medium">Get Involved!</span> <i class="fa fa-caret-down"></i></button>
         <div class="w3-dropdown-content w3-bar-block w3-card-4">
-          <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">How to Join</a>
-          <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Freshers' Zone</a>
-          <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Mailing Lists</a>
-          <a href="#" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Pub Meets</a>
+          <a href="{% url 'GetInvolvedHowToJoin' %}" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">How to Join</a>
+          <a href="{% url 'GetInvolvedFreshers' %}" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Freshers' Zone</a>
+          <a href="{% url 'ContactMailingList' %}" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Mailing Lists</a>
+          <a href="{% url 'MeetsPub' %}" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Pub Meets</a>
         </div>
       </div>
       <!-- Non Modal Login Link

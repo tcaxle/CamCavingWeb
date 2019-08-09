@@ -12,12 +12,21 @@ urlpatterns = [
 	path('About/Constition&Safety/', views.AboutConstitutionSafety, name='AboutConstitutionSafety'),
 
 	# Contact Section
+	path('Contact/Committee/', views.ContactCommittee, name='ContactCommittee'),
+	path('Contact/MailingList/', views.ContactMailingList, name='ContactMailingList'),
 
 	# Gear Section
+	path('Gear/Club/', views.GearClub, name='GearClub'),
+	path('Gear/Personal/', views.GearPersonal, name='GearPersonal'),
 
 	# Meets Section
 	path('Meets/Calendar/', views.MeetsCalendar, name='MeetsCalendar'),
+	path('Meets/Blog/', views.MeetsBlog, name='MeetsBlog'),
+	path('Meets/Pub/', views.MeetsPub, name='MeetsPub'),
+	path('Meets/Social/', views.MeetsSocial, name='MeetsSocial'),
+	path('Meets/Training/', views.MeetsTraining, name='MeetsTraining'),
 
 	# Get Involved Section
-
+	path('GetInvolved/Freshers/', views.GetInvolvedFreshers, name='GetInvolvedFreshers'),
+	path('GetInvolved/HowToJoin/', views.GetInvolvedHowToJoin, name='GetInvolvedHowToJoin'),
 ]
