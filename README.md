@@ -7,6 +7,8 @@ Cambridge University Caving Club (CUCC) website repository
 - [x] "base.html" page template
 - [x] Migration of basic static pages from old wiki
 - [ ] Extract all documents, images, misc files from old wiki and restructure archive
+- [ ] Provide links on relevant pages to relevant documents and additionally to the apache archive
+- [ ] Migrate master to Caving SRCF socuser. All further changes to be done on sepeate dev branches.
 - [ ] Layout database: list of tables, fields, mappings
 - [ ] Authentication and Accounts App (one-to-one user model for extra details)
 - [ ] Gear Hire App "Gear"
