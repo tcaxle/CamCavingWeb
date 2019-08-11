@@ -9,5 +9,6 @@ Cambridge University Caving Club Website Repository
 - [ ] Extract all documents, images, misc files from old wiki and restructure archive
 - [ ] Layout database: list of tables, fields, mappings
 - [ ] Authentication and Accounts App (one-to-one user model for extra details)
-- [ ] Gear Hire App "GearHire"
+- [ ] Blogging app "Blog"
+- [ ] Gear Hire app "GearLog"
 - [ ] Treasury app "BankOfCaving"
