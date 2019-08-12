@@ -11,11 +11,6 @@ Cambridge University Caving Club (CUCC) website repository
 - [ ] Migrate master to Caving SRCF socuser. All further changes to be done on sepeate dev branches.
 - [ ] Layout database: list of tables, fields, mappings
 - [ ] Authentication and Accounts App (one-to-one user model for extra details)
-<<<<<<< HEAD
-- [ ] Blogging app "Blog"
-- [ ] Gear Hire app "GearLog"
-- [ ] Treasury app "BankOfCaving"
-=======
 - [ ] Gear Hire App "Gear"
 - [ ] Blog app "Blog"
 - [ ] ? Treasury app "BankOfCaving"
@@ -40,4 +35,3 @@ This app manages all of the club's gear inventories, logging, and hiring systems
 
 ### BankOfCaving
 This app may or may not exist. If I get around to it, it will handle all club finances. It will integrate gear hire, meet and membersip fees, and bank account balance.
->>>>>>> 5f304c605c964ac907676deafa1c81fbdc4140e3
