@@ -13,6 +13,8 @@ def AboutLibrary(request):
     return render(request, 'StaticPages/About/Library.html')
 def AboutConstitutionSafety(request):
     return render(request, 'StaticPages/About/ConstitutionSafety.html')
+def AboutExpo(request):
+    return render(request, 'StaticPages/About/Expo.html')
 
 # Contact Section
 def ContactCommittee(request):
