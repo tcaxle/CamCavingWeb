@@ -1,0 +1,21 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block title %}
+  <title>CUCC | About | Expo</title>
+{% endblock %}
+
+{% block main-content %}
+  <h1>The Expo Website</h1>
+  <p>Expo has its own website over at <a href="http://expo.survex.com">expo.survex.com</a>.</p>
+
+  <h2>Mailing Lists</h2>
+  <p>The Expo mailing list is <a href="mailto:expo@lists.wookware.org">expo@lists.wookware.org</a> and you can sign up <a href="https://lists.wookware.org/cgi-bin/mailman/listinfo/expo">here</a>.</p>
+{% endblock %}
+
+{% block side-content %}
+  <p></p>
+  <img src="{% static 'Images/Misc/Loser.jpg' %}" alt="The Loeser Plateau" class="w3-card-4 w3-image">
+  <h2>History</h2>
+  <p>The CUCC have been going to the Loeser Plateau in the Totes Gebirge since 1976. We have found pver 150km of passage so far, and find more every year.</p>
+{% endblock %}

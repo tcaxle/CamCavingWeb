@@ -1,0 +1,23 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block title %}
+  <title>CUCC | Get Involved | How to Join</title>
+{% endblock %}
+
+{% block main-content %}
+  <h1>How to Join</h1>
+  <p><i>So you want to go caving?</i></p>
+  <p>Fantastic news! We are always keen for new members.</p>
+  <p>The best way to join us is to come and <b>meet us at <a href="{% url 'MeetsPub' %}">the pub</a></b> on a Tuesday evening. Alternatively, you can <b>send an email</b> to <a href="{% url 'ContactCommittee' %}">one of the committee</a> or <b>send a message</b> to our <a href="https://www.facebook.com/CamCaving/">facebook page</a>. The <a href="#{% url 'AboutMeetsFormatCost' %}">About Meets page</a> contains most of the information about the main caving weekends. Synchronise your calendar with ours on our <a href="{% url 'MeetsCalendar' %}">Calendar Page</a> so you don't miss any events.</p>
+  <p>We're looking forward to seeing you!</p>
+{% endblock %}
+
+{% block side-content %}
+  <h2>Useful Links</h2>
+  <p>As well as the resources on this website, a great place to look if you're starting out caving is <a href="http://newtocaving.com">newtocaving.com</a>.</p>
+  <p>The site is run by the maintainers of <a href="http://ukcaving.com">ukcaving.com</a> and is full of useful information for beginner cavers.</p>
+  <p></p>
+  <img src="{% static 'Images/Caves/CwmDwr.jpg' %}" class="w3-image w3-hide-small" alt="Cwm Dwr">
+  <p></p>
+{% endblock %}
