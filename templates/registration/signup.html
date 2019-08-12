@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  <title>CUCC | Sign Up</title>
+{% endblock %}
+
+{% block main-content %}
+  <h2>Sign Up</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="w3-button w3-theme-d3 w3-hover-black" type="submit">Sign up</button>
+  </form>
+  <p></p>
+{% endblock %}

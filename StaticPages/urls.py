@@ -10,6 +10,8 @@ urlpatterns = [
 	path('About/TackleStore/', views.AboutTackleStore, name='AboutTackleStore'),
 	path('About/Library/', views.AboutLibrary, name='AboutLibrary'),
 	path('About/Constition&Safety/', views.AboutConstitutionSafety, name='AboutConstitutionSafety'),
+	path('About/Expo/', views.AboutExpo, name='AboutExpo'),
+
 
 	# Contact Section
 	path('Contact/Committee/', views.ContactCommittee, name='ContactCommittee'),
