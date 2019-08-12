@@ -1,7 +1,15 @@
-<!-- templates/registration/login.html -->
-<h2>Login</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button type="submit">Login</button>
-</form>
+{% extends 'StaticPages/base.html' %}
+
+{% block title %}
+  <title>CUCC | Login</title>
+{% endblock %}
+
+{% block main-content %}
+  <h2>Login</h2>
+  <form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button class="w3-button w3-theme-d3 w3-hover-black" type="submit">Login</button>
+  </form>
+  <p></p>
+{% endblock %}
