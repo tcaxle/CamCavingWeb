@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}
   <title>CUCC | About | Tackle Store</title>
@@ -71,7 +72,5 @@
   <p>The Tackle Store is located at 6 Grange Road:</p>
   <iframe class="w3-card" width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.openstreetmap.org/export/embed.html?bbox=0.10344743728637695%2C52.19690513536284%2C0.10698795318603516%2C52.19838312010057&amp;layer=mapnik&amp;marker=52.1976441338751%2C0.10521769523620605" style="border: 1px solid black"></iframe><br/><small><a href="https://www.openstreetmap.org/?mlat=52.19764&amp;mlon=0.10522#map=19/52.19764/0.10522">View Larger Map</a></small>
   <p>Keys are distributed at a cost of £5 per pair to the committee members and to other club members at the Tackle Master's discretion.</p>
-  <div class="w3-panel w3-red">
-    <p>PLACEHOLDER: Picture of Tackle Store</p>
-  </div>
+  <img src="{% static 'images/TackleStoreRopeWash.jpg' %}" alt="Rope washing at the Tackle Store" class="w3-image w3-card-4">
 {% endblock %}
