@@ -2,7 +2,7 @@ from django.shortcuts import render
 
 # Homepage
 def index(request):
-    return render(request, 'StaticPages/index.html')
+    return render(request, 'index.html')
 
 # About Section
 def AboutMeetsFormatCost(request):
