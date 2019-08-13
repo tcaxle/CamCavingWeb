@@ -17,10 +17,9 @@ Cambridge University Caving Club (CUCC) website repository
 - [ ] ? Treasury app "BankOfCaving"
 
 # Site Layout
-## Apps
-### StaticPages
-This app holds the static pages of the app. Mainly, this means the "public" half of the site: the homepage, about pages and suchlike.
+In the root of the site ("CamCavingWeb") is the urls.py and views.py for all the static pages on the site.
 
+## Apps
 ### Blog
 This app holds the pages with the blog functionality. The blog is used for all user posts of any kind. Different kinds of post (trip logs, announcements, articles etc.) are handled by tags. Relevant pages are then set up to display different tagged posts.
 
