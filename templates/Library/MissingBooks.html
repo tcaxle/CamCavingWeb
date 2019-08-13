@@ -1,4 +1,4 @@
-{% extends 'Base.html' %}
+{% extends 'Library/SideBar.html' %}
 {% load static %}
 
 {% block title %}
@@ -275,12 +275,4 @@
   </td></tr></table>
   <p></p>
 
-{% endblock %}
-
-{% block side-content %}
-  <h2>Library</h2>
-  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'AboutLibrary' %}">The Caving Library</a>
-  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'LibraryBooks' %}">Books Catalogue</a>
-  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'LibraryMissingBooks' %}">Missing Books</a>
-  <br>
 {% endblock %}
