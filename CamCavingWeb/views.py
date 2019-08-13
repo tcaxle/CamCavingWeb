@@ -39,6 +39,8 @@ def MeetsSocial(request):
     return render(request, 'Meets/Social.html')
 def MeetsTraining(request):
     return render(request, 'Meets/Training.html')
+def MeetsDinners(request):
+    return render(request, 'Meets/Dinners.html')
 
 # Get Involved
 def GetInvolvedHowToJoin(request):
@@ -49,6 +51,10 @@ def LibraryBooks(request):
     return render(request, 'Library/Books.html')
 def LibraryMissingBooks(request):
     return render(request, 'Library/MissingBooks.html')
+
+# Misc
+def MiscCommitteeFunctions(request):
+    return render(request, 'Misc/CommitteeFunctions.html')
 
 # Ardeche
 def ArdecheAgas(request):

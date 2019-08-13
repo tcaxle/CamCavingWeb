@@ -50,6 +50,7 @@ urlpatterns = [
 	path('Meets/Pub/', views.MeetsPub, name='MeetsPub'),
 	path('Meets/Social/', views.MeetsSocial, name='MeetsSocial'),
 	path('Meets/Training/', views.MeetsTraining, name='MeetsTraining'),
+    path('Meets/Dinners/', views.MeetsDinners, name='MeetsDinners'),
 
 	# Get Involved
 	path('GetInvolved/HowToJoin/', views.GetInvolvedHowToJoin, name='GetInvolvedHowToJoin'),
@@ -57,6 +58,9 @@ urlpatterns = [
     # Library
     path('Library/Books', views.LibraryBooks, name='LibraryBooks'),
     path('Library/MissingBooks', views.LibraryMissingBooks, name='LibraryMissingBooks'),
+
+	# Misc
+	path('Misc/CommitteeFunctions/', views.MiscCommitteeFunctions, name='MiscCommitteeFunctions'),
 
     # Ardheche
     path('Ardeche/Agas', views.ArdecheAgas, name='ArdecheAgas'),
