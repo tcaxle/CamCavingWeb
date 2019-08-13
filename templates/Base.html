@@ -72,6 +72,17 @@
 
       <!-- Contact -->
       <div class="w3-dropdown-hover w3-mobile">
+        <button class="w3-button w3-hover-black"><i class="fas fa-hard-hat"></i> <span class=" w3-hide-medium">Gear</span> <i class="fa fa-caret-down"></i></button>
+        <div class="w3-dropdown-content w3-bar-block w3-card-4">
+          <a href="{% url 'GearHire' %}" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Gear Hire</a>
+          <a href="{% url 'GearTape' %}" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Gear Tape</a>
+          <a href="{% url 'GearInventory' %}" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Tackle Store Inventory</a>
+          <a href="{% url 'GearFirstAid' %}" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">First Aid Kits</a>
+        </div>
+      </div>
+
+      <!-- Contact -->
+      <div class="w3-dropdown-hover w3-mobile">
         <button class="w3-button w3-hover-black"><i class="fas fa-address-card"></i> <span class=" w3-hide-medium">Contact</span> <i class="fa fa-caret-down"></i></button>
         <div class="w3-dropdown-content w3-bar-block w3-card-4">
           <a href="{% url 'ContactMailingList' %}" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Mailing Lists</a>

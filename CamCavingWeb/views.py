@@ -42,6 +42,16 @@ def MeetsTraining(request):
 def MeetsDinners(request):
     return render(request, 'Meets/Dinners.html')
 
+# Contact
+def GearFirstAid(request):
+    return render(request, 'Gear/FirstAid.html')
+def GearHire(request):
+    return render(request, 'Gear/Hire.html')
+def GearInventory(request):
+    return render(request, 'Gear/Inventory.html')
+def GearTape(request):
+    return render(request, 'Gear/Tape.html')
+
 # Get Involved
 def GetInvolvedHowToJoin(request):
     return render(request, 'GetInvolved/HowToJoin.html')

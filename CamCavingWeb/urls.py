@@ -52,6 +52,12 @@ urlpatterns = [
 	path('Meets/Training/', views.MeetsTraining, name='MeetsTraining'),
     path('Meets/Dinners/', views.MeetsDinners, name='MeetsDinners'),
 
+    # Gear
+	path('Gear/FirstAid/', views.GearFirstAid, name='GearFirstAid'),
+	path('Gear/Hire/', views.GearHire, name='GearHire'),
+    path('Gear/Inventory/', views.GearInventory, name='GearInventory'),
+    path('Gear/Tape/', views.GearTape, name='GearTape'),
+
 	# Get Involved
 	path('GetInvolved/HowToJoin/', views.GetInvolvedHowToJoin, name='GetInvolvedHowToJoin'),
 
