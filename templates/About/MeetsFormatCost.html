@@ -116,7 +116,8 @@
 
 {% block side-content %}
   <h2>Checklists for Caving Meets</h2>
-  <p>Please read our <a href="{% static 'Documents/GuidesForNovices/GuideForNoviceCavers.pdf' %}">Guide for Novice Cavers (pdf)</a> for a list of what to bring with you on caving weekends.</p>
+  <p>Please read our <a href="{% static 'Documents/GuidesForNovices/GuideForNoviceCavers.pdf' %}">Guide for Novice Cavers (pdf)</a> for a comprehensive guide to caving weekends.</p>
+  <p>Please read our <a href="{% url 'MiscNoviceChecklist' %}">Novice Caver Checklist for a guide to what to pack for a weekend.</a></p>
 
   <h2>FAQ</h2>
   <ul>
@@ -125,5 +126,6 @@
     <li><b>Q: How much will subsequent weekend meets cost me?</b><br> A: £39 (£35 Standard Fee + £1 Light + £3 Caving Clothing)</li>
     <li><b>Q: Where do we stay for the weekend?</b><br> A: In Caving Huts. These are similar to youth hostels, but are situated near to popular caving areas in the UK.</li>
     <li><b>Q: How do we get to the Caving Huts?</b><br> A: In Cars. Members of the club who own cars drive members of the club who do not. On rare occasions, when we don't have enough drivers, we hire vehicles.</li>
+    <li><b>Q: I'm a meet leader and don't know what to do!</b> A: Don't Panic. Read the <a href="{% url 'MiscLeaderChecklist' %}">Meet Leader Checklist</a>.</li>
   </ul>
 {% endblock %}

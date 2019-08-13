@@ -69,6 +69,10 @@ def MiscNCAGuidelines(request):
     return render(request, 'Misc/NCAGuidelines.html')
 def MiscExCS(request):
     return render(request, 'Misc/ExCS.html')
+def MiscNoviceChecklist(request):
+    return render(request, 'Misc/NoviceChecklist.html')
+def MiscLeaderChecklist(request):
+    return render(request, 'Misc/LeaderChecklist.html')
 
 # Ardeche
 def ArdecheAgas(request):
