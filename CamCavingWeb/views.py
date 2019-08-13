@@ -15,6 +15,10 @@ def AboutConstitutionSafety(request):
     return render(request, 'About/ConstitutionSafety.html')
 def AboutExpo(request):
     return render(request, 'About/Expo.html')
+def AboutBureaucracy(request):
+    return render(request, 'About/Bureaucracy.html')
+def AboutArchive(request):
+    return render(request, 'About/Archive.html')
 
 # Contact Section
 def ContactCommittee(request):
