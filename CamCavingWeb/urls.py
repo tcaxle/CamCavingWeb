@@ -61,6 +61,8 @@ urlpatterns = [
 
 	# Misc
 	path('Misc/CommitteeFunctions/', views.MiscCommitteeFunctions, name='MiscCommitteeFunctions'),
+	path('Misc/NCAGuidelines/', views.MiscNCAGuidelines, name='MiscNCAGuidelines'),
+
 
     # Ardheche
     path('Ardeche/Agas', views.ArdecheAgas, name='ArdecheAgas'),

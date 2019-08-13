@@ -55,6 +55,8 @@ def LibraryMissingBooks(request):
 # Misc
 def MiscCommitteeFunctions(request):
     return render(request, 'Misc/CommitteeFunctions.html')
+def MiscNCAGuidelines(request):
+    return render(request, 'Misc/NCAGuidelines.html')
 
 # Ardeche
 def ArdecheAgas(request):
