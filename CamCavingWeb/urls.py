@@ -29,7 +29,7 @@ urlpatterns = [
     # Homepage
 	path('', views.Home, name='Home'),
 
-	# About Section
+	# About
 	path('About/Meets/', views.AboutMeetsFormatCost, name='AboutMeetsFormatCost'),
 	path('About/TackleStore/', views.AboutTackleStore, name='AboutTackleStore'),
 	path('About/Library/', views.AboutLibrary, name='AboutLibrary'),
@@ -39,17 +39,21 @@ urlpatterns = [
     path('About/Archive/', views.AboutArchive, name='AboutArchive'),
 
 
-	# Contact Section
+	# Contact
 	path('Contact/Committee/', views.ContactCommittee, name='ContactCommittee'),
 	path('Contact/MailingList/', views.ContactMailingList, name='ContactMailingList'),
 
-	# Meets Section
+	# Meets
 	path('Meets/Calendar/', views.MeetsCalendar, name='MeetsCalendar'),
 	path('Meets/Blog/', views.MeetsBlog, name='MeetsBlog'),
 	path('Meets/Pub/', views.MeetsPub, name='MeetsPub'),
 	path('Meets/Social/', views.MeetsSocial, name='MeetsSocial'),
 	path('Meets/Training/', views.MeetsTraining, name='MeetsTraining'),
 
-	# Get Involved Section
+	# Get Involved
 	path('GetInvolved/HowToJoin/', views.GetInvolvedHowToJoin, name='GetInvolvedHowToJoin'),
+
+    # Library
+    path('Library/Books', views.LibraryBooks, name='LibraryBooks'),
+    path('Library/MissingBooks', views.LibraryMissingBooks, name='LibraryMissingBooks'),
 ]

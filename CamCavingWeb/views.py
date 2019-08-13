@@ -4,7 +4,7 @@ from django.shortcuts import render
 def Home(request):
     return render(request, 'Home.html')
 
-# About Section
+# About
 def AboutMeetsFormatCost(request):
     return render(request, 'About/MeetsFormatCost.html')
 def AboutTackleStore(request):
@@ -20,13 +20,13 @@ def AboutBureaucracy(request):
 def AboutArchive(request):
     return render(request, 'About/Archive.html')
 
-# Contact Section
+# Contact
 def ContactCommittee(request):
     return render(request, 'Contact/Committee.html')
 def ContactMailingList(request):
     return render(request, 'Contact/MailingList.html')
 
-# Meets Section
+# Meets
 def MeetsCalendar(request):
     return render(request, 'Meets/Calendar.html')
 def MeetsBlog(request):
@@ -38,6 +38,12 @@ def MeetsSocial(request):
 def MeetsTraining(request):
     return render(request, 'Meets/Training.html')
 
-# Get Involved Section
+# Get Involved
 def GetInvolvedHowToJoin(request):
     return render(request, 'GetInvolved/HowToJoin.html')
+
+# Library
+def LibraryBooks(request):
+    return render(request, 'Library/Books.html')
+def LibraryMissingBooks(request):
+    return render(request, 'Library/MissingBooks.html')
