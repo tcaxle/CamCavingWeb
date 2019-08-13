@@ -15,9 +15,8 @@
   <p>Within the Tackle Store, the various types of equipment are stored on shelves or hooks as appropriate. Rope is chained and sorted according to length. Each rope bears a label at both ends identifying its year of purchase and length. Should this coding be ambiguous, extra letters are added to disambiguate. Ladders are coiled and nested. The club's own articles of cave clothing are labelled and stored on shelves.</p>
   <p>Members of the club may store their personal caving equiment in the attic of the tackle store, though they do so at their own risk.</p>
   <p>In the past, an inventory of the Tackle Store was conducted annually. It is the view of the current president (T. Crossley, 2019) that this was a slow and laborious task that did little to actually prevent loss or theft of club equipment; especially as the habbit of actually signing out gear has slipped in recent years. This website will include an integrated enviornment containing the Tackle Store Inventory, the Gear Hire/Sign-Out Log, and the Club Finances all operating in beautiful synergy and harmony. Hopefully.</p>
-  <div class="w3-panel w3-red">
-    <p>PLACEHOLDER: Link to Gear Hire/Inventory Page</p>
-  </div>
+  <p>If you wish to hire gear, please see the <a href="{% url 'GearHire' %}">gear hire page</a>.</p>
+  <p>If you wish to view the club's gear inventory, please see the <a href="{% url 'GearInventory' %}">gear inventory page</a>.</p>
 
   <h2>Maintenance and Inspection of Equipment</h2>
   <p>The maintenance requirements of caving equipment vary from one type to the next.</p>
@@ -72,5 +71,36 @@
   <p>The Tackle Store is located at 6 Grange Road:</p>
   <iframe class="w3-card w3-block" width="425" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="https://www.openstreetmap.org/export/embed.html?bbox=0.10344743728637695%2C52.19690513536284%2C0.10698795318603516%2C52.19838312010057&amp;layer=mapnik&amp;marker=52.1976441338751%2C0.10521769523620605" style="border: 1px solid black"></iframe><br/><small><a href="https://www.openstreetmap.org/?mlat=52.19764&amp;mlon=0.10522#map=19/52.19764/0.10522">View Larger Map</a></small>
   <p>Keys are distributed at a cost of £5 per pair to the committee members and to other club members at the Tackle Master's discretion.</p>
+  <p>Current key holders are:</p>
+  <div class="w3-responsive">
+    <table class="w3-table-all">
+      <thead>
+        <tr class="w3-theme-d3">
+          <th>Name</th>
+          <th>Contact Details</th>
+          <th>Notes</th>
+        </tr>
+      </thead>
+      <tr class="w3-theme-l3">
+        <td>Tom Crossley</td>
+        <td>tcac2</td>
+        <td>President</td>
+      </tr>
+      <tr class="w3-theme-l4">
+        <td>Paul Fox</td>
+        <td></td>
+        <td>Senior Member</td>
+      </tr>
+      <tr class="w3-theme-l3">
+        <td>David Walker</td>
+        <td></td>
+        <td>Junior Treasurer</td>
+      </tr>
+    </table>
+  </div>
+  <div class="w3-panel w3-red">
+    <p>PLACEHOLDER: Table needs updating</p>
+  </div>
+  <br>
   <img src="{% static 'Images/Misc/TackleStoreRopeWash.jpg' %}" alt="Rope washing at the Tackle Store" class="w3-image w3-card-4">
 {% endblock %}
