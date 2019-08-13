@@ -67,6 +67,8 @@ def MiscCommitteeFunctions(request):
     return render(request, 'Misc/CommitteeFunctions.html')
 def MiscNCAGuidelines(request):
     return render(request, 'Misc/NCAGuidelines.html')
+def MiscExCS(request):
+    return render(request, 'Misc/ExCS.html')
 
 # Ardeche
 def ArdecheAgas(request):
