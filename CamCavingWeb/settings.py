@@ -20,10 +20,11 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '0ji7t3y^b!-a9(v*6(cj&+l-hs_f6ge0f1*_w8g#bf$xr*b#e5'
+with open('/societies/caving/.DjangoSecretKey') as f:
+    SECRET_KEY = f.read().strip()
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [u'tcac2.user.srcf.net', 'localhost']
 
