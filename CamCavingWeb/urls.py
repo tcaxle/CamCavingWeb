@@ -39,8 +39,6 @@ urlpatterns = [
 	path('About/Expo/', views.AboutExpo, name='AboutExpo'),
     path('About/TripsAbroad/', views.AboutTripsAbroad, name='AboutTripsAbroad'),
     path('About/Bureaucracy/', views.AboutBureaucracy, name='AboutBureaucracy'),
-    path('About/Archive/', views.AboutArchive, name='AboutArchive'),
-
 
 	# Contact
 	path('Contact/Committee/', views.ContactCommittee, name='ContactCommittee'),

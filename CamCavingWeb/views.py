@@ -19,8 +19,6 @@ def AboutTripsAbroad(request):
     return render(request, 'About/TripsAbroad.html')
 def AboutBureaucracy(request):
     return render(request, 'About/Bureaucracy.html')
-def AboutArchive(request):
-    return render(request, 'About/Archive.html')
 
 # Contact
 def ContactCommittee(request):
