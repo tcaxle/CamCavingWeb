@@ -118,7 +118,12 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
 STATIC_ROOT = '/societies/caving/public_html/'
-STATIC_URL = '/'
+
+if DEBUG:
+    STATIC_URL = '/static/'
+else:
+    STATIC_URL = '/'
+
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "Static"),
     os.path.join(BASE_DIR, "Archive"),
