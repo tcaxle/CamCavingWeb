@@ -10,7 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
-import os
+import os, environ
+env = environ.Env()
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,7 +24,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '0ji7t3y^b!-a9(v*6(cj&+l-hs_f6ge0f1*_w8g#bf$xr*b#e5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ['DJANGO_DEBUG']
 
 ALLOWED_HOSTS = ['localhost']
 
@@ -119,10 +119,24 @@ USE_TZ = True
 
 STATIC_ROOT = '/societies/caving/public_html/'
 
+DEBUG = env.bool('DJANGO_DEBUG', default=False)
 if DEBUG:
     STATIC_URL = '/static/'
+    SECURE_SSL_REDIRECT = False
+    SESSION_COOKIE_SECURE = False
+    CSRF_COOKIE_SECURE = False
+    SECURE_CONTENT_TYPE_NOSNIFF = False
+    SECURE_BROWSER_XSS_FILTER = False
 else:
     STATIC_URL = '/'
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    SECURE_BROWSER_XSS_FILTER = True
+
+X_FRAME_OPTIONS = 'DENY'
+
 
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "Static"),
