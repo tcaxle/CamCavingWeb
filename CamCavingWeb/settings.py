@@ -134,6 +134,12 @@ STATICFILES_DIRS = [
 
 EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, "SentMail")
+EMAIL_HOST = 'mail.gandi.net'
+EMAIL_HOST_USER = 'info@camcaving.uk'
+EMAIL_HOST_PASSWORD = 'CUCCiagc'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+DEFAULT_FROM_EMAIL = 'CUCC Server <info@camcaving.uk>'
 
 AUTH_USER_MODEL = 'UserPortal.CustomUser'
 LOGIN_REDIRECT_URL = 'Home'
