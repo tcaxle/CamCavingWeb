@@ -10,8 +10,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
-import os, environ
-env = environ.Env()
+import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -119,7 +118,7 @@ USE_TZ = True
 
 STATIC_ROOT = '/societies/caving/public_html/'
 
-DEBUG = env.bool('DJANGO_DEBUG', default=False)
+DEBUG = False
 if DEBUG:
     STATIC_URL = '/static/'
     SECURE_SSL_REDIRECT = False

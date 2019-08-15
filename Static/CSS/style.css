@@ -1,18 +1,4 @@
-{% load static %}
 
-/* roboto-regular - latin */
-@font-face {
-  font-family: 'Roboto';
-  font-style: normal;
-  font-weight: 400;
-  src: url('{% static 'webfonts/roboto-v20-latin-regular.eot' %}'); /* IE9 Compat Modes */
-  src: local('Roboto'), local('Roboto-Regular'),
-       url('') format('embedded-opentype'), /* IE6-IE8 */
-       url('{% static 'webfonts/roboto-v20-latin-regular.woff2' %}' format('woff2'), /* Super Modern Browsers */
-       url('{% static 'webfonts/roboto-v20-latin-regular.woff' %}' format('woff'), /* Modern Browsers */
-       url('{% static 'webfonts/roboto-v20-latin-regular.ttf' %}' format('truetype'), /* Safari, Android, iOS */
-       url('{% static 'webfonts/roboto-v20-latin-regular.svg#Roboto' %}' format('svg'); /* Legacy iOS */
-}
 
 .w3-theme-l5 {color:#000 !important; background-color:#f5f8fa !important}
 .w3-theme-l4 {color:#000 !important; background-color:#dde8ee !important}
