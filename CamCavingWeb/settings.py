@@ -24,7 +24,7 @@ SECRET_KEY = '0ji7t3y^b!-a9(v*6(cj&+l-hs_f6ge0f1*_w8g#bf$xr*b#e5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 
-ALLOWED_HOSTS = ['localhost']
+ALLOWED_HOSTS = ['localhost', 'caving.soc.srcf.net']
 
 # Application definition
 
@@ -121,18 +121,8 @@ STATIC_ROOT = '/societies/caving/public_html/'
 DEBUG = False
 if DEBUG:
     STATIC_URL = '/static/'
-    SECURE_SSL_REDIRECT = False
-    SESSION_COOKIE_SECURE = False
-    CSRF_COOKIE_SECURE = False
-    SECURE_CONTENT_TYPE_NOSNIFF = False
-    SECURE_BROWSER_XSS_FILTER = False
 else:
     STATIC_URL = '/'
-    SECURE_SSL_REDIRECT = True
-    SESSION_COOKIE_SECURE = True
-    CSRF_COOKIE_SECURE = True
-    SECURE_CONTENT_TYPE_NOSNIFF = True
-    SECURE_BROWSER_XSS_FILTER = True
 
 X_FRAME_OPTIONS = 'DENY'
 
