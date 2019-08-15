@@ -132,6 +132,9 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "Archive"),
 ]
 
+EMAIL_BACKEND = "django.core.mail.backends.filebased.EmailBackend"
+EMAIL_FILE_PATH = os.path.join(BASE_DIR, "SentMail")
+
 AUTH_USER_MODEL = 'UserPortal.CustomUser'
 LOGIN_REDIRECT_URL = 'Home'
 LOGOUT_REDIRECT_URL = 'Home'

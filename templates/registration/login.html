@@ -11,5 +11,5 @@
     {{ form.as_p }}
     <button class="w3-button w3-theme-d3 w3-hover-black" type="submit">Login</button>
   </form>
-  <p></p>
+  <p>Alternatively, <a class="w3-button w3-theme-d3 w3-hover-black" href="{% url 'SignUp' %}">Sign Up</a> or <a class="w3-button w3-theme-d3 w3-hover-black" href="{% url 'password_reset' %}">Reset Password</a>
 {% endblock %}
