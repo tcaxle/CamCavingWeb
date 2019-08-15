@@ -118,7 +118,7 @@ USE_TZ = True
 
 STATIC_ROOT = '/societies/caving/public_html/'
 
-DEBUG = False
+DEBUG = True
 if DEBUG:
     STATIC_URL = '/static/'
 else:
@@ -132,5 +132,6 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "Archive"),
 ]
 
+AUTH_USER_MODEL = 'UserPortal.CustomUser'
 LOGIN_REDIRECT_URL = 'Home'
 LOGOUT_REDIRECT_URL = 'Home'
