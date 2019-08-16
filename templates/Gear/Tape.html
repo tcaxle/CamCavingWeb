@@ -9,6 +9,22 @@
   <h1>Gear Tape</h1>
 
   <h2>Table of Gear Tape Colours</h2>
+  <table class="w3-table w3-table-all w3-card">
+  <tr>
+    <th>Name</th>
+    <th>Tape Colours</th>
+    <th>Notes</th>
+  </tr>
+  {% for i in user_list %}
+  <tr>
+    <td>{{ i.full_name }}</td>
+    <td>{{ i.tape_colour_1 }} {{ i.tape_colour_2 }} {{ i.tape_colour_3 }}</td>
+    <td>{{ i.tape_colour_notes }}</td>
+  </tr>
+  {% endfor %}
+  </table>
+
+  <h2>Table of Gear Tape Colours (Legacy)</h2>
 
   <table class="w3-table w3-table-all w3-card">
     <tbody><tr class="w3-theme-d3">

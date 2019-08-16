@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from UserPortal.models import CustomUser
 
 # Homepage
 def Home(request):
@@ -40,7 +41,7 @@ def MeetsTraining(request):
 def MeetsDinners(request):
     return render(request, 'Meets/Dinners.html')
 
-# Contact
+# Gear
 def GearFirstAid(request):
     return render(request, 'Gear/FirstAid.html')
 def GearHire(request):
@@ -48,7 +49,9 @@ def GearHire(request):
 def GearInventory(request):
     return render(request, 'Gear/Inventory.html')
 def GearTape(request):
-    return render(request, 'Gear/Tape.html')
+    user_list = CustomUser.objects.filter(groups__name='humans')
+    context = {'user_list': user_list}
+    return render(request, 'Gear/Tape.html', context)
 
 # Get Involved
 def GetInvolvedHowToJoin(request):
