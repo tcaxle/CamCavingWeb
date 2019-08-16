@@ -49,7 +49,7 @@ def GearHire(request):
 def GearInventory(request):
     return render(request, 'Gear/Inventory.html')
 def GearTape(request):
-    user_list = CustomUser.objects.filter(groups__name='humans')
+    user_list = CustomUser.objects.all()
     context = {'user_list': user_list}
     return render(request, 'Gear/Tape.html', context)
 

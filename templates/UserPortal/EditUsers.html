@@ -1,0 +1,18 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block title %}
+  <title>CUCC | Portal | Edit Users</title>
+{% endblock %}
+
+{% block main-content %}
+  <h1>Welcome {{ user.full_name }}</h1>
+
+  <h2>Choose a user to edit</h2>
+  {% for i in user_list %}
+  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'SuperEditProfile' i.user_key %}">{{ i.username }}</a>
+  {% endfor %}
+{% endblock %}
+
+{% block side-content %}
+{% endblock %}

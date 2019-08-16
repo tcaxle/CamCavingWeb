@@ -11,7 +11,7 @@ class CustomUserAdmin(UserAdmin):
     form = CustomUserChangeForm
     model = CustomUser
     fieldsets = UserAdmin.fieldsets + (
-            (None, {'fields': ('uuid', 'full_name', 'bio', 'tape_colour_1', 'tape_colour_2', 'tape_colour_3', 'tape_colour_notes')}),
+            (None, {'fields': ('full_name', 'bio', 'tape_colour_1', 'tape_colour_2', 'tape_colour_3', 'tape_colour_notes')}),
     )
     list_display = ['username', 'full_name', 'email', 'bio']
 
