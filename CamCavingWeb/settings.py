@@ -142,5 +142,5 @@ EMAIL_USE_TLS = True
 DEFAULT_FROM_EMAIL = 'CUCC Server <info@camcaving.uk>'
 
 AUTH_USER_MODEL = 'UserPortal.CustomUser'
-LOGIN_REDIRECT_URL = 'Home'
+LOGIN_REDIRECT_URL = 'UserPortalDashboard'
 LOGOUT_REDIRECT_URL = 'Home'

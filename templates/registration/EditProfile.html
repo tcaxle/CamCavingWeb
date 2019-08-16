@@ -1,0 +1,14 @@
+{% extends 'Base.html' %}
+
+{% block title %}
+<title>CUCC | Portal | Edit Profile</title>
+{% endblock %}
+
+{% block main-content %}
+<h2>Edit Profile</h2>
+<form method="post">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button class="w3-button w3-theme-d3 w3-hover-black" type="submit">Save</button>
+</form>
+{% endblock %}
