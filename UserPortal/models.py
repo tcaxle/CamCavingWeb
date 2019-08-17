@@ -58,7 +58,11 @@ class LegacyUser(models.Model):
     tape_colour_2 = models.CharField(verbose_name='Gear Tape Colour 2', max_length=6, choices=COLOR_CHOICES, default='', blank=True)
     tape_colour_3 = models.CharField(verbose_name='Gear Tape Colour 3', max_length=6, choices=COLOR_CHOICES, default='', blank=True)
     tape_colour_notes = models.CharField(verbose_name='Gear Tape Notes', max_length=50, blank=True)
+    rank = models.ManyToManyField(Rank, verbose_name='Club Position')
     status = models.CharField(verbose_name='Status', max_length=20, choices=STATUS_CHOICES, blank=False, default='Inactive')
+
+    def rank_display(self):
+        return ', '.join([i.name for i in self.rank.all()])
 
     def __str__(self):
         return self.full_name

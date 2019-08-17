@@ -9,52 +9,75 @@
   <h1>Committee</h1>
   <p>The committee consists of ten officers:</p>
 
-  {% for i in user_list %}
-
-  {% if 'President' in i.rank_display %}
-  <h2>President: {{ i.full_name }}, {{ i.college }}</h2>
+  <h2>President:
+    {% for i in user_list %}{% if 'President' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
+    {% for i in legacy_user_list %}{% if 'President' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
+  </h2>
   <p><i>president at camcaving.uk</i></p>
-  <p>The president deals with the overall running of the Club. Contact them for general enquiries.</p>
-  {% endif %}
+  <p>The President deals with the overall running of the Club. Contact them for general enquiries.</p>
 
-  {% endfor %}
-
-  <h2>Senior Treasurer: James Hickson, Pembroke</h2>
+  <h2>Senior Treasurer:
+    {% for i in user_list %}{% if 'Senior Treasurer' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
+    {% for i in legacy_user_list %}{% if 'Senior Treasurer' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
+  </h2>
   <p><i>streasurer at camcaving.uk</i></p>
-  <p>James oversees the running of the Club's finances. Please note that day-to-day transactions and enquiries should go to the Junior Treasurer (see below).</p>
+  <p>The Senior Treasurer oversees the running of the Club's finances. Please note that day-to-day transactions and enquiries should go to the Junior Treasurer (see below).</p>
 
-  <h2>Junior Treasurer: David Walker, Ex-Johns</h2>
+  <h2>Junior Treasurer:
+    {% for i in user_list %}{% if 'Junior Treasurer' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
+    {% for i in legacy_user_list %}{% if 'Junior Treasurer' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
+  </h2>
   <p><i>treasurer at camcaving.uk</i></p>
-  <p>David deals with the Club's finances. Email him if you have any queries regarding trip costs.</p>
+  <p>The Junior Treasurer deals with the Club's finances. Email them if you have any queries regarding trip costs.</p>
 
-  <h2>Secretary: Ruairidh Macleod, Hommerton</h2>
+  <h2>Secretary:
+    {% for i in user_list %}{% if 'Membership Secretary' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
+    {% for i in legacy_user_list %}{% if 'Membership Secretary' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
+  </h2>
   <p><i>secretary at camcaving.uk</i></p>
-  <p>Ruairidh (pron. Roory) deals with general Club paperwork, including insurance and subscriptions to the relevant national caving bodies, as well as all port and wetsuit related tasks.</p>
+  <p>The (Membership) Secretary deals with general Club paperwork, including insurance and subscriptions to the relevant national caving bodies.</p>
 
-  <h2>Tackle Master: Wassil Jansen, Hommerton</h2>
+  <h2>Tackle Master:
+    {% for i in user_list %}{% if 'Tackle Master' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
+    {% for i in legacy_user_list %}{% if 'Tackle Master' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
+  </h2>
   <p><i>tackle at camcaving.uk</i></p>
-  <p>Wassil looks after the CUCC Tackle Store and its contents. He is also responsible for allocating gear tape colours.</p>
+  <p>The Tackle Master looks after the CUCC Tackle Store and its contents. They are also responsible for allocating gear tape colours.</p>
 
-  <h2>Meets Secretary: Tom Crossley, Clare</h2>
+  <h2>Meets Secretary:
+    {% for i in user_list %}{% if 'Meets Secretary' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
+    {% for i in legacy_user_list %}{% if 'Meets Secretary' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
+  </h2>
   <p><i>meets at camcaving.uk</i></p>
-  <p>Tom arranges the meets schedule, booking of huts and permits for meets.</p>
+  <p>The Meets Secretary arranges the meets schedule, booking of huts and permits for meets.</p>
 
-  <h2>Social Secretary: Sophie Draper, Ex-Jesus</h2>
+  <h2>Social Secretary:
+    {% for i in user_list %}{% if 'Social Secretary' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
+    {% for i in legacy_user_list %}{% if 'Social Secretary' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
+  </h2>
   <p><i>social at camcaving.uk</i></p>
-  <p>Sophie takes care of CUCC social life between trips.</p>
+  <p>The Social Secretary takes care of CUCC social life between trips.</p>
 
-  <h2>Training Officer: Vacant</h2>
+  <h2>Training Secretary:
+    {% for i in user_list %}{% if 'Training Secretary' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
+    {% for i in legacy_user_list %}{% if 'Training Secretary' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
+  </h2>
   <p><i>training at camcaving.uk</i></p>
-  <p>The trainig officer eals with matters relating to instruction in caving techniques within the club. They are responsible for the training sessions.</p>
+  <p>The Trainig Secretary deals with matters relating to instruction in caving techniques within the club. They are responsible for the training sessions.</p>
 
-  <h2>Webmaster: Tom Crossley, Clare</h2>
+  <h2>Webmaster:
+    {% for i in user_list %}{% if 'Webmaster' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
+    {% for i in legacy_user_list %}{% if 'Webmaster' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
+  </h2>
   <p><i>web at camcaving.uk</i></p>
-  <p>Tom manages the website. He is responsible for the mess of python, html, css, and javascript that you are currently looking at. It's all his fault.</p>
+  <p>The Webmaster manages the website. They are the one to bother when there is an issue with this website.</p>
 
-  <h2>Librarian: Vacant</h2>
+  <h2>Librarian:
+    {% for i in user_list %}{% if 'Librarian' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
+    {% for i in legacy_user_list %}{% if 'Librarian' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
+  </h2>
   <p><i>librarian at camcaving.uk</i></p>
   <p>CUCC has a fine Library in Pembroke College (which is full of fascinating stuff).</p>
-
 
   <h1>Previous Committees</h1>
   <div class="w3-responsive">
@@ -68,7 +91,7 @@
           <th>Secretary</th>
           <th>Tackle Master</th>
           <th>Meets Secretary</th>
-          <th>Social Secretay</th>
+          <th>Social Secretary</th>
           <th>Training Officer</th>
           <th>Webmaster</th>
           <th>Librarian</th>
@@ -209,9 +232,6 @@
 {% endblock %}
 
 {% block side-content %}
-  <h2>Under Construction</h2>
-  <p>This page will soon be integrated with the UserPortal system (as soon as we make the UserPortal System), from which point it will become a bit more showy.</p>
-
   <h2>Committee Functions</h2>
   <p>If you would like more information about the jobs of specific committee members, please follow <a href="{% url 'MiscCommitteeFunctions' %}">this link</a>.</p>
 {% endblock %}

@@ -24,7 +24,8 @@ def AboutBureaucracy(request):
 # Contact
 def ContactCommittee(request):
     user_list = CustomUser.objects.all().order_by('full_name')
-    context = {'user_list': user_list}
+    legacy_user_list = LegacyUser.objects.all().order_by('full_name')
+    context = {'user_list': user_list, 'legacy_user_list': legacy_user_list}
     return render(request, 'Contact/Committee.html', context)
 def ContactMailingList(request):
     return render(request, 'Contact/MailingList.html')
