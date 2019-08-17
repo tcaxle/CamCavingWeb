@@ -17,16 +17,19 @@ COLOR_CHOICES = (
     ('other', 'OTHER')
 )
 
-RANKS = (
-    ('member','MEMBER'),
-    ('president', 'PRESIDENT'),
-    ('senior_treasurer', 'SENIOR TREASURER'),
-    ('junior_treasurer', 'JUNIOR TREASURER'),
-    ('secretary', 'SECRETARY'),
-    ('tackle_master', 'TACKLE MASTER'),
-    ('meets_secretary', 'MEETS SECRETARY'),
-    ('social_secretary', 'SOCIAL SECRETARY')
+STATUS_CHOICES = (
+    ('Frequent', 'Active - Frequent'),
+    ('Infrequent', 'Active - Infrequent'),
+    ('Expo', 'Active - Expo'),
+    ('Inactive', 'Inactive'),
 )
+
+
+
+class Rank(models.Model):
+    name = models.CharField(max_length=20, blank=False)
+    def __str__(self):
+        return self.name
 
 class CustomUser(AbstractUser):
     user_key = models.CharField(max_length=32, default=uuid().hex)
@@ -38,8 +41,12 @@ class CustomUser(AbstractUser):
     tape_colour_3 = models.CharField(verbose_name='Gear Tape Colour 3', max_length=6, choices=COLOR_CHOICES, default='', blank=True)
     tape_colour_notes = models.CharField(verbose_name='Gear Tape Notes', max_length=50, blank=True)
     mailing_list = models.BooleanField(verbose_name='Subscribe to Mailing List?', blank=False, default=False)
-    rank = models.CharField(max_length=30,verbose_name='Club Position', choices=RANKS, default='Member', blank=False)
+    rank = models.ManyToManyField(Rank, verbose_name='Club Position')
+    status = models.CharField(verbose_name='Status', max_length=20, choices=STATUS_CHOICES, blank=False, default='Inactive')
 
+    def rank_display(self):
+        return ', '.join([i.name for i in self.rank.all()])
+    rank_display.short_description = 'Rank Display'
 
     def __str__(self):
         return self.username

@@ -11,7 +11,7 @@
 
   {% for i in user_list %}
 
-  {% if i.rank == 'President' %}
+  {% if 'President' in i.rank_display %}
   <h2>President: {{ i.full_name }}, {{ i.college }}</h2>
   <p><i>caving-president at srcf.net</i></p>
   <p>The president deals with the overall running of the Club. Contact them for general enquiries.</p>
