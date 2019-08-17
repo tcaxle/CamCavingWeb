@@ -12,7 +12,11 @@
   <p><b>Username:</b> {{ user.username }}</p>
   <p><b>Full Name:</b> {{ user.full_name }}</p>
   <p><b>Email Address:</b> {{ user.email }}</p>
-  <p><b>Gear Tape Colours:</b> {{ user.tape_colour_1 }} {{ user.tape_colour_2 }} {{ user.tape_colour_3 }} {{ user.tape_colour_notes }}</p>
+  <p><b>Club Position:</b> {{ user.rank }}</p>
+  <p><b>Gear Tape Colours:</b>
+    <span style="border:1px solid black" class="w3-padding w3-{{ user.tape_colour_1 }}">{{ user.tape_colour_1 }}</span>
+    <span style="border:1px solid black" class="w3-padding w3-{{ user.tape_colour_2 }}">{{ user.tape_colour_2 }}</span>
+    <span style="border:1px solid black" class="w3-padding w3-{{ user.tape_colour_3 }}">{{ user.tape_colour_3 }}</span></p>
   <p><b>Bio:</b> {{ user.bio }}</p>
 {% endblock %}
 

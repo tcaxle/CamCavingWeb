@@ -9,9 +9,15 @@
   <h1>Committee</h1>
   <p>The committee consists of ten officers:</p>
 
-  <h2>President: Tom Crossley, Clare</h2>
+  {% for i in user_list %}
+
+  {% if i.rank == 'President' %}
+  <h2>President: {{ i.full_name }}, {{ i.college }}</h2>
   <p><i>caving-president at srcf.net</i></p>
-  <p>Tom deals with the overall running of the Club. Contact him for general enquiries.</p>
+  <p>The president deals with the overall running of the Club. Contact them for general enquiries.</p>
+  {% endif %}
+
+  {% endfor %}
 
   <h2>Senior Treasurer: James Hickson, Pembroke</h2>
   <p><i>caving-streasurer at srcf.net</i></p>
@@ -48,6 +54,7 @@
   <h2>Librarian: Vacant</h2>
   <p><i>caving-library at srcf.net</i></p>
   <p>CUCC has a fine Library in Pembroke College (which is full of fascinating stuff).</p>
+
 
   <h1>Previous Committees</h1>
   <div class="w3-responsive">

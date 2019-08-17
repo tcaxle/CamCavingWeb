@@ -118,7 +118,7 @@ USE_TZ = True
 
 STATIC_ROOT = '/societies/caving/public_html/'
 
-DEBUG = False
+DEBUG = True
 if DEBUG:
     STATIC_URL = '/static/'
 else:

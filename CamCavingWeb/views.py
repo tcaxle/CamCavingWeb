@@ -23,7 +23,9 @@ def AboutBureaucracy(request):
 
 # Contact
 def ContactCommittee(request):
-    return render(request, 'Contact/Committee.html')
+    user_list = CustomUser.objects.all()
+    context = {'user_list': user_list}
+    return render(request, 'Contact/Committee.html', context)
 def ContactMailingList(request):
     return render(request, 'Contact/MailingList.html')
 
