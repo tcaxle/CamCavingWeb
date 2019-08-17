@@ -23,6 +23,14 @@
 .w3-hover-text-theme:hover {color:#578ca9 !important}
 .w3-hover-border-theme:hover {border-color:#578ca9 !important}
 
+.w3-earth {background: repeating-linear-gradient(
+  45deg,
+  #4CAF50,
+  #4CAF50 10px,
+  #ffeb3b 10px,
+  #ffeb3b 20px
+  )}
+
 body {background-color: #2b4654;}
 
 p {text-align: justify;}

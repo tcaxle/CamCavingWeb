@@ -13,7 +13,7 @@ COLOR_CHOICES = (
     ('purple', 'PURPLE'),
     ('grey', 'GREY'),
     ('white', 'WHITE'),
-    ('warth', 'EARTH'),
+    ('earth', 'EARTH'),
     ('other', 'OTHER')
 )
 

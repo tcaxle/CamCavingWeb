@@ -1,11 +1,6 @@
 from django.shortcuts import render
 from UserPortal.models import CustomUser, LegacyUser
 
-user_list = CustomUser.objects.all()
-legacy_user_list = LegacyUser.objects.all()
-
-
-
 # Homepage
 def Home(request):
     return render(request, 'Home.html')
@@ -28,6 +23,7 @@ def AboutBureaucracy(request):
 
 # Contact
 def ContactCommittee(request):
+    user_list = CustomUser.objects.all().order_by('full_name')
     context = {'user_list': user_list}
     return render(request, 'Contact/Committee.html', context)
 def ContactMailingList(request):
@@ -55,6 +51,8 @@ def GearHire(request):
 def GearInventory(request):
     return render(request, 'Gear/Inventory.html')
 def GearTape(request):
+    user_list = CustomUser.objects.all().order_by('full_name')
+    legacy_user_list = LegacyUser.objects.all().order_by('full_name')
     context = {'user_list': user_list, 'legacy_user_list': legacy_user_list}
     return render(request, 'Gear/Tape.html', context)
 

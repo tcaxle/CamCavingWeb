@@ -8,545 +8,148 @@
 {% block main-content %}
   <h1>Gear Tape</h1>
 
-  <h2>Table of Gear Tape Colours</h2>
+  <h2>Frequently Seen Members</h2>
   <table class="w3-table w3-table-all w3-card">
   <tr class="w3-theme-d3">
     <th>Name</th>
     <th>Tape Colours</th>
-    <th>Notes</th>
   </tr>
   {% for i in user_list %}
-  {% if i.tape_colour_1 != '' %}
+  {% if i.tape_colour_1 != '' and i.status == 'Frequent' %}
   <tr>
     <td>{{ i.full_name }}</td>
     <td>
-      <span style="border:1px solid black" class="w3-padding w3-{{ i.tape_colour_1 }}">{{ i.tape_colour_1 }}</span>
-      <span style="border:1px solid black" class="w3-padding w3-{{ i.tape_colour_2 }}">{{ i.tape_colour_2 }}</span>
-      <span style="border:1px solid black" class="w3-padding w3-{{ i.tape_colour_3 }}">{{ i.tape_colour_3 }}</span></td>
-    <td>{{ i.tape_colour_notes }}</td>
+      <span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_1 }}">{{ i.tape_colour_1 }}</span>
+      {% if i.tape_colour_2 != '' %}<span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_2 }}">{{ i.tape_colour_2 }}</span>{% endif %}
+      {% if i.tape_colour_3 != '' %}<span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_3 }}">{{ i.tape_colour_3 }}</span>{% endif %}
+      {{ i.tape_colour_notes }}
+    </td>
   </tr>
   {% endif %}
   {% endfor %}
   {% for i in legacy_user_list %}
-  {% if i.tape_colour_1 != '' %}
+  {% if i.tape_colour_1 != '' and i.status == 'Frequent' %}
   <tr>
     <td>{{ i.full_name }}</td>
     <td>
-      <span style="border:1px solid black" class="w3-padding w3-{{ i.tape_colour_1 }}">{{ i.tape_colour_1 }}</span>
-      <span style="border:1px solid black" class="w3-padding w3-{{ i.tape_colour_2 }}">{{ i.tape_colour_2 }}</span>
-      <span style="border:1px solid black" class="w3-padding w3-{{ i.tape_colour_3 }}">{{ i.tape_colour_3 }}</span></td>
-    <td>{{ i.tape_colour_notes }}</td>
+      <span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_1 }}">{{ i.tape_colour_1 }}</span>
+      {% if i.tape_colour_2 != '' %}<span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_2 }}">{{ i.tape_colour_2 }}</span>{% endif %}
+      {% if i.tape_colour_3 != '' %}<span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_3 }}">{{ i.tape_colour_3 }}</span>{% endif %}
+      {{ i.tape_colour_notes }}
+    </td>
   </tr>
   {% endif %}
   {% endfor %}
   </table>
 
-  <h2>Table of Gear Tape Colours (Legacy)</h2>
-
+  <h2>Infrequently Seen Members</h2>
   <table class="w3-table w3-table-all w3-card">
-    <tbody><tr class="w3-theme-d3">
-    <td><b>Colour</b>
-    </td>
-    <td><b>Name</b>
-    </td>
-    <td><b>Often seen?</b>
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#000;">Black</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#f00;">Red</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#000;">Black</span> Red is thin
-    </td>
-    <td>Paul Fox
-    </td>
-    <td>Current member
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#00f;">Blue</span> with Ns
-    </td>
-    <td>Sophie Draper
-    </td>
-    <td>Current member
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#ff0;">Yellow</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#000;">Black</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#ff0;">Yellow</span>
-    </td>
-    <td>Tom Crossley
-    </td>
-    <td>Current member very often
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#00f;">Blue</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#840;">Brown</span>
-    </td>
-    <td>Ruairidh Macleod
-    </td>
-    <td>Current member very often
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#00f;">Blue</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#fff;">White</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#00f;">Blue</span> White is thin
-    </td>
-    <td>Radost Waszkiewicz
-    </td>
-    <td>Current member very often
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#00f;">Blue</span>
-    </td>
-    <td>James Hickson
-    </td>
-    <td>Current member
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#00f;">Blue</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#f00;">Red</span>
-    </td>
-    <td>Sam Wenham
-    </td>
-    <td>Current member
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#840;">Brown</span>
-    </td>
-    <td>Aiora Zabala
-    </td>
-    <td>Current member
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#840;">Brown</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#0c0;">Green</span>
-    </td>
-    <td>Wookey &amp; Tess
-    </td>
-    <td>Current members very often
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; color:#000; background:#ff0;"><span style="color:#000; background:#8f4;">E</span>a<span style="color:#000; background:#8f4;">r</span>t<span style="color:#000; background:#8f4;">h</span></span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#000;">Black</span>
-    </td>
-    <td>Aidan Marks
-    </td>
-    <td>Current member
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#fff;">White</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#00f;">Blue</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#fff;">White</span>
-    </td>
-    <td>Millie Kiel
-    </td>
-    <td>Current member
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#0c0;">Green</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#000;">Black</span>
-    </td>
-    <td>Jon Arne Toft
-    </td>
-    <td>Sometimes
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#888;">Grey</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#ff0;">Yellow</span>
-    </td>
-    <td>David Walker
-    </td>
-    <td>Current member
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#808;">Purple</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#ff0;">Yellow</span>
-    </td>
-    <td>Mark Shinwell
-    </td>
-    <td>Current member very often
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#f00;">Red</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#888;">Grey</span>
-    </td>
-    <td>Elaine Oliver
-    </td>
-    <td>Current member very often
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#fff;">White</span>
-    </td>
-    <td>Adrian Horrell
-    </td>
-    <td>Current member
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#fff;">White</span>
-    </td>
-    <td>Philip Sargent
-    </td>
-    <td>Expo
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#f00;">Red</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#fff;">White</span>
-    </td>
-    <td>Michael Sargent
-    </td>
-    <td>Rarely
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#fff;">White</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#00f;">Blue</span>
-    </td>
-    <td>Haydon Saunders
-    </td>
-    <td>Official non-member (very often)
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#00f;">Blue</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#ff0;">Yellow</span>
-    </td>
-    <td>Becka Lawson
-    </td>
-    <td>Frequently
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; color:#000; background:#ff0;"><span style="color:#000; background:#8f4;">E</span>a<span style="color:#000; background:#8f4;">r</span>t<span style="color:#000; background:#8f4;">h</span></span>
-    </td>
-    <td>Frank Tully
-    </td>
-    <td>Sometimes
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#888;">Grey</span>
-    </td>
-    <td>Sam Lieberman
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#f60;">Orange</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#f60;">Orange</span>
-    </td>
-    <td>Martin Green
-    </td>
-    <td>Sometimes
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#f00;">Red</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#00f;">Blue</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#f00;">Red</span>
-    </td>
-    <td>Julian Todd
-    </td>
-    <td>Emails and anecdotes
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; color:#000; background:#ff0;"><span style="color:#000; background:#8f4;">E</span>a<span style="color:#000; background:#8f4;">r</span>t<span style="color:#000; background:#8f4;">h</span></span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#fff;">White</span>
-    </td>
-    <td>Olly Madge
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#000;">Black</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#00f;">Blue</span>
-    </td>
-    <td>Chris Densham
-    </td>
-    <td>Frequently
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#00f;">Blue</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#808;">Purple</span>
-    </td>
-    <td>Lydia-Clare Leather
-    </td>
-    <td>Expo
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#0c0;">Green</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#fff;">White</span>
-    </td>
-    <td>Julia Day
-    </td>
-    <td>Expo
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#000;">Black</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#ff0;">Yellow</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#000;">Black</span>
-    </td>
-    <td>Toby Speight
-    </td>
-    <td>Expo
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#000;">Black</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#ff0;">Yellow</span>
-    </td>
-    <td>Anthony Day
-    </td>
-    <td>Expo
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#840;">Brown</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#f00;">Red</span>
-    </td>
-    <td>Emma Wilson
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#00f;">Blue</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#fff;">White</span>
-    </td>
-    <td>Stuart Bennett
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#840;">Brown</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#888;">Grey</span>, <span style="border: thin solid black; color:#000; background:#ff0;"><span style="color:#000; background:#8f4;">E</span>a<span style="color:#000; background:#8f4;">r</span>t<span style="color:#000; background:#8f4;">h</span></span>
-    </td>
-    <td>Tom Handford
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; color:#000; background:#ff0;"><span style="color:#000; background:#8f4;">E</span>a<span style="color:#000; background:#8f4;">r</span>t<span style="color:#000; background:#8f4;">h</span></span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#f00;">Red</span>
-    </td>
-    <td>Pete Harley*
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#000;">Black</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#000;">Black</span>
-    </td>
-    <td>Steve Jones
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#0c0;">Green</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#ff0;">Yellow</span>
-    </td>
-    <td>Nial Peters
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#0c0;">Green</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#fff;">White</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#f00;">Red</span>
-    </td>
-    <td>Serena Povia
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#00f;">Blue</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#000;">Black</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#fff;">White</span>
-    </td>
-    <td>Kathryn Hopkins
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#000;">Black</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#840;">Brown</span>
-    </td>
-    <td>Tony Rooke
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#000;">Black</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#00f;">Blue</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#000;">Black</span>
-    </td>
-    <td>Edvin Deadman
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#00f;">Blue</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#000;">Black</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#f00;">Red</span>
-    </td>
-    <td>Ollie Stevens
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#00f;">Blue</span>, <span style="border: thin solid black; color:#000; background:#ff0;"><span style="color:#000; background:#8f4;">E</span>a<span style="color:#000; background:#8f4;">r</span>t<span style="color:#000; background:#8f4;">h</span></span>
-    </td>
-    <td>Alex Crow and Jess Stirrups
-    </td>
-    <td>Sometimes
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#000;">Black</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#f00;">Red</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#000;">Black</span>
-    </td>
-    <td>Erin Lynch
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#000;">Black</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#fff;">White</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#f00;">Red</span>
-    </td>
-    <td>Adam Kessler
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#00f;">Blue</span>
-    </td>
-    <td>Mike Richardson
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#00f;">Blue</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#f60;">Orange</span>
-    </td>
-    <td>Richard Mundy
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; color:#000; background:#ff0;"><span style="color:#000; background:#8f4;">E</span>a<span style="color:#000; background:#8f4;">r</span>t<span style="color:#000; background:#8f4;">h</span></span>
-    </td>
-    <td>Jenny Black
-    </td>
-    <td>Never(expo)
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; color:#000; background:#ff0;"><span style="color:#000; background:#8f4;">E</span>a<span style="color:#000; background:#8f4;">r</span>t<span style="color:#000; background:#8f4;">h</span></span>, <span style="border: thin solid black; color:#000; background:#ff0;"><span style="color:#000; background:#8f4;">E</span>a<span style="color:#000; background:#8f4;">r</span>t<span style="color:#000; background:#8f4;">h</span></span>
-    </td>
-    <td>Earl Merson
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; color:#000; background:#ff0;"><span style="color:#000; background:#8f4;">E</span>a<span style="color:#000; background:#8f4;">r</span>t<span style="color:#000; background:#8f4;">h</span></span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#808;">Purple</span>
-    </td>
-    <td>Duncan Collis
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; color:#000; background:#ff0;"><span style="color:#000; background:#8f4;">E</span>a<span style="color:#000; background:#8f4;">r</span>t<span style="color:#000; background:#8f4;">h</span></span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#f00;">Red</span>
-    </td>
-    <td>Brian Outram*
-    </td>
-    <td>Ever
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#0c0;">Green</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#f60;">Orange</span>
-    </td>
-    <td>Olly Betts
-    </td>
-    <td>Emails and anecdotes
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#0c0;">Green</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#f00;">Red</span>
-    </td>
-    <td>Aaron Curtis
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#808;">Purple</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#f00;">Red</span>
-    </td>
-    <td>Julian Haines
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#f00;">Red</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#fff;">White</span>
-    </td>
-    <td>Simon Redhead
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#ff0;">Yellow</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#fff;">White</span>
-    </td>
-    <td>David Loeffler
-    </td>
-    <td>Sometimes
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#f60;">Orange</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#ff0;">Yellow</span>
-    </td>
-    <td>Djuke Veldhuis
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#000;">Black</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#888;">Grey</span>
-    </td>
-    <td>Alex Cheesman
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#000;">Black</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#f00;">Red</span>
-    </td>
-    <td>Steve Bishop
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#000;">Black</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#ff0;">Yellow</span>
-    </td>
-    <td>Penny Reeves
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#00f;">Blue</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#000;">Black</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#f00;">Red</span>
-    </td>
-    <td>Jeremy Rodgers
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#00f;">Blue</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#0c0;">Green</span>
-    </td>
-    <td>Tanya Savage
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#00f;">Blue</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#0c0;">Green</span>
-    </td>
-    <td>Letty ten Harkel
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#00f;">Blue</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#0c0;">Green</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#f00;">Red</span>
-    </td>
-    <td>John Billings
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#00f;">Blue</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#fff;">White</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#f00;">Red</span>
-    </td>
-    <td>Chantalle Mouwer
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#00f;">Blue</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#ff0;">Yellow</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#f00;">Red</span>
-    </td>
-    <td>Ally Graff-Fearon
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#f60;">Orange</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#f00;">Red</span>
-    </td>
-    <td>Peter Clifton
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#f00;">Red</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#ff0;">Yellow</span>
-    </td>
-    <td>Mark Fearon
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#ff0;">Yellow</span>
-    </td>
-    <td>Andy Waddington
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#ff0;">Yellow</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#fff;">White</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#ff0;">Yellow</span>
-    </td>
-    <td>Dave Fearon
-    </td>
-    <td>Never
-    </td></tr>
-    <tr>
-    <td><span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#f00;">Red</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:white; background:#000;">Black</span>, <span style="border: thin solid black; padding: 0.3ex 0.5em; color:black; background:#f00;">Red</span>
-    </td>
-    <td>Aled Elmore
-    </td>
-    <td>Never
-  </td></tr></tbody></table>
-  <br>
+  <tr class="w3-theme-d3">
+    <th>Name</th>
+    <th>Tape Colours</th>
+  </tr>
+  {% for i in user_list %}
+  {% if i.tape_colour_1 != '' and i.status == 'Infrequent' %}
+  <tr>
+    <td>{{ i.full_name }}</td>
+    <td>
+      <span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_1 }}">{{ i.tape_colour_1 }}</span>
+      {% if i.tape_colour_2 != '' %}<span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_2 }}">{{ i.tape_colour_2 }}</span>{% endif %}
+      {% if i.tape_colour_3 != '' %}<span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_3 }}">{{ i.tape_colour_3 }}</span>{% endif %}
+      {{ i.tape_colour_notes }}
+    </td>
+  </tr>
+  {% endif %}
+  {% endfor %}
+  {% for i in legacy_user_list %}
+  {% if i.tape_colour_1 != '' and i.status == 'Infrequent' %}
+  <tr>
+    <td>{{ i.full_name }}</td>
+    <td>
+      <span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_1 }}">{{ i.tape_colour_1 }}</span>
+      {% if i.tape_colour_2 != '' %}<span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_2 }}">{{ i.tape_colour_2 }}</span>{% endif %}
+      {% if i.tape_colour_3 != '' %}<span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_3 }}">{{ i.tape_colour_3 }}</span>{% endif %}
+      {{ i.tape_colour_notes }}
+    </td>
+  </tr>
+  {% endif %}
+  {% endfor %}
+  </table>
+
+  <h2>Expo Members</h2>
+  <table class="w3-table w3-table-all w3-card">
+  <tr class="w3-theme-d3">
+    <th>Name</th>
+    <th>Tape Colours</th>
+  </tr>
+  {% for i in user_list %}
+  {% if i.tape_colour_1 != '' and i.status == 'Expo' %}
+  <tr>
+    <td>{{ i.full_name }}</td>
+    <td>
+      <span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_1 }}">{{ i.tape_colour_1 }}</span>
+      {% if i.tape_colour_2 != '' %}<span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_2 }}">{{ i.tape_colour_2 }}</span>{% endif %}
+      {% if i.tape_colour_3 != '' %}<span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_3 }}">{{ i.tape_colour_3 }}</span>{% endif %}
+      {{ i.tape_colour_notes }}
+    </td>
+  </tr>
+  {% endif %}
+  {% endfor %}
+  {% for i in legacy_user_list %}
+  {% if i.tape_colour_1 != '' and i.status == 'Expo' %}
+  <tr>
+    <td>{{ i.full_name }}</td>
+    <td>
+      <span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_1 }}">{{ i.tape_colour_1 }}</span>
+      {% if i.tape_colour_2 != '' %}<span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_2 }}">{{ i.tape_colour_2 }}</span>{% endif %}
+      {% if i.tape_colour_3 != '' %}<span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_3 }}">{{ i.tape_colour_3 }}</span>{% endif %}
+      {{ i.tape_colour_notes }}
+    </td>
+  </tr>
+  {% endif %}
+  {% endfor %}
+  </table>
+
+
+  <h2>Inactive Members</h2>
+  <table class="w3-table w3-table-all w3-card">
+  <tr class="w3-theme-d3">
+    <th>Name</th>
+    <th>Tape Colours</th>
+  </tr>
+  {% for i in user_list %}
+  {% if i.tape_colour_1 != '' and i.status == 'Inactive' %}
+  <tr>
+    <td>{{ i.full_name }}</td>
+    <td>
+      <span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_1 }}">{{ i.tape_colour_1 }}</span>
+      {% if i.tape_colour_2 != '' %}<span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_2 }}">{{ i.tape_colour_2 }}</span>{% endif %}
+      {% if i.tape_colour_3 != '' %}<span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_3 }}">{{ i.tape_colour_3 }}</span>{% endif %}
+      {{ i.tape_colour_notes }}
+    </td>
+  </tr>
+  {% endif %}
+  {% endfor %}
+  {% for i in legacy_user_list %}
+  {% if i.tape_colour_1 != '' and i.status == 'Inactive' %}
+  <tr>
+    <td>{{ i.full_name }}</td>
+    <td>
+      <span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_1 }}">{{ i.tape_colour_1 }}</span>
+      {% if i.tape_colour_2 != '' %}<span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_2 }}">{{ i.tape_colour_2 }}</span>{% endif %}
+      {% if i.tape_colour_3 != '' %}<span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_3 }}">{{ i.tape_colour_3 }}</span>{% endif %}
+      {{ i.tape_colour_notes }}
+    </td>
+  </tr>
+  {% endif %}
+  {% endfor %}
+  </table>
 
 {% endblock %}
 
 {% block side-content %}
   <p>It is recommended that members of CUCC and Expo use some combination of coloured tape or similar tagging system to mark their gear. </p>
   <p>Please edit this page to list your currently used gear tape colours if you are involved with either CUCC or the CUCC Expo. You must have an account on the wiki to edit this page. Use other entries in the table as an example format. </p>
-  <p>When choosing gear tape colours, try your best to avoid using in-use combinations, especially if in use by a member who is listed as currently active in the club or expedition. </p>
+  <p>When choosing gear tape colours, try your best to avoid using in-use combinations, especially if in use by a member who is listed as currently active in the club or expedition.</p>
+  <p><span style="border:1px solid black" class="w3-padding-small w3-purple">Purple</span> tape is reserved for club gear. The only exception to this is members of other clubs who attend Expo.</p>
 {% endblock %}
