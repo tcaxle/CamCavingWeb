@@ -1,5 +1,10 @@
 from django.shortcuts import render
-from UserPortal.models import CustomUser
+from UserPortal.models import CustomUser, LegacyUser
+
+user_list = CustomUser.objects.all()
+legacy_user_list = LegacyUser.objects.all()
+
+
 
 # Homepage
 def Home(request):
@@ -23,7 +28,6 @@ def AboutBureaucracy(request):
 
 # Contact
 def ContactCommittee(request):
-    user_list = CustomUser.objects.all()
     context = {'user_list': user_list}
     return render(request, 'Contact/Committee.html', context)
 def ContactMailingList(request):
@@ -51,8 +55,7 @@ def GearHire(request):
 def GearInventory(request):
     return render(request, 'Gear/Inventory.html')
 def GearTape(request):
-    user_list = CustomUser.objects.all()
-    context = {'user_list': user_list}
+    context = {'user_list': user_list, 'legacy_user_list': legacy_user_list}
     return render(request, 'Gear/Tape.html', context)
 
 # Get Involved

@@ -50,3 +50,15 @@ class CustomUser(AbstractUser):
 
     def __str__(self):
         return self.username
+
+class LegacyUser(models.Model):
+    full_name = models.CharField(max_length=50, blank=False)
+    college = models.CharField(max_length=50, blank=True)
+    tape_colour_1 = models.CharField(verbose_name='Gear Tape Colour 1', max_length=6, choices=COLOR_CHOICES, default='', blank=True)
+    tape_colour_2 = models.CharField(verbose_name='Gear Tape Colour 2', max_length=6, choices=COLOR_CHOICES, default='', blank=True)
+    tape_colour_3 = models.CharField(verbose_name='Gear Tape Colour 3', max_length=6, choices=COLOR_CHOICES, default='', blank=True)
+    tape_colour_notes = models.CharField(verbose_name='Gear Tape Notes', max_length=50, blank=True)
+    status = models.CharField(verbose_name='Status', max_length=20, choices=STATUS_CHOICES, blank=False, default='Inactive')
+
+    def __str__(self):
+        return self.full_name

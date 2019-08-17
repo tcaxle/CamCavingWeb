@@ -27,6 +27,18 @@
   </tr>
   {% endif %}
   {% endfor %}
+  {% for i in legacy_user_list %}
+  {% if i.tape_colour_1 != '' %}
+  <tr>
+    <td>{{ i.full_name }}</td>
+    <td>
+      <span style="border:1px solid black" class="w3-padding w3-{{ i.tape_colour_1 }}">{{ i.tape_colour_1 }}</span>
+      <span style="border:1px solid black" class="w3-padding w3-{{ i.tape_colour_2 }}">{{ i.tape_colour_2 }}</span>
+      <span style="border:1px solid black" class="w3-padding w3-{{ i.tape_colour_3 }}">{{ i.tape_colour_3 }}</span></td>
+    <td>{{ i.tape_colour_notes }}</td>
+  </tr>
+  {% endif %}
+  {% endfor %}
   </table>
 
   <h2>Table of Gear Tape Colours (Legacy)</h2>

@@ -17,3 +17,4 @@ class CustomUserAdmin(UserAdmin):
 
 admin.site.register(CustomUser, CustomUserAdmin)
 admin.site.register(Rank)
+admin.site.register(LegacyUser)
