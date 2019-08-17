@@ -118,7 +118,7 @@ USE_TZ = True
 
 STATIC_ROOT = '/societies/caving/public_html/'
 
-DEBUG = False
+DEBUG = os.environ['DJANGO_DEBUG'] == 'TRUE'
 if DEBUG:
     STATIC_URL = '/static/'
 else:
