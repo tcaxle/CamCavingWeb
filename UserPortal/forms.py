@@ -6,9 +6,9 @@ from .models import *
 class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm):
         model = CustomUser
-        fields = ('username', 'email', 'full_name', 'rank', 'bio', 'mailing_list', 'tape_colour_1', 'tape_colour_2', 'tape_colour_3', 'tape_colour_notes', 'rank', 'status')
+        fields = ('username', 'full_name', 'email', 'status', 'bio', 'tape_colour_1', 'tape_colour_2', 'tape_colour_3', 'tape_colour_notes')
 
 class CustomUserChangeForm(UserCreationForm):
     class Meta(UserChangeForm):
         model = CustomUser
-        fields = ('username', 'email', 'full_name', 'rank', 'bio', 'mailing_list', 'tape_colour_1', 'tape_colour_2', 'tape_colour_3', 'tape_colour_notes', 'rank', 'status')
+        fields = ('username', 'full_name', 'email', 'status', 'bio', 'tape_colour_1', 'tape_colour_2', 'tape_colour_3', 'tape_colour_notes')

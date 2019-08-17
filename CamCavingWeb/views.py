@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from UserPortal.models import CustomUser, LegacyUser
+from UserPortal.models import *
 
 # Homepage
 def Home(request):
@@ -25,7 +25,9 @@ def AboutBureaucracy(request):
 def ContactCommittee(request):
     user_list = CustomUser.objects.all().order_by('full_name')
     legacy_user_list = LegacyUser.objects.all().order_by('full_name')
-    context = {'user_list': user_list, 'legacy_user_list': legacy_user_list}
+    rank_list = Rank.objects.filter(committee=True)
+    committee_list = Committee.objects.all().order_by('-year')
+    context = {'user_list': user_list, 'legacy_user_list': legacy_user_list, 'rank_list': rank_list, 'committee_list': committee_list}
     return render(request, 'Contact/Committee.html', context)
 def ContactMailingList(request):
     return render(request, 'Contact/MailingList.html')
@@ -54,7 +56,7 @@ def GearInventory(request):
 def GearTape(request):
     user_list = CustomUser.objects.all().order_by('full_name')
     legacy_user_list = LegacyUser.objects.all().order_by('full_name')
-    context = {'user_list': user_list, 'legacy_user_list': legacy_user_list}
+    context = {'user_list': user_list, 'legacy_user_list': legacy_user_list,}
     return render(request, 'Gear/Tape.html', context)
 
 # Get Involved

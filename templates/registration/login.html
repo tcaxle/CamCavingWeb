@@ -8,7 +8,9 @@
   <h2>Login</h2>
   <form method="post">
     {% csrf_token %}
-    {{ form.as_p }}
+    <table class="w3-table w3-striped">
+    {{ form.as_table }}
+    </table>
     <button class="w3-button w3-theme-d3 w3-hover-black" type="submit">Login</button>
   </form>
   <p>Alternatively, <a class="w3-button w3-theme-d3 w3-hover-black" href="{% url 'SignUp' %}">Sign Up</a> or <a class="w3-button w3-theme-d3 w3-hover-black" href="{% url 'password_reset' %}">Reset Password</a>

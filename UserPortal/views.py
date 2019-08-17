@@ -21,7 +21,7 @@ class EditProfile(UpdateView):
     model = CustomUser
     success_url = reverse_lazy('UserPortalDashboard')
     template_name = 'registration/EditProfile.html'
-    fields = ['full_name', 'email', 'bio', 'status', 'college', 'mailing_list', 'tape_colour_1', 'tape_colour_2', 'tape_colour_3', 'tape_colour_notes']
+    fields = ['full_name', 'email', 'bio', 'status', 'college', 'tape_colour_1', 'tape_colour_2', 'tape_colour_3', 'tape_colour_notes']
     template_name_suffix = '_update_form'
     slug_field = 'user_key'
 

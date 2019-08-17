@@ -24,10 +24,11 @@ STATUS_CHOICES = (
     ('Inactive', 'Inactive'),
 )
 
-
-
 class Rank(models.Model):
     name = models.CharField(max_length=20, blank=False)
+    description = models.TextField(max_length=500, blank=True)
+    committee = models.BooleanField(default=False, blank=False)
+    email = models.CharField(max_length=50, blank=True)
     def __str__(self):
         return self.name
 
@@ -66,3 +67,20 @@ class LegacyUser(models.Model):
 
     def __str__(self):
         return self.full_name
+
+class Committee(models.Model):
+    year = models.IntegerField()
+    president = models.CharField(max_length=40, blank=True)
+    senior_treasurer = models.CharField(max_length=40, blank=True)
+    junior_treasurer = models.CharField(max_length=40, blank=True)
+    secretary = models.CharField(max_length=40, blank=True)
+    tackle_master = models.CharField(max_length=40, blank=True)
+    meets_secretary = models.CharField(max_length=40, blank=True)
+    social_secretary = models.CharField(max_length=40, blank=True)
+    training_secretary = models.CharField(max_length=40, blank=True)
+    webmaster = models.CharField(max_length=40, blank=True)
+    librarian = models.CharField(max_length=40, blank=True)
+    lamp_post = models.CharField(max_length=40, blank=True)
+
+    def __str__(self):
+        return str(self.year)

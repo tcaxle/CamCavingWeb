@@ -9,79 +9,18 @@
   <h1>Committee</h1>
   <p>The committee consists of ten officers:</p>
 
-  <h2>President:
-    {% for i in user_list %}{% if 'President' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
-    {% for i in legacy_user_list %}{% if 'President' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
+  {% for r in rank_list %}
+  <h2>{{ r.name }}:
+    {% for u in user_list %}{% if r.name in u.rank_display %}{{ u.full_name }}, {{ u.college }}{% endif %}{% endfor %}
+    {% for u in legacy_user_list %}{% if r.name in u.rank_display %}{{ u.full_name }}, {{ u.college }}{% endif %}{% endfor %}
   </h2>
-  <p><i>president at camcaving.uk</i></p>
-  <p>The President deals with the overall running of the Club. Contact them for general enquiries.</p>
-
-  <h2>Senior Treasurer:
-    {% for i in user_list %}{% if 'Senior Treasurer' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
-    {% for i in legacy_user_list %}{% if 'Senior Treasurer' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
-  </h2>
-  <p><i>streasurer at camcaving.uk</i></p>
-  <p>The Senior Treasurer oversees the running of the Club's finances. Please note that day-to-day transactions and enquiries should go to the Junior Treasurer (see below).</p>
-
-  <h2>Junior Treasurer:
-    {% for i in user_list %}{% if 'Junior Treasurer' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
-    {% for i in legacy_user_list %}{% if 'Junior Treasurer' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
-  </h2>
-  <p><i>treasurer at camcaving.uk</i></p>
-  <p>The Junior Treasurer deals with the Club's finances. Email them if you have any queries regarding trip costs.</p>
-
-  <h2>Secretary:
-    {% for i in user_list %}{% if 'Membership Secretary' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
-    {% for i in legacy_user_list %}{% if 'Membership Secretary' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
-  </h2>
-  <p><i>secretary at camcaving.uk</i></p>
-  <p>The (Membership) Secretary deals with general Club paperwork, including insurance and subscriptions to the relevant national caving bodies.</p>
-
-  <h2>Tackle Master:
-    {% for i in user_list %}{% if 'Tackle Master' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
-    {% for i in legacy_user_list %}{% if 'Tackle Master' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
-  </h2>
-  <p><i>tackle at camcaving.uk</i></p>
-  <p>The Tackle Master looks after the CUCC Tackle Store and its contents. They are also responsible for allocating gear tape colours.</p>
-
-  <h2>Meets Secretary:
-    {% for i in user_list %}{% if 'Meets Secretary' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
-    {% for i in legacy_user_list %}{% if 'Meets Secretary' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
-  </h2>
-  <p><i>meets at camcaving.uk</i></p>
-  <p>The Meets Secretary arranges the meets schedule, booking of huts and permits for meets.</p>
-
-  <h2>Social Secretary:
-    {% for i in user_list %}{% if 'Social Secretary' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
-    {% for i in legacy_user_list %}{% if 'Social Secretary' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
-  </h2>
-  <p><i>social at camcaving.uk</i></p>
-  <p>The Social Secretary takes care of CUCC social life between trips.</p>
-
-  <h2>Training Secretary:
-    {% for i in user_list %}{% if 'Training Secretary' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
-    {% for i in legacy_user_list %}{% if 'Training Secretary' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
-  </h2>
-  <p><i>training at camcaving.uk</i></p>
-  <p>The Trainig Secretary deals with matters relating to instruction in caving techniques within the club. They are responsible for the training sessions.</p>
-
-  <h2>Webmaster:
-    {% for i in user_list %}{% if 'Webmaster' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
-    {% for i in legacy_user_list %}{% if 'Webmaster' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
-  </h2>
-  <p><i>web at camcaving.uk</i></p>
-  <p>The Webmaster manages the website. They are the one to bother when there is an issue with this website.</p>
-
-  <h2>Librarian:
-    {% for i in user_list %}{% if 'Librarian' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
-    {% for i in legacy_user_list %}{% if 'Librarian' in i.rank_display %}{{ i.full_name }}, {{ i.college }}{% endif %}{% endfor %}
-  </h2>
-  <p><i>librarian at camcaving.uk</i></p>
-  <p>CUCC has a fine Library in Pembroke College (which is full of fascinating stuff).</p>
+  <p>Email: <i>{{ r.email }}</i></p>
+  <p>{{ r.description }}</p>
+  {% endfor %}
 
   <h1>Previous Committees</h1>
   <div class="w3-responsive">
-    <table class="w3-table-all">
+    <table class="w3-table-all w3-striped">
       <thead>
         <tr class="w3-theme-d3">
           <th>Year</th>
@@ -98,132 +37,22 @@
           <th>Lamp Post</th>
         </tr>
       </thead>
-      <tr class="w3-theme-l3">
-        <td>2018-19</td>
-        <td>Radost Waskieicz</td>
-        <td>James Hickson</td>
-        <td>Aidan Marks</td>
-        <td>Ruairidh Macleod</td>
-        <td>Tom Crossley</td>
-        <td>David Walker</td>
-        <td>Max Sinclair</td>
-        <td></td>
-        <td>Radost Waskieicz</td>
-        <td></td>
-        <td></td>
+      {% for c in committee_list %}
+      <tr>
+        <td>{{ c.year }}</td>
+        <td>{{ c.president }}</td>
+        <td>{{ c.senior_treasurer }}</td>
+        <td>{{ c.junior_treasurer }}</td>
+        <td>{{ c.secretary }}</td>
+        <td>{{ c.tackle_master }}</td>
+        <td>{{ c.meets_secretary }}</td>
+        <td>{{ c.social_secretary }}</td>
+        <td>{{ c.training_secretary }}</td>
+        <td>{{ c.webmaster }}</td>
+        <td>{{ c.librarian }}</td>
+        <td>{{ c.lamp_post }}</td>
       </tr>
-      <tr class="w3-theme-l4">
-        <td>2017-18</td>
-        <td>Ruairidh Macleod</td>
-        <td>James Hickson</td>
-        <td>Aidan Marks</td>
-        <td>Radost Waskieicz</td>
-        <td></td>
-        <td>David Walker</td>
-        <td>Elaine Oliver</td>
-        <td></td>
-        <td>Sam Wenham & Wookey</td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr class="w3-theme-l3">
-        <td>2016-17</td>
-        <td>Felix Stahlberg</td>
-        <td>James Hickson</td>
-        <td>Michael Sargent</td>
-        <td>David Walker</td>
-        <td></td>
-        <td>Aidan Marks</td>
-        <td>Roshni Gohil</td>
-        <td></td>
-        <td>Sam Wenham & Wookey</td>
-        <td></td>
-        <td></td>
-      </tr>
-      <tr class="w3-theme-l4">
-        <td>2015-16</td>
-        <td>David Walker</td>
-        <td>James Hickson</td>
-        <td>Michael Sargent</td>
-        <td>Felix Stahlberg</td>
-        <td>Sam Wenham</td>
-        <td>David Walker</td>
-        <td>Aled Elmore</td>
-        <td>David Walker</td>
-        <td>Sam Wenham</td>
-        <td>Dávid Molnár</td>
-        <td>Adrian Horrell</td>
-      </tr>
-      <tr class="w3-theme-l3">
-        <td>2014-15</td>
-        <td>David Walker</td>
-        <td>James Hickson</td>
-        <td>Stuart Bennett</td>
-        <td>Michael Sargent</td>
-        <td>Xian Jie Tay & Michael Sargent</td>
-        <td>Sophie Draper</td>
-        <td>Bela Dimova</td>
-        <td></td>
-        <td>Sam Wenham</td>
-        <td>Dávid Molnár</td>
-        <td>Adrian Horrell</td>
-      </tr>
-      <tr class="w3-theme-l4">
-        <td>2013-14</td>
-        <td>Bela Dimova</td>
-        <td>James Hickson</td>
-        <td>Stuart Bennett</td>
-        <td>David Walker</td>
-        <td>Xian Jie Tay</td>
-        <td>Anya Ermakova</td>
-        <td>Jessica Chatwin & Cormac Doyle</td>
-        <td>Alex Crow</td>
-        <td>Aiora Zabala</td>
-        <td>Dávid Molnár</td>
-        <td>Adrian Horrell</td>
-      </tr>
-      <tr class="w3-theme-l3">
-        <td>2012-13</td>
-        <td>Aiora Zabala</td>
-        <td>James Hickson</td>
-        <td>Stuart Bennett</td>
-        <td>Bela Dimova</td>
-        <td>Xian Jie Tay</td>
-        <td>Matt Watson</td>
-        <td></td>
-        <td>Stuart Bennett</td>
-        <td>Wookey</td>
-        <td>Dávid Molnár</td>
-        <td>Adrian Horrell</td>
-      </tr>
-      <tr class="w3-theme-l4">
-        <td>2011-12</td>
-        <td>Aiora Zabala</td>
-        <td>James Hickson</td>
-        <td>Dávid Mólnar</td>
-        <td>Krista Mumdzjana</td>
-        <td></td>
-        <td>Matt Watson</td>
-        <td>Stuart Bennett</td>
-        <td></td>
-        <td>Olly Madge & Wookey</td>
-        <td>Jess Stirrups</td>
-        <td>Wookey</td>
-      </tr>
-      <tr class="w3-theme-l3">
-        <td>2010-11</td>
-        <td>Jess Stirrups</td>
-        <td>James Hickson</td>
-        <td>Ben Gibson</td>
-        <td>Tom Logan</td>
-        <td></td>
-        <td>Serena Povia</td>
-        <td></td>
-        <td>Martin Jahnke</td>
-        <td>Tom Logan</td>
-        <td></td>
-        <td>Wookey</td>
-      </tr>
+      {% endfor %}
     </table>
   </div>
 
