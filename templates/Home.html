@@ -20,6 +20,75 @@
   </ul>
   <p>If you are an alumni member of CUCC, please see the <a href="{% url 'MiscExCS' %}">ExCS page</a> for more details.</p>
 
+  <h1>CUCC News</h1>
+  <p>Please see the <a href="{% url 'Blog' %}">Blog</a> for other posts.</p>
+
+  <table class="w3-padding-16 w3-table w3-striped">
+  {% for p in posts %}
+  <tr><td>
+  <div class="w3-container w3-twothird w3-cell w3-mobile">
+    <h2>{{ p.title }} ({{ p.published_date.date }}) {% if user == p.author or user.username == 'webmaster' %}<a class="w3-button w3-right w3-large w3-theme-d4 w3-hover-black" href="{% url 'BlogEdit' pk=p.pk %}">Edit</a>{% endif %}</h2>
+    <p style="white-space: pre-wrap;">{{ p.text }}</p>
+  </div>
+  <div class="w3-center w3-container w3-third w3-cell w3-mobile">
+    {% for i in image_list %}
+    {% if i.post == p %}
+    <img class="w3-image" src="{{ i.images.url }}" alt="{{ p.title }}">
+    {% endif %}
+    {% endfor %}
+  </div>
+  </td></tr>
+  {% endfor %}
+  </table>
+
+{% if posts.has_other_pages %}
+  <div class="pagination w3-bar w3-center w3-padding-32">
+    {% if posts.has_previous %}
+      <a class="w3-button w3-hover-black" href="?page={{ posts.previous_page_number }}">&laquo;</a>
+    {% else %}
+      <span class="disabled w3-button">&laquo;</span>
+    {% endif %}
+    {% for i in posts.paginator.page_range %}
+      {% if posts.number == i %}
+        <span class="active w3-button w3-black">{{ i }} <span class="sr-only">(current)</span></span>
+      {% else %}
+        <a class="w3-button w3-hover-black" href="?page={{ i }}">{{ i }}</a>
+      {% endif %}
+    {% endfor %}
+    {% if posts.has_next %}
+      <a class="w3-button w3-hover-black" href="?page={{ posts.next_page_number }}">&raquo;</a>
+    {% else %}
+      <span class="disabled w3-button">&raquo;</span>
+    {% endif %}
+  </div>
+{% endif %}
+
+
+  <p></p>
+
+{% endblock %}
+
+{% block side-content %}
+  <p></p>
+  <div class="w3-card">
+    <img src="{% static "Images/Caves/CoverPhoto.jpg" %}" class="w3-image w3-hide-small" alt="Photo by Mark Shinwell">
+  </div>
+
+  <h2>About</h2>
+  <p>You have reached the homepage of the <b>Cambridge University Caving Club (CUCC).</b> Please feel free to browse the site to find out more about who we are.</p>
+
+  <h2>History</h2>
+  <p>The CUCC was founded in 1949 as an undergraduate club. Since then, it has grown to include people of all walks of life.</p>
+  <blockquote class="w3-panel w3-leftbar w3-theme-l4 w3-card">
+   <p>
+   <i>"The membership of the Club shall be open to all past and present members of the  University  of  Cambridge,  students  pursuing  a  course  of  full-time  study  at a college of higher education in Cambridge or at a research institute approvedby the University of Cambridge,  employees of the University of Cambridge or of a college of higher education in Cambridge, and other people accepted by the committee, regardless of religion, nationality, ethnicity, gender, sexual orientation, stature, lardiness or lack of personal hygiene."</i></p>
+   <p>Excerpt from the CUCC Constituion</p>
+  </blockquote>
+
+  <h2>Join us!</h2>
+  <p>If you like the sound of caving and adventure, or are an experienced caver new to the Cambridge area, then you are more than welcome to join us. Contact details can be found in the links above, but the best way to get involved is to come to the pubmeet.</p>
+  <p>We meet every Tuesday night at 21:00. Usually, we can be found in the Elm Tree (near Parkers Piece). Come along and join us for a drink, get to know the club, and see what we're up to!</p>
+
   <div class="w3-content w3-section w3-card-4" style="max-width:800px">
     <img class="mySlides" src="{% static "Images/HomeSlideShow/1.jpg" %}" style="width:100%">
     <img class="mySlides" src="{% static "Images/HomeSlideShow/2.jpg" %}" style="width:100%">
@@ -79,28 +148,4 @@
       setTimeout(carousel, 5000); // Change image every 2 seconds
     }
   </script>
-  <p></p>
-
-{% endblock %}
-
-{% block side-content %}
-  <p></p>
-  <div class="w3-card">
-    <img src="{% static "Images/Caves/CoverPhoto.jpg" %}" class="w3-image w3-hide-small" alt="Photo by Mark Shinwell">
-  </div>
-
-  <h2>About</h2>
-  <p>You have reached the homepage of the <b>Cambridge University Caving Club (CUCC).</b> Please feel free to browse the site to find out more about who we are.</p>
-
-  <h2>History</h2>
-  <p>The CUCC was founded in 1949 as an undergraduate club. Since then, it has grown to include people of all walks of life.</p>
-  <blockquote class="w3-panel w3-leftbar w3-theme-l4 w3-card">
-   <p>
-   <i>"The membership of the Club shall be open to all past and present members of the  University  of  Cambridge,  students  pursuing  a  course  of  full-time  study  at a college of higher education in Cambridge or at a research institute approvedby the University of Cambridge,  employees of the University of Cambridge or of a college of higher education in Cambridge, and other people accepted by the committee, regardless of religion, nationality, ethnicity, gender, sexual orientation, stature, lardiness or lack of personal hygiene."</i></p>
-   <p>Excerpt from the CUCC Constituion</p>
-  </blockquote>
-
-  <h2>Join us!</h2>
-  <p>If you like the sound of caving and adventure, or are an experienced caver new to the Cambridge area, then you are more than welcome to join us. Contact details can be found in the links above, but the best way to get involved is to come to the pubmeet.</p>
-  <p>We meet every Tuesday night at 21:00. Usually, we can be found in the Elm Tree (near Parkers Piece). Come along and join us for a drink, get to know the club, and see what we're up to!</p>
 {% endblock %}

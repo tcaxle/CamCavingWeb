@@ -1,10 +1,21 @@
 from django.shortcuts import render
 from UserPortal.models import *
 from Blog.models import *
+from django.core.paginator import Paginator
 
 # Homepage
 def Home(request):
-    return render(request, 'Home.html')
+    post_list = Post.objects.filter(category='News').order_by('-published_date')
+    image_list = Image.objects.all()
+    page = request.GET.get('page', 1)
+    paginator = Paginator(post_list, 10)
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+    return render(request, 'Home.html', { 'posts': posts, 'image_list': image_list })
 
 # About
 def AboutMeetsFormatCost(request):
