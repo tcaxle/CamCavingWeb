@@ -19,21 +19,21 @@
   {% endfor %}
 
   <h1>Previous Committees</h1>
-    <table class="w3-table-all w3-striped w3-tiny w3-card-4">
+    <table class="w3-table-all w3-striped w3-card-4">
       {% for c in committee_list %}
         <tr><td>
-          Year: {{ c.year }}
-          President: {{ c.president }}
-          Senior Treasurer: {{ c.senior_treasurer }}
-          Junior Treasurer: {{ c.junior_treasurer }}
-          Secretary: {{ c.secretary }}
-          Tackle Master: {{ c.tackle_master }}
-          Meets Secretary: {{ c.meets_secretary }}
-          Social Secretary: {{ c.social_secretary }}
-          Training Officer: {{ c.training_secretary }}
-          Webmaster: {{ c.webmaster }}
-          Librarian: {{ c.librarian }}
-          Lamp Post: {{ c.lamp_post }}
+          <p>Year: {{ c.year }}</p>
+          <p>President: {{ c.president }}</p>
+          <p>Senior Treasurer: {{ c.senior_treasurer }}</p>
+          <p>Junior Treasurer: {{ c.junior_treasurer }}</p>
+          <p>Secretary: {{ c.secretary }}</p>
+          <p>Tackle Master: {{ c.tackle_master }}</p>
+          <p>Meets Secretary: {{ c.meets_secretary }}</p>
+          <p>Social Secretary: {{ c.social_secretary }}</p>
+          <p>Training Officer: {{ c.training_secretary }}</p>
+          <p>Webmaster: {{ c.webmaster }}</p>
+          <p>Librarian: {{ c.librarian }}</p>
+          <p>Lamp Post: {{ c.lamp_post }}</p>
         </td></tr>
       {% endfor %}
     </table>
