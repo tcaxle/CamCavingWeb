@@ -24,7 +24,7 @@
   <div class="w3-container w3-twothird w3-cell w3-mobile">
     <h2>{{ p.title }} {% if user == p.author or user.username == 'webmaster' %}<a class="w3-button w3-right w3-large w3-theme-d4 w3-hover-black" href="{% url 'BlogEdit' pk=p.pk %}">Edit</a>{% endif %}</h2>
     <p style="white-space: pre-wrap;">{{ p.text }}</p>
-    <p class=w3-small><i>-- {{ p.author }}, {{ p.published_date.date }}</i></p>
+    <p class=w3-small><i>-- {{ p.author.full_name }}, {{ p.published_date.date }}</i></p>
   </div>
   <div class="w3-center w3-container w3-third w3-cell w3-mobile">
     {% for i in image_list %}

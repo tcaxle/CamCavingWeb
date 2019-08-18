@@ -49,6 +49,9 @@ class CustomUser(AbstractUser):
         return ', '.join([i.name for i in self.rank.all()])
     rank_display.short_description = 'Rank Display'
 
+    def name(self):
+        return self.full_name
+
     def __str__(self):
         return self.username
 
