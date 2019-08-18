@@ -20,37 +20,21 @@
 
   <h1>Previous Committees</h1>
     <table class="w3-table-all w3-striped w3-tiny w3-card-4">
-      <thead>
-        <tr class="w3-theme-d3">
-          <th>Year</th>
-          <th>President</th>
-          <th>Senior Treasurer</th>
-          <th>Junior Treasurer</th>
-          <th>Secretary</th>
-          <th>Tackle Master</th>
-          <th>Meets Secretary</th>
-          <th>Social Secretary</th>
-          <th>Training Officer</th>
-          <th>Webmaster</th>
-          <th>Librarian</th>
-          <th>Lamp Post</th>
-        </tr>
-      </thead>
       {% for c in committee_list %}
-      <tr>
-        <td>{{ c.year }}</td>
-        <td>{{ c.president }}</td>
-        <td>{{ c.senior_treasurer }}</td>
-        <td>{{ c.junior_treasurer }}</td>
-        <td>{{ c.secretary }}</td>
-        <td>{{ c.tackle_master }}</td>
-        <td>{{ c.meets_secretary }}</td>
-        <td>{{ c.social_secretary }}</td>
-        <td>{{ c.training_secretary }}</td>
-        <td>{{ c.webmaster }}</td>
-        <td>{{ c.librarian }}</td>
-        <td>{{ c.lamp_post }}</td>
-      </tr>
+        <tr><td>
+          Year: {{ c.year }}
+          President: {{ c.president }}
+          Senior Treasurer: {{ c.senior_treasurer }}
+          Junior Treasurer: {{ c.junior_treasurer }}
+          Secretary: {{ c.secretary }}
+          Tackle Master: {{ c.tackle_master }}
+          Meets Secretary: {{ c.meets_secretary }}
+          Social Secretary: {{ c.social_secretary }}
+          Training Officer: {{ c.training_secretary }}
+          Webmaster: {{ c.webmaster }}
+          Librarian: {{ c.librarian }}
+          Lamp Post: {{ c.lamp_post }}
+        </td></tr>
       {% endfor %}
     </table>
 
