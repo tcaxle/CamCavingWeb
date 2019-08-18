@@ -50,9 +50,41 @@ def MeetsCalendar(request):
 def MeetsPub(request):
     return render(request, 'Meets/Pub.html')
 def MeetsSocial(request):
-    return render(request, 'Meets/Social.html')
+    post_list = Post.objects.filter(category='Social').order_by('-published_date')
+    image_list = Image.objects.all()
+    page = request.GET.get('page', 1)
+    paginator = Paginator(post_list, 10)
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+    return render(request, 'Meets/Social.html', { 'posts': posts, 'image_list': image_list })
 def MeetsTraining(request):
-    return render(request, 'Meets/Training.html')
+    post_list = Post.objects.filter(category='Training').order_by('-published_date')
+    image_list = Image.objects.all()
+    page = request.GET.get('page', 1)
+    paginator = Paginator(post_list, 10)
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+    return render(request, 'Meets/Training.html', { 'posts': posts, 'image_list': image_list })
+def MeetsCaving(request):
+    post_list = Post.objects.filter(category='Caving').order_by('-published_date')
+    image_list = Image.objects.all()
+    page = request.GET.get('page', 1)
+    paginator = Paginator(post_list, 10)
+    try:
+        posts = paginator.page(page)
+    except PageNotAnInteger:
+        posts = paginator.page(1)
+    except EmptyPage:
+        posts = paginator.page(paginator.num_pages)
+    return render(request, 'Meets/Caving.html', { 'posts': posts, 'image_list': image_list })
 def MeetsDinners(request):
     return render(request, 'Meets/Dinners.html')
 

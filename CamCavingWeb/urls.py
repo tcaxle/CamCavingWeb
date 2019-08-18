@@ -52,6 +52,7 @@ urlpatterns = [
 	# Meets
 	path('Meets/Calendar/', views.MeetsCalendar, name='MeetsCalendar'),
 	path('Meets/Pub/', views.MeetsPub, name='MeetsPub'),
+    path('Meets/Caving/', views.MeetsCaving, name='MeetsCaving'),
 	path('Meets/Social/', views.MeetsSocial, name='MeetsSocial'),
 	path('Meets/Training/', views.MeetsTraining, name='MeetsTraining'),
     path('Meets/Dinners/', views.MeetsDinners, name='MeetsDinners'),
