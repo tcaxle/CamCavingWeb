@@ -1,5 +1,6 @@
 from django.shortcuts import render
 from UserPortal.models import *
+from Blog.models import *
 
 # Homepage
 def Home(request):
@@ -35,8 +36,6 @@ def ContactMailingList(request):
 # Meets
 def MeetsCalendar(request):
     return render(request, 'Meets/Calendar.html')
-def MeetsBlog(request):
-    return render(request, 'Meets/Blog.html')
 def MeetsPub(request):
     return render(request, 'Meets/Pub.html')
 def MeetsSocial(request):
@@ -45,6 +44,7 @@ def MeetsTraining(request):
     return render(request, 'Meets/Training.html')
 def MeetsDinners(request):
     return render(request, 'Meets/Dinners.html')
+
 
 # Gear
 def GearFirstAid(request):

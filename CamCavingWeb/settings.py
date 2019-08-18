@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'UserPortal',
+    'Blog',
 ]
 
 MIDDLEWARE = [
@@ -144,3 +145,6 @@ DEFAULT_FROM_EMAIL = 'CUCC Server <info@camcaving.uk>'
 AUTH_USER_MODEL = 'UserPortal.CustomUser'
 LOGIN_REDIRECT_URL = 'UserPortalDashboard'
 LOGOUT_REDIRECT_URL = 'Home'
+
+MEDIA_URL = '/Media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'Media')

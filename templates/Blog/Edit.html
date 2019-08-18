@@ -1,0 +1,24 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block title %}
+  <title>CUCC | Blog | Edit Post</title>
+{% endblock %}
+
+{% block main-content %}
+  <h1>Edit Blog Post</h1>
+  <form method="post" action="" enctype="multipart/form-data">
+  {% csrf_token %}
+  <table class="w3-table w3-striped">
+  {{ form.as_table }}
+  </table>
+  <button class="w3-button w3-theme-d3 w3-hover-black" type="submit">Submit</button>
+  </form>
+
+
+
+
+{% endblock %}
+
+{% block side-content %}
+{% endblock %}

@@ -16,6 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from . import views
+from django.conf.urls.static import static
+from django.conf import settings
 
 urlpatterns = [
 
@@ -23,6 +25,9 @@ urlpatterns = [
 
     # Admin
     path('Admin/', admin.site.urls),
+
+    # Blog
+    path('Blog/', include('Blog.urls')),
 
     # User Portal
     path('Portal/', include('UserPortal.urls')),
@@ -46,7 +51,6 @@ urlpatterns = [
 
 	# Meets
 	path('Meets/Calendar/', views.MeetsCalendar, name='MeetsCalendar'),
-	path('Meets/Blog/', views.MeetsBlog, name='MeetsBlog'),
 	path('Meets/Pub/', views.MeetsPub, name='MeetsPub'),
 	path('Meets/Social/', views.MeetsSocial, name='MeetsSocial'),
 	path('Meets/Training/', views.MeetsTraining, name='MeetsTraining'),
@@ -110,3 +114,6 @@ urlpatterns = [
     path('Ardeche/Varade', views.ArdecheVarade, name='ArdecheVarade'),
     path('Ardeche/VigneClose', views.ArdecheVigneClose, name='ArdecheVigneClose'),
 ]
+
+if settings.DEBUG:
+   urlpatterns += static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
