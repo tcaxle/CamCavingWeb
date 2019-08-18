@@ -55,7 +55,7 @@ def BlogEdit(request, pk):
         if form.is_valid():
             post = form.save(commit=False)
             post.save()
-            return redirect('post_detail', pk=post.pk)
+            return redirect('/Blog', pk=post.pk)
     else:
         form = PostForm(instance=post)
     return render(request, 'Blog/Edit.html', {'form': form})
