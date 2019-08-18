@@ -122,8 +122,10 @@ STATIC_ROOT = '/societies/caving/public_html/'
 DEBUG = os.environ['DJANGO_DEBUG'] == 'TRUE'
 if DEBUG:
     STATIC_URL = '/static/'
+    MEDIA_ROOT = os.path.join(BASE_DIR, 'Media')
 else:
     STATIC_URL = '/'
+    MEDIA_ROOT = '/societies/caving/public_html/Media/'
 
 X_FRAME_OPTIONS = 'DENY'
 
@@ -132,6 +134,8 @@ STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "Static"),
     os.path.join(BASE_DIR, "Archive"),
 ]
+
+MEDIA_URL = '/Media/'
 
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_FILE_PATH = os.path.join(BASE_DIR, "SentMail")
@@ -146,5 +150,3 @@ AUTH_USER_MODEL = 'UserPortal.CustomUser'
 LOGIN_REDIRECT_URL = 'UserPortalDashboard'
 LOGOUT_REDIRECT_URL = 'Home'
 
-MEDIA_URL = '/Media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'Media')
