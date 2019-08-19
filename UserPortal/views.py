@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import render, redirect
+from django.http import request
 from datetime import datetime
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 from django.contrib.auth.decorators import login_required, user_passes_test
@@ -16,6 +17,21 @@ class SignUp(CreateView):
     form_class = CustomUserCreationForm
     success_url = reverse_lazy('login')
     template_name = 'registration/SignUp.html'
+
+    def form_valid(self, form):
+        print("Form Valid")
+        if form.cleaned_data['mailing_list']:
+            # If user has checked the mailing list box, they get their full name and email added to the SubscribeQueue.txt file
+            f = open("../SubscribeQueue.txt", "a")
+            f.write('\"'+form.cleaned_data['full_name']+'\" <'+form.cleaned_data['email']+'>\n')
+            f.close()
+        else:
+            # If user has NOT checked the mailing list box, they get their full name and email added to the UnubscribeQueue.txt file
+            f = open("../UnsubscribeQueue.txt", "a")
+            f.write(form.cleaned_data['email']+'\n')
+            f.close()
+        return super().form_valid(form)
+
 
 class EditProfile(UpdateView):
     model = CustomUser

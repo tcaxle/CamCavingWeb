@@ -42,7 +42,7 @@ class CustomUser(AbstractUser):
     tape_colour_2 = models.CharField(verbose_name='Gear Tape Colour 2', max_length=6, choices=COLOR_CHOICES, default='', blank=True)
     tape_colour_3 = models.CharField(verbose_name='Gear Tape Colour 3', max_length=6, choices=COLOR_CHOICES, default='', blank=True)
     tape_colour_notes = models.CharField(verbose_name='Gear Tape Notes', max_length=50, blank=True)
-    mailing_list = models.BooleanField(verbose_name='Subscribe to Mailing List?', blank=False, default=False)
+    mailing_list = models.BooleanField(verbose_name='Subscribe to Mailing List?', blank=False, default=False, help_text='This is how most club business is conducted. It is highly recommended that you subscribe. If you are already subscribed and leave this box unchecked, you will be unsubscribed.')
     rank = models.ManyToManyField(Rank, verbose_name='Club Position')
     status = models.CharField(verbose_name='Status', max_length=20, choices=STATUS_CHOICES, blank=False, default='Inactive')
     phone_number = models.CharField(max_length=20, blank=True, help_text="See information below on use of emergency contact information.")
