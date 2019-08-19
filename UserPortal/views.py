@@ -41,6 +41,20 @@ class EditProfile(UpdateView):
     template_name_suffix = '_update_form'
     slug_field = 'user_key'
 
+    def form_valid(self, form):
+        print("Form Valid")
+        if form.cleaned_data['mailing_list']:
+            # If user has checked the mailing list box, they get their full name and email added to the SubscribeQueue.txt file
+            f = open("../SubscribeQueue.txt", "a")
+            f.write('\"'+form.cleaned_data['full_name']+'\" <'+form.cleaned_data['email']+'>\n')
+            f.close()
+        else:
+            # If user has NOT checked the mailing list box, they get their full name and email added to the UnubscribeQueue.txt file
+            f = open("../UnsubscribeQueue.txt", "a")
+            f.write(form.cleaned_data['email']+'\n')
+            f.close()
+        return super().form_valid(form)
+
 class SuperEditProfile(UpdateView):
     model = CustomUser
     success_url = reverse_lazy('EditUsers')
