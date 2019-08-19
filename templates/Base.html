@@ -3,6 +3,7 @@
 <head>
   {% load static %}
   {% block title %}
+  {% load cookielaw_tags %}
   {% endblock %}
 
   <!--favicon -->
@@ -14,11 +15,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
 
-  <!-- W3.CSS Import -->
+  <!-- CSS Import -->
+  <link href="{% static "cookielaw/css/cookielaw.css"%}" rel="stylesheet" />
   <link rel="stylesheet" type="text/css" href="{% static 'CSS/w3.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'CSS/fonts.css' %}">
   <link rel="stylesheet" type="text/css" href="{% static 'CSS/style.css' %}">
   <link rel="stylesheet" href="{% static 'CSS/all.css' %}">
+
+  <!-- JS Import -->
+  <script src="{% static "cookielaw/js/cookielaw.js"%}" type="text/javascript"></script>
   <script defer src="{% static 'JS/all.js' %}"></script>
 
   <style>
@@ -136,6 +141,7 @@
       {% endif %}
 
     </div>
+    {% cookielaw_banner %}
   </header>
 
   <!-- Main content. Side bars are hidden when medium and small. Content goes vertical when small. -->

@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'UserPortal',
     'Blog',
+    'cookielaw',
 ]
 
 MIDDLEWARE = [
