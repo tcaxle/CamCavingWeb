@@ -1,6 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from uuid import uuid4 as uuid
+from django.core.validators import RegexValidator
 
 COLOR_CHOICES = (
     ('black','BLACK'),
@@ -44,6 +45,9 @@ class CustomUser(AbstractUser):
     mailing_list = models.BooleanField(verbose_name='Subscribe to Mailing List?', blank=False, default=False)
     rank = models.ManyToManyField(Rank, verbose_name='Club Position')
     status = models.CharField(verbose_name='Status', max_length=20, choices=STATUS_CHOICES, blank=False, default='Inactive')
+    phone_number = models.CharField(max_length=20, blank=True, help_text="See information below on use of emergency contact information.")
+    emergency_phone_number = models.CharField(max_length=20, blank=True, help_text="See information below on use of emergency contact information.")
+    emergency_contact_name = models.CharField(max_length=50, blank=True, help_text="See information below on use of emergency contact information.")
 
     def rank_display(self):
         return ', '.join([i.name for i in self.rank.all()])
