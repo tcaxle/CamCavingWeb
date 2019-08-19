@@ -17,4 +17,4 @@ class CustomUserCreationForm(UserCreationForm):
 class CustomUserChangeForm(UserCreationForm):
     class Meta(UserChangeForm):
         model = CustomUser
-        fields = ('username', 'full_name', 'email', 'mailing_list', 'phone_number', 'emergency_contact_name', 'emergency_phone_number', 'status', 'bio', 'tape_colour_1', 'tape_colour_2', 'tape_colour_3', 'tape_colour_notes')
+        fields = ('username', 'user_key', 'rank', 'full_name', 'email', 'mailing_list', 'phone_number', 'emergency_contact_name', 'emergency_phone_number', 'status', 'bio', 'tape_colour_1', 'tape_colour_2', 'tape_colour_3', 'tape_colour_notes')
