@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from django.forms import modelformset_factory
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
 from .forms import ImageForm, PostForm
 from .models import *
@@ -21,7 +21,7 @@ def Blog(request):
         posts = paginator.page(paginator.num_pages)
     return render(request, 'Meets/Blog.html', { 'posts': posts, 'image_list': image_list })
 
-@login_required(login_url='/Portal/login/')
+@permission_required('blog.add_post', login_url='/Portal/login')
 def BlogPost(request):
     ImageFormSet = modelformset_factory(Image, form=ImageForm, extra=10)
     if request.method == 'POST':
@@ -47,7 +47,7 @@ def BlogPost(request):
         formset = ImageFormSet(queryset=Image.objects.none())
     return render(request, 'Blog/Post.html', {'postForm': postForm, 'formset': formset})
 
-@login_required(login_url='/Portal/login/')
+@permission_required('blog.change_post', login_url='/Portal/login')
 def BlogEdit(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
@@ -60,7 +60,7 @@ def BlogEdit(request, pk):
         form = PostForm(instance=post)
     return render(request, 'Blog/Edit.html', {'form': form})
 
-@login_required(login_url='/Portal/login/')
+@permission_required('blog.delete_post', login_url='/Portal/login')
 def BlogDelete(request, pk):
     post = get_object_or_404(Post, pk=pk)
     post.delete()

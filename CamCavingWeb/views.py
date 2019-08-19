@@ -1,7 +1,11 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from UserPortal.models import *
 from Blog.models import *
 from django.core.paginator import Paginator
+
+# Login redirect
+def LoginRedirect(request):
+    return redirect('/Portal/login')
 
 # Homepage
 def Home(request):

@@ -22,6 +22,7 @@ from django.conf import settings
 urlpatterns = [
 
     path('index.html', views.Home, name='Index'),
+    path('accounts/login/', views.LoginRedirect, name='LoginRedirect'),
 
     # Admin
     path('Admin/', admin.site.urls),

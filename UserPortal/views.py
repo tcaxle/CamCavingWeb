@@ -6,12 +6,10 @@ from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import render, redirect
 from django.http import request
 from datetime import datetime
-from .forms import CustomUserCreationForm, CustomUserChangeForm
-from django.contrib.auth.decorators import login_required, user_passes_test
+from .forms import *
+from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
 from .models import CustomUser
-
-def superuser_check(user):
-    return user.is_superuser
+from django.utils.decorators import method_decorator
 
 class SignUp(CreateView):
     form_class = CustomUserCreationForm
@@ -32,12 +30,12 @@ class SignUp(CreateView):
             f.close()
         return super().form_valid(form)
 
-
+@method_decorator(login_required, name='dispatch')
 class EditProfile(UpdateView):
     model = CustomUser
     success_url = reverse_lazy('UserPortalDashboard')
     template_name = 'registration/EditProfile.html'
-    fields = ['username', 'full_name', 'email', 'mailing_list', 'phone_number', 'emergency_contact_name', 'emergency_phone_number', 'status', 'bio', 'tape_colour_1', 'tape_colour_2', 'tape_colour_3', 'tape_colour_notes']
+    form_class = EditUser
     template_name_suffix = '_update_form'
     slug_field = 'user_key'
 
@@ -55,11 +53,12 @@ class EditProfile(UpdateView):
             f.close()
         return super().form_valid(form)
 
+@method_decorator(permission_required('UserPortal.change_CustomUser', login_url='/Portal/login/'), name='dispatch')
 class SuperEditProfile(UpdateView):
+    form_class = SuperEditUser
     model = CustomUser
     success_url = reverse_lazy('EditUsers')
     template_name = 'registration/EditProfile.html'
-    fields = ['username', 'user_key', 'rank', 'full_name', 'email', 'mailing_list', 'phone_number', 'emergency_contact_name', 'emergency_phone_number', 'status', 'bio', 'tape_colour_1', 'tape_colour_2', 'tape_colour_3', 'tape_colour_notes']
     template_name_suffix = '_update_form'
     slug_field = 'user_key'
 
@@ -76,6 +75,7 @@ class SuperEditProfile(UpdateView):
             f.write(form.cleaned_data['email']+'\n')
             f.close()
         return super().form_valid(form)
+
 
 @login_required(login_url='/Portal/login/')
 def ChangePassword(request):
@@ -98,7 +98,7 @@ def ChangePassword(request):
 def UserPortalDashboard(request):
     return render(request, 'UserPortal/Dashboard.html')
 
-@user_passes_test(superuser_check, login_url='/Portal/login/')
+@permission_required('UserPortal.change_CustomUser', login_url='/Portal/login/')
 def EditUsers(request):
     user_list = CustomUser.objects.all()
     context = {'user_list': user_list}

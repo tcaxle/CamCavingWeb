@@ -127,6 +127,8 @@ if DEBUG:
 else:
     STATIC_URL = '/'
     MEDIA_ROOT = '/societies/caving/public_html/Media/'
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
 
 X_FRAME_OPTIONS = 'DENY'
 
@@ -150,6 +152,3 @@ DEFAULT_FROM_EMAIL = 'CUCC Server <info@camcaving.uk>'
 AUTH_USER_MODEL = 'UserPortal.CustomUser'
 LOGIN_REDIRECT_URL = 'UserPortalDashboard'
 LOGOUT_REDIRECT_URL = 'Home'
-
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
