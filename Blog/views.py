@@ -59,3 +59,9 @@ def BlogEdit(request, pk):
     else:
         form = PostForm(instance=post)
     return render(request, 'Blog/Edit.html', {'form': form})
+
+@login_required(login_url='/Portal/login/')
+def BlogDelete(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    post.delete()
+    return redirect('/Blog')
