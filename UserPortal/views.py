@@ -55,12 +55,28 @@ class EditProfile(UpdateView):
             f.close()
         return super().form_valid(form)
 
+@user_passes_test(superuser_check, login_url='/Portal/login/')
 class SuperEditProfile(UpdateView):
     model = CustomUser
     success_url = reverse_lazy('EditUsers')
     template_name = 'registration/EditProfile.html'
+    fields = ['username', 'user_key', 'rank', 'full_name', 'email', 'mailing_list', 'phone_number', 'emergency_contact_name', 'emergency_phone_number', 'status', 'bio', 'tape_colour_1', 'tape_colour_2', 'tape_colour_3', 'tape_colour_notes']
     template_name_suffix = '_update_form'
     slug_field = 'user_key'
+
+    def form_valid(self, form):
+        print("Form Valid")
+        if form.cleaned_data['mailing_list']:
+            # If user has checked the mailing list box, they get their full name and email added to the SubscribeQueue.txt file
+            f = open("../SubscribeQueue.txt", "a")
+            f.write('\"'+form.cleaned_data['full_name']+'\" <'+form.cleaned_data['email']+'>\n')
+            f.close()
+        else:
+            # If user has NOT checked the mailing list box, they get their full name and email added to the UnubscribeQueue.txt file
+            f = open("../UnsubscribeQueue.txt", "a")
+            f.write(form.cleaned_data['email']+'\n')
+            f.close()
+        return super().form_valid(form)
 
 @login_required(login_url='/Portal/login/')
 def ChangePassword(request):
