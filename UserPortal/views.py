@@ -55,10 +55,10 @@ class EditProfile(UpdateView):
 
 @method_decorator(permission_required('UserPortal.change_CustomUser', login_url='/Portal/login/'), name='dispatch')
 class SuperEditProfile(UpdateView):
-    form_class = SuperEditUser
     model = CustomUser
     success_url = reverse_lazy('EditUsers')
     template_name = 'registration/EditProfile.html'
+    form_class = SuperEditUser
     template_name_suffix = '_update_form'
     slug_field = 'user_key'
 
