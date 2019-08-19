@@ -55,7 +55,6 @@ class EditProfile(UpdateView):
             f.close()
         return super().form_valid(form)
 
-@user_passes_test(superuser_check, login_url='/Portal/login/')
 class SuperEditProfile(UpdateView):
     model = CustomUser
     success_url = reverse_lazy('EditUsers')
