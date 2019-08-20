@@ -18,6 +18,11 @@ class GearTape(ListView):
     context_object_name = 'user_list'
 class GearHire(TemplateView):
     template_name = 'Gear/Hire.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['rope_list'] = Rope.objects.all()
+        context['hirerope_list'] = HireRope.objects.all()
+        return context
 
 # Signing in and out views as redirects that create and edit HireInstance Models
 def RopeSignOut(request, pk):

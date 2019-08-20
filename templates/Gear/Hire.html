@@ -9,39 +9,44 @@
   <h1>Gear Hire</h1>
 
   <h2>Ropes</h2>
+  {% if rope_list %}
+    <table class="w3-table w3-table-all w3-striped w3-card">
+    <tr class="w3-theme-d3">
+      <th>Length</th>
+      <th>Diameter</th>
+      <th>Year</th>
+      <th>Notes</th>
+      <th>Signed Out By</th>
+      <th></th>
+    </tr>
+    {% for r in rope_list %}
+      {% if r.available %}
+        <tr class="w3-green">
+          <td>{{ r.length }}</td>
+          <td>{{ r.diameter }}</td>
+          <td>{{ r.purchased_year }}</td>
+          <td>{{ r.notes }}</td>
+          <td>Available</td>
+          <td><a class="w3-button w3-block w3-theme-d4 w3-hover-black" href="{% url 'RopeSignOut' pk=r.pk %}">Sign Out</a></td>
+        </tr>
+      {% else %}
+        <tr class="w3-red">
+          <td>{{ r.length }}</td>
+          <td>{{ r.diameter }}</td>
+          <td>{{ r.purchased_year }}</td>
+          <td>{{ r.notes }}</td>
+          <td>{% for rh in hirerope_list %}{% if rh.rope == r and rh.signed_in == None %}{{ rh.signed_out_by.full_name }}{% endif %}{% endfor %}</td>
+          <td><a class="w3-button w3-block w3-theme-d4 w3-hover-black" href="{% url 'RopeSignIn' pk=r.pk %}">Sign In</a></td>
+        </tr>
+      {% endif %}
+    {% endfor %}
+    </table>
+  {% else %}
+  <p>No Ropes Found</p>
+  {% endif %}
 
 {% endblock %}
 
 {% block side-content %}
   <h2>Actions</h2>
-
-  <h3>Rope</h3>
-  <span>
-    <a class="w3-button w3-block w3-theme-d4 w3-hover-black w3-half" style="text-align: left" href="#">Sign Out</a>
-    <a class="w3-button w3-block w3-theme-d4 w3-hover-black w3-half" style="text-align: left" href="#">Sign In</a>
-  </span>
-
-  <h3>Helmets</h3>
-  <span>
-    <a class="w3-button w3-block w3-theme-d4 w3-hover-black w3-half" style="text-align: left" href="#">Sign Out</a>
-    <a class="w3-button w3-block w3-theme-d4 w3-hover-black w3-half" style="text-align: left" href="#">Sign In</a>
-  </span>
-
-  <h3>SRT Kits</h3>
-  <span>
-    <a class="w3-button w3-block w3-theme-d4 w3-hover-black w3-half" style="text-align: left" href="#">Sign Out</a>
-    <a class="w3-button w3-block w3-theme-d4 w3-hover-black w3-half" style="text-align: left" href="#">Sign In</a>
-  </span>
-
-  <h3>Harnesses</h3>
-  <span>
-    <a class="w3-button w3-block w3-theme-d4 w3-hover-black w3-half" style="text-align: left" href="#">Sign Out</a>
-    <a class="w3-button w3-block w3-theme-d4 w3-hover-black w3-half" style="text-align: left" href="#">Sign In</a>
-  </span>
-  <h3>Other Gear</h3>
-  <span>
-    <a class="w3-button w3-block w3-theme-d4 w3-hover-black w3-half" style="text-align: left" href="#">Sign Out</a>
-    <a class="w3-button w3-block w3-theme-d4 w3-hover-black w3-half" style="text-align: left" href="#">Sign In</a>
-  </span>
-  <br>
 {% endblock %}
