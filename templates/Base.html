@@ -122,10 +122,10 @@
 
       <!-- Login / Signup / Logout -->
       {% if user.is_authenticated %}
-
         <div class="w3-dropdown-hover w3-mobile w3-right">
           <button class="w3-button w3-hover-black"><i class="fas fa-sign-in-alt"></i> <span class=" w3-hide-medium">My Account</span> <i class="fa fa-caret-down"></i></button>
           <div class="w3-dropdown-content w3-bar-block w3-card-4">
+            <div class="w3-bar-item w3-theme-d3 w3-mobile w3-large w3-center">{{ user.username }}</div>
             <a href="{% url 'UserPortalDashboard' %}" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Dashboard</a>
             <a href="{% url 'logout' %}" class="w3-bar-item w3-button w3-theme-d3 w3-hover-black w3-mobile">Logout</a>
           </div>
