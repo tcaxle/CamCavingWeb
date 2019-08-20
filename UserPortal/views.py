@@ -3,7 +3,7 @@ from django.views.generic.edit import CreateView, UpdateView
 from django.contrib import messages
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, Http404
 from django.http import request
 from datetime import datetime
 from .forms import *
@@ -53,7 +53,12 @@ class EditProfile(UpdateView):
             f.close()
         return super().form_valid(form)
 
-@method_decorator(permission_required('UserPortal.change_CustomUser', login_url='/Portal/login/'), name='dispatch')
+    def dispatch(self, request, *args, **kwargs):
+        if self.get_object() != self.request.user:
+            raise Http404("You cannot edit someone else's profile")
+        return super(EditProfile, self).dispatch(request, *args, **kwargs)
+
+@method_decorator(permission_required('UserPortal.change_customuser', login_url='/Portal/login/'), name='dispatch')
 class SuperEditProfile(UpdateView):
     model = CustomUser
     success_url = reverse_lazy('EditUsers')
@@ -76,6 +81,10 @@ class SuperEditProfile(UpdateView):
             f.close()
         return super().form_valid(form)
 
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_superuser:
+            raise Http404("You must be a superuser to edit someone else's profile")
+        return super(SuperEditProfile, self).dispatch(request, *args, **kwargs)
 
 @login_required(login_url='/Portal/login/')
 def ChangePassword(request):
@@ -98,8 +107,10 @@ def ChangePassword(request):
 def UserPortalDashboard(request):
     return render(request, 'UserPortal/Dashboard.html')
 
-@permission_required('UserPortal.change_CustomUser', login_url='/Portal/login/')
+@permission_required('UserPortal.change_customuser', login_url='/Portal/login/')
 def EditUsers(request):
+    if not request.user.is_superuser:
+        raise Http404("You must be a superuser to edit someone else's profile")
     user_list = CustomUser.objects.all()
     context = {'user_list': user_list}
     return render(request, 'UserPortal/EditUsers.html', context)

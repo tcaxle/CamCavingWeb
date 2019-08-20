@@ -5,7 +5,7 @@ from django.contrib import messages
 from .forms import ImageForm, PostForm
 from .models import *
 from datetime import datetime
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, Http404
 from django.core.paginator import Paginator
 
 def Blog(request):
@@ -21,7 +21,7 @@ def Blog(request):
         posts = paginator.page(paginator.num_pages)
     return render(request, 'Meets/Blog.html', { 'posts': posts, 'image_list': image_list })
 
-@permission_required('blog.add_post', login_url='/Portal/login')
+@permission_required('Blog.add_post', login_url='/Portal/login')
 def BlogPost(request):
     ImageFormSet = modelformset_factory(Image, form=ImageForm, extra=10)
     if request.method == 'POST':
@@ -47,9 +47,9 @@ def BlogPost(request):
         formset = ImageFormSet(queryset=Image.objects.none())
     return render(request, 'Blog/Post.html', {'postForm': postForm, 'formset': formset})
 
-@permission_required('blog.change_post', login_url='/Portal/login')
+@permission_required('Blog.change_post', login_url='/Portal/login')
 def BlogEdit(request, pk):
-    post = get_object_or_404(Post, pk=pk)
+    post = get_object_or_404(Post, pk=pk, author=request.user)
     if request.method == "POST":
         form = PostForm(request.POST, instance=post)
         if form.is_valid():
@@ -60,8 +60,10 @@ def BlogEdit(request, pk):
         form = PostForm(instance=post)
     return render(request, 'Blog/Edit.html', {'form': form})
 
-@permission_required('blog.delete_post', login_url='/Portal/login')
+@permission_required('Blog.delete_post', login_url='/Portal/login')
 def BlogDelete(request, pk):
     post = get_object_or_404(Post, pk=pk)
+    if post.author != request.user and not request.user.is_superuser:
+        raise Http404("You are not allowed to delete this Post")
     post.delete()
     return redirect('/Blog')
