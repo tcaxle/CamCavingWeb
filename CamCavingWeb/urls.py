@@ -28,7 +28,7 @@ urlpatterns = [
     path('Admin/', admin.site.urls),
 
     # Redirects
-    path('index.html/', RedirectView.as_view(url=''), name='IndexRedirect'),
+    path('index.html/', views.Home.as_view(), name='IndexRedirect'),
     path('accounts/login/', RedirectView.as_view(url='/Portal/login/'), name='LoginRedirect'),
 
     # Homepage
