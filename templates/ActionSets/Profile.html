@@ -1,0 +1,8 @@
+<h2>Profile Actions</h2>
+<a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditProfile' user.user_key %}">Edit Profile</a>
+<a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'ChangePassword' %}">Change Password</a>
+
+{% if user.is_superuser %}
+  <h2>Superuser Actions</h2>
+  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditUsers' %}">Edit Users</a>
+{% endif %}

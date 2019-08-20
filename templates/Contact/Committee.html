@@ -12,7 +12,6 @@
   {% for r in rank_list %}
   <h2>{{ r.name }}:
     {% for u in user_list %}{% if r.name in u.rank_display %}{{ u.full_name }}, {{ u.college }}{% endif %}{% endfor %}
-    {% for u in legacy_user_list %}{% if r.name in u.rank_display %}{{ u.full_name }}, {{ u.college }}{% endif %}{% endfor %}
   </h2>
   <p>Email: <i>{{ r.email }}</i></p>
   <p>{{ r.description }}</p>
@@ -34,6 +33,12 @@
           <p>Webmaster: {{ c.webmaster }}</p>
           <p>Librarian: {{ c.librarian }}</p>
           <p>Lamp Post: {{ c.lamp_post }}</p>
+          {% if perms.UserPortal.change_committee and perms.UserPortal.delete_committee %}
+          <span class="w3-container">
+            <a class="w3-button w3-block w3-theme-d4 w3-hover-black w3-half w3-center" style="text-align: left" href="{% url 'CommitteeEdit' pk=c.pk %}">Edit</a>
+            <a class="w3-button w3-block w3-theme-d4 w3-hover-black w3-half w3-center" style="text-align: left" href="{% url 'CommitteeDelete' pk=c.pk %}">Delete</a>
+          </span>
+          {% endif %}
         </td></tr>
       {% endfor %}
     </table>
@@ -43,6 +48,7 @@
 {% endblock %}
 
 {% block side-content %}
+  {% include 'ActionSets/Committee.html' %}
   <h2>Committee Functions</h2>
   <p>If you would like more information about the jobs of specific committee members, please follow <a href="{% url 'MiscCommitteeFunctions' %}">this link</a>.</p>
 {% endblock %}

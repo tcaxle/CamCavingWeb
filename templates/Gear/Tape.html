@@ -27,19 +27,6 @@
   </tr>
   {% endif %}
   {% endfor %}
-  {% for i in legacy_user_list %}
-  {% if i.tape_colour_1 != '' and i.status == 'Frequent' %}
-  <tr>
-    <td>{{ i.full_name }}</td>
-    <td>
-      <span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_1 }}">{{ i.tape_colour_1 }}</span>
-      {% if i.tape_colour_2 != '' %}<span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_2 }}">{{ i.tape_colour_2 }}</span>{% endif %}
-      {% if i.tape_colour_3 != '' %}<span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_3 }}">{{ i.tape_colour_3 }}</span>{% endif %}
-      {{ i.tape_colour_notes }}
-    </td>
-  </tr>
-  {% endif %}
-  {% endfor %}
   </table>
 
   <h2>Infrequently Seen Members</h2>
@@ -49,19 +36,6 @@
     <th>Tape Colours</th>
   </tr>
   {% for i in user_list %}
-  {% if i.tape_colour_1 != '' and i.status == 'Infrequent' %}
-  <tr>
-    <td>{{ i.full_name }}</td>
-    <td>
-      <span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_1 }}">{{ i.tape_colour_1 }}</span>
-      {% if i.tape_colour_2 != '' %}<span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_2 }}">{{ i.tape_colour_2 }}</span>{% endif %}
-      {% if i.tape_colour_3 != '' %}<span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_3 }}">{{ i.tape_colour_3 }}</span>{% endif %}
-      {{ i.tape_colour_notes }}
-    </td>
-  </tr>
-  {% endif %}
-  {% endfor %}
-  {% for i in legacy_user_list %}
   {% if i.tape_colour_1 != '' and i.status == 'Infrequent' %}
   <tr>
     <td>{{ i.full_name }}</td>
@@ -95,19 +69,6 @@
   </tr>
   {% endif %}
   {% endfor %}
-  {% for i in legacy_user_list %}
-  {% if i.tape_colour_1 != '' and i.status == 'Expo' %}
-  <tr>
-    <td>{{ i.full_name }}</td>
-    <td>
-      <span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_1 }}">{{ i.tape_colour_1 }}</span>
-      {% if i.tape_colour_2 != '' %}<span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_2 }}">{{ i.tape_colour_2 }}</span>{% endif %}
-      {% if i.tape_colour_3 != '' %}<span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_3 }}">{{ i.tape_colour_3 }}</span>{% endif %}
-      {{ i.tape_colour_notes }}
-    </td>
-  </tr>
-  {% endif %}
-  {% endfor %}
   </table>
 
 
@@ -118,19 +79,6 @@
     <th>Tape Colours</th>
   </tr>
   {% for i in user_list %}
-  {% if i.tape_colour_1 != '' and i.status == 'Inactive' %}
-  <tr>
-    <td>{{ i.full_name }}</td>
-    <td>
-      <span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_1 }}">{{ i.tape_colour_1 }}</span>
-      {% if i.tape_colour_2 != '' %}<span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_2 }}">{{ i.tape_colour_2 }}</span>{% endif %}
-      {% if i.tape_colour_3 != '' %}<span style="border:1px solid black" class="w3-padding-small w3-{{ i.tape_colour_3 }}">{{ i.tape_colour_3 }}</span>{% endif %}
-      {{ i.tape_colour_notes }}
-    </td>
-  </tr>
-  {% endif %}
-  {% endfor %}
-  {% for i in legacy_user_list %}
   {% if i.tape_colour_1 != '' and i.status == 'Inactive' %}
   <tr>
     <td>{{ i.full_name }}</td>

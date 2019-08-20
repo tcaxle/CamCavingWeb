@@ -29,13 +29,15 @@ class AboutBureaucracy(TemplateView):
     template_name = 'About/Bureaucracy.html'
 
 # Contact
-def ContactCommittee(request):
-    user_list = CustomUser.objects.all().order_by('full_name')
-    legacy_user_list = LegacyUser.objects.all().order_by('full_name')
-    rank_list = Rank.objects.filter(committee=True)
-    committee_list = Committee.objects.all().order_by('-year')
-    context = {'user_list': user_list, 'legacy_user_list': legacy_user_list, 'rank_list': rank_list, 'committee_list': committee_list}
-    return render(request, 'Contact/Committee.html', context)
+class ContactCommittee(ListView):
+    model = Committee
+    template_name = 'Contact/Committee.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['user_list'] = CustomUser.objects.all().order_by('full_name')
+        context['rank_list'] = Rank.objects.all()
+        context['committee_list'] = Committee.objects.all().order_by('-year')
+        return context
 class ContactMailingList(TemplateView):
     template_name = 'Contact/MailingList.html'
 
@@ -73,11 +75,11 @@ class GearHire(TemplateView):
     template_name = 'Gear/Hire.html'
 class GearInventory(TemplateView):
     template_name = 'Gear/Inventory.html'
-def GearTape(request):
-    user_list = CustomUser.objects.all().order_by('full_name')
-    legacy_user_list = LegacyUser.objects.all().order_by('full_name')
-    context = {'user_list': user_list, 'legacy_user_list': legacy_user_list,}
-    return render(request, 'Gear/Tape.html', context)
+class GearTape(ListView):
+    model = CustomUser
+    template_name = 'Gear/Tape.html'
+    queryset = CustomUser.objects.all().order_by('full_name')
+    context_object_name = 'user_list'
 
 # Get Involved
 class GetInvolvedHowToJoin(TemplateView):

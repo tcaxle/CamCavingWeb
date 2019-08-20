@@ -44,7 +44,7 @@ urlpatterns = [
     path('About/Bureaucracy/', views.AboutBureaucracy.as_view(), name='AboutBureaucracy'),
 
 	# Contact
-	path('Contact/Committee/', views.ContactCommittee, name='ContactCommittee'),
+	path('Contact/Committee/', views.ContactCommittee.as_view(), name='ContactCommittee'),
 	path('Contact/MailingList/', views.ContactMailingList.as_view(), name='ContactMailingList'),
 
 	# Meets
@@ -59,7 +59,7 @@ urlpatterns = [
 	path('Gear/FirstAid/', views.GearFirstAid.as_view(), name='GearFirstAid'),
 	path('Gear/Hire/', views.GearHire.as_view(), name='GearHire'),
     path('Gear/Inventory/', views.GearInventory.as_view(), name='GearInventory'),
-    path('Gear/Tape/', views.GearTape, name='GearTape'),
+    path('Gear/Tape/', views.GearTape.as_view(), name='GearTape'),
 
 	# Get Involved
 	path('GetInvolved/HowToJoin/', views.GetInvolvedHowToJoin.as_view(), name='GetInvolvedHowToJoin'),

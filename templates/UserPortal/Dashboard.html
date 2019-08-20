@@ -23,11 +23,5 @@
 {% endblock %}
 
 {% block side-content %}
-  <h2>Actions</h2>
-  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditProfile' user.user_key %}">Edit Profile</a>
-  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'ChangePassword' %}">Change Password</a>
-  {% if user.username == 'webmaster' %}
-  <h2>Admin Actions</h2>
-  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditUsers' %}">Edit Users</a>
-  {% endif %}
+  {% include 'ActionSets/profile.html' %}
 {% endblock %}

@@ -1,0 +1,9 @@
+{% if user.is_authenticated %}
+  <h2>Blog Actions</h2>
+  {% if perms.Blog.add_post %}
+    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'BlogAdd' %}">Write a Post</a>
+  {% endif %}
+  {% if perms.Blog.add_image %}
+    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'ImageAdd' %}">Upload an Image</a>
+  {% endif %}
+{% endif %}

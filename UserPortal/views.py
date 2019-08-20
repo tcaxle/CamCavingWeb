@@ -1,6 +1,6 @@
 from django.urls import reverse_lazy
-from django.views.generic.edit import CreateView, UpdateView
-from django.contrib import messages
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.detail import DetailView
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from django.shortcuts import render, redirect, Http404
@@ -8,8 +8,10 @@ from django.http import request
 from datetime import datetime
 from .forms import *
 from django.contrib.auth.decorators import login_required, user_passes_test, permission_required
-from .models import CustomUser
+from .models import *
 from django.utils.decorators import method_decorator
+from django.views.generic.base import TemplateView
+from django.views.generic.list import ListView
 
 class SignUp(CreateView):
     form_class = CustomUserCreationForm
@@ -58,7 +60,7 @@ class EditProfile(UpdateView):
             raise Http404("You cannot edit someone else's profile")
         return super(EditProfile, self).dispatch(request, *args, **kwargs)
 
-@method_decorator(permission_required('UserPortal.change_customuser', login_url='/Portal/login/'), name='dispatch')
+@method_decorator(permission_required('UserPortal.change_customuser'), name='dispatch')
 class SuperEditProfile(UpdateView):
     model = CustomUser
     success_url = reverse_lazy('EditUsers')
@@ -103,14 +105,56 @@ def ChangePassword(request):
         'form': form
     })
 
-@login_required(login_url='/Portal/login/')
-def UserPortalDashboard(request):
-    return render(request, 'UserPortal/Dashboard.html')
+@method_decorator(login_required, name='dispatch')
+class UserPortalDashboard(TemplateView):
+    template_name = 'UserPortal/Dashboard.html'
 
-@permission_required('UserPortal.change_customuser', login_url='/Portal/login/')
-def EditUsers(request):
-    if not request.user.is_superuser:
-        raise Http404("You must be a superuser to edit someone else's profile")
-    user_list = CustomUser.objects.all()
-    context = {'user_list': user_list}
-    return render(request, 'UserPortal/EditUsers.html', context)
+@method_decorator(permission_required('UserPortal.change_customuser'), name='dispatch')
+class EditUsers(ListView):
+    model = CustomUser
+    context_object_name = 'user_list'
+    template_name = 'UserPortal/EditUsers.html'
+    def dispatch(self, request, *args, **kwargs):
+        if not self.request.user.is_superuser:
+            raise Http404("You must be a superuser to edit someone else's profile")
+        return super(EditUsers, self).dispatch(request, *args, **kwargs)
+
+@method_decorator(permission_required('UserPortal.add_committee'), name='dispatch')
+class CommitteeAdd(CreateView):
+    model = Committee
+    template_name = 'UserPortal/CommitteeForm.html'
+    success_url = reverse_lazy('ContactCommittee')
+    fields = '__all__'
+
+@method_decorator(permission_required('UserPortal.change_committee'), name='dispatch')
+class CommitteeEdit(UpdateView):
+    model = Committee
+    template_name = 'UserPortal/CommitteeForm.html'
+    success_url = reverse_lazy('ContactCommittee')
+    fields = '__all__'
+
+@method_decorator(permission_required('UserPortal.delete_committee'), name='dispatch')
+class CommitteeDelete(DeleteView):
+    model = Committee
+    template_name = 'UserPortal/CommitteeForm.html'
+    success_url = reverse_lazy('ContactCommittee')
+
+@method_decorator(permission_required('UserPortal.add_rank'), name='dispatch')
+class RankAdd(CreateView):
+    model = Rank
+    template_name = 'UserPortal/RankForm.html'
+    success_url = reverse_lazy('UserPortalDashboard')
+    fields = '__all__'
+
+@method_decorator(permission_required('UserPortal.change_rank'), name='dispatch')
+class RankEdit(UpdateView):
+    model = Rank
+    template_name = 'UserPortal/RankForm.html'
+    success_url = reverse_lazy('UserPortalDashboard')
+    fields = '__all__'
+
+@method_decorator(permission_required('UserPortal.delete_rank'), name='dispatch')
+class RankDelete(DeleteView):
+    model = Rank
+    template_name = 'UserPortal/RankForm.html'
+    success_url = reverse_lazy('UserPortalDashboard')

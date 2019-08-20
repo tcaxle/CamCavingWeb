@@ -2,11 +2,20 @@ from django.shortcuts import render, redirect
 from django.forms import modelformset_factory
 from django.contrib.auth.decorators import login_required, permission_required
 from django.contrib import messages
-from .forms import ImageForm, PostForm
 from .models import *
 from datetime import datetime
 from django.shortcuts import get_object_or_404, Http404
 from django.views.generic.list import ListView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.utils.decorators import method_decorator
+from django.urls import reverse_lazy
+from django.forms.models import modelform_factory
+from django.forms.widgets import CheckboxSelectMultiple
+
+class ModelFormWidgetMixin(object):
+    ## Allow easy use of widgets in views
+    def get_form_class(self):
+        return modelform_factory(self.model, fields=self.fields, widgets=self.widgets)
 
 class Blog(ListView):
     model = Post
@@ -15,49 +24,58 @@ class Blog(ListView):
     context_obect_name = 'post_list'
     queryset = Post.objects.all().order_by('-published_date')
 
-@permission_required('Blog.add_post', login_url='/Portal/login')
-def BlogPost(request):
-    ImageFormSet = modelformset_factory(Image, form=ImageForm, extra=10)
-    if request.method == 'POST':
-        postForm = PostForm(request.POST)
-        formset = ImageFormSet(request.POST, request.FILES, queryset=Image.objects.none())
-        if postForm.is_valid() and formset.is_valid():
-            post_form = postForm.save(commit=False)
-            post_form.author = request.user
-            post_form.save()
-            for form in formset.cleaned_data:
-                #this helps to not crash if the user
-                #do not upload all the photos
-                if form:
-                    image = form['image']
-                    photo = Image(post=post_form, images=image)
-                    photo.save()
-            messages.success(request,"Success")
-            return redirect("/Blog")
-        else:
-            print(postForm.errors, formset.errors)
-    else:
-        postForm = PostForm()
-        formset = ImageFormSet(queryset=Image.objects.none())
-    return render(request, 'Blog/Post.html', {'postForm': postForm, 'formset': formset})
+@method_decorator(permission_required('Blog.add_post'), name='dispatch')
+class BlogAdd(CreateView):
+    model = Post
+    template_name = 'Blog/PostForm.html'
+    success_url = reverse_lazy('Blog')
+    form_class =  modelform_factory(
+        Post,
+        fields = ['title', 'text', 'category', 'images'],
+        widgets={"images": CheckboxSelectMultiple }
+        )
+    def form_valid(self, form):
+        form.instance.author = self.request.user
+        return super().form_valid(form)
 
-@permission_required('Blog.change_post', login_url='/Portal/login')
-def BlogEdit(request, pk):
-    post = get_object_or_404(Post, pk=pk, author=request.user)
-    if request.method == "POST":
-        form = PostForm(request.POST, instance=post)
-        if form.is_valid():
-            post = form.save(commit=False)
-            post.save()
-            return redirect('/Blog', pk=post.pk)
-    else:
-        form = PostForm(instance=post)
-    return render(request, 'Blog/Edit.html', {'form': form})
+@method_decorator(permission_required('Blog.change_post'), name='dispatch')
+class BlogEdit(UpdateView):
+    model = Post
+    template_name = 'Blog/PostForm.html'
+    template_name_suffix = '_update_form'
+    success_url = reverse_lazy('Blog')
+    form_class =  modelform_factory(
+        Post,
+        fields = ['title', 'text', 'category', 'images'],
+        widgets={"images": CheckboxSelectMultiple }
+        )
 
-@permission_required('Blog.delete_post', login_url='/Portal/login')
-def BlogDelete(request, pk):
-    post = get_object_or_404(Post, pk=pk)
-    if post.author != request.user and not request.user.is_superuser:
-        raise Http404("You are not allowed to delete this Post")
-    post.delete()
-    return redirect('/Blog')
+@method_decorator(permission_required('Blog.delete_post'), name='dispatch')
+class BlogDelete(DeleteView):
+    model = Post
+    template_name = 'Blog/PostForm.html'
+    success_url = reverse_lazy('Blog')
+
+@method_decorator(permission_required('Blog.add_image'), name='dispatch')
+class ImageAdd(CreateView):
+    model = Image
+    template_name = 'Blog/ImageForm.html'
+    fields = ['image', 'name']
+    success_url = reverse_lazy('Blog')
+    def form_valid(self, form):
+        form.instance.owner = self.request.user
+        return super().form_valid(form)
+
+@method_decorator(permission_required('Blog.change_image'), name='dispatch')
+class ImageEdit(UpdateView):
+    model = Post
+    template_name = 'Blog/ImageForm.html'
+    fields = ['image', 'name']
+    template_name_suffix = '_update_form'
+    success_url = reverse_lazy('Blog')
+
+@method_decorator(permission_required('Blog.delete_image'), name='dispatch')
+class ImageDelete(DeleteView):
+    model = Post
+    template_name = 'Blog/ImageForm.html'
+    success_url = reverse_lazy('Blog')
