@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from UserPortal.models import *
 from Blog.models import *
+from Gear.models import *
 from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
 
@@ -66,20 +67,6 @@ class MeetsCaving(ListView):
     queryset = Post.objects.filter(category='Caving').order_by('-published_date')
 class MeetsDinners(TemplateView):
     template_name = 'Meets/Dinners.html'
-
-
-# Gear
-class GearFirstAid(TemplateView):
-    template_name = 'Gear/FirstAid.html'
-class GearHire(TemplateView):
-    template_name = 'Gear/Hire.html'
-class GearInventory(TemplateView):
-    template_name = 'Gear/Inventory.html'
-class GearTape(ListView):
-    model = CustomUser
-    template_name = 'Gear/Tape.html'
-    queryset = CustomUser.objects.all().order_by('full_name')
-    context_object_name = 'user_list'
 
 # Get Involved
 class GetInvolvedHowToJoin(TemplateView):

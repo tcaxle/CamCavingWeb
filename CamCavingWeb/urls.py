@@ -25,6 +25,7 @@ urlpatterns = [
     path('Portal/', include('UserPortal.urls')),
     path('Portal/', include('django.contrib.auth.urls')),
     path('Blog/', include('Blog.urls')),
+    path('Gear/', include('Gear.urls')),
     path('Admin/', admin.site.urls),
 
     # Redirects
@@ -54,12 +55,6 @@ urlpatterns = [
 	path('Meets/Social/', views.MeetsSocial.as_view(), name='MeetsSocial'),
 	path('Meets/Training/', views.MeetsTraining.as_view(), name='MeetsTraining'),
     path('Meets/Dinners/', views.MeetsDinners.as_view(), name='MeetsDinners'),
-
-    # Gear
-	path('Gear/FirstAid/', views.GearFirstAid.as_view(), name='GearFirstAid'),
-	path('Gear/Hire/', views.GearHire.as_view(), name='GearHire'),
-    path('Gear/Inventory/', views.GearInventory.as_view(), name='GearInventory'),
-    path('Gear/Tape/', views.GearTape.as_view(), name='GearTape'),
 
 	# Get Involved
 	path('GetInvolved/HowToJoin/', views.GetInvolvedHowToJoin.as_view(), name='GetInvolvedHowToJoin'),
