@@ -68,7 +68,7 @@ class ImageAdd(CreateView):
 
 @method_decorator(permission_required('Blog.change_image'), name='dispatch')
 class ImageEdit(UpdateView):
-    model = Post
+    model = Image
     template_name = 'Blog/ImageForm.html'
     fields = ['image', 'name']
     template_name_suffix = '_update_form'
@@ -76,6 +76,6 @@ class ImageEdit(UpdateView):
 
 @method_decorator(permission_required('Blog.delete_image'), name='dispatch')
 class ImageDelete(DeleteView):
-    model = Post
+    model = Image
     template_name = 'Blog/ImageForm.html'
     success_url = reverse_lazy('Blog')
