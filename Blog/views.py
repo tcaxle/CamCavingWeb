@@ -6,20 +6,14 @@ from .forms import ImageForm, PostForm
 from .models import *
 from datetime import datetime
 from django.shortcuts import get_object_or_404, Http404
-from django.core.paginator import Paginator
+from django.views.generic.list import ListView
 
-def Blog(request):
-    post_list = Post.objects.all().order_by('-published_date')
-    image_list = Image.objects.all()
-    page = request.GET.get('page', 1)
-    paginator = Paginator(post_list, 10)
-    try:
-        posts = paginator.page(page)
-    except PageNotAnInteger:
-        posts = paginator.page(1)
-    except EmptyPage:
-        posts = paginator.page(paginator.num_pages)
-    return render(request, 'Meets/Blog.html', { 'posts': posts, 'image_list': image_list })
+class Blog(ListView):
+    model = Post
+    template_name = 'Meets/Blog.html'
+    paginate_by = 5
+    context_obect_name = 'post_list'
+    queryset = Post.objects.all().order_by('-published_date')
 
 @permission_required('Blog.add_post', login_url='/Portal/login')
 def BlogPost(request):

@@ -7,52 +7,10 @@
 
 {% block main-content %}
   <h1>The CUCC Blog</h1>
+  {% include 'Blog/PostList.html' %}
 
-  <table class="w3-padding-16 w3-table w3-striped">
-  {% for p in posts %}
-  <tr><td>
-  <div class="w3-container w3-twothird w3-cell w3-mobile">
-    <h2>{{ p.title }}
-      {% if user == p.author or user.username == 'webmaster' %}
-      <a class="w3-button w3-right w3-large w3-theme-d4 w3-hover-black" href="{% url 'BlogEdit' pk=p.pk %}">Edit</a>
-      <a class="w3-button w3-right w3-large w3-theme-d4 w3-hover-black" href="{% url 'BlogDelete' pk=p.pk %}">Delete</a>
-      {% endif %}
-    </h2>
-    <p style="white-space: pre-wrap;">{{ p.text }}</p>
-    <p class=w3-small><i>-- {{ p.author.full_name }}, {{ p.published_date.date }}</i></p>
-  </div>
-  <div class="w3-center w3-container w3-third w3-cell w3-mobile">
-    {% for i in image_list %}
-    {% if i.post == p %}
-    <img class="w3-image" src="{{ i.images.url }}" alt="{{ p.title }}">
-    {% endif %}
-    {% endfor %}
-  </div>
-  </td></tr>
-  {% endfor %}
-  </table>
 
-{% if posts.has_other_pages %}
-  <div class="pagination w3-bar w3-center w3-padding-32">
-    {% if posts.has_previous %}
-      <a class="w3-button w3-hover-black" href="?page={{ posts.previous_page_number }}">&laquo;</a>
-    {% else %}
-      <span class="disabled w3-button">&laquo;</span>
-    {% endif %}
-    {% for i in posts.paginator.page_range %}
-      {% if posts.number == i %}
-        <span class="active w3-button w3-black">{{ i }} <span class="sr-only">(current)</span></span>
-      {% else %}
-        <a class="w3-button w3-hover-black" href="?page={{ i }}">{{ i }}</a>
-      {% endif %}
-    {% endfor %}
-    {% if posts.has_next %}
-      <a class="w3-button w3-hover-black" href="?page={{ posts.next_page_number }}">&raquo;</a>
-    {% else %}
-      <span class="disabled w3-button">&raquo;</span>
-    {% endif %}
-  </div>
-{% endif %}
+
 
 {% endblock %}
 

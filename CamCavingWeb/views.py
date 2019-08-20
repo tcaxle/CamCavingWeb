@@ -1,41 +1,32 @@
 from django.shortcuts import render, redirect
 from UserPortal.models import *
 from Blog.models import *
-from django.core.paginator import Paginator
-
-# Login redirect
-def LoginRedirect(request):
-    return redirect('/Portal/login')
+from django.views.generic.list import ListView
+from django.views.generic.base import TemplateView
 
 # Homepage
-def Home(request):
-    post_list = Post.objects.filter(category='News').order_by('-published_date')
-    image_list = Image.objects.all()
-    page = request.GET.get('page', 1)
-    paginator = Paginator(post_list, 10)
-    try:
-        posts = paginator.page(page)
-    except PageNotAnInteger:
-        posts = paginator.page(1)
-    except EmptyPage:
-        posts = paginator.page(paginator.num_pages)
-    return render(request, 'Home.html', { 'posts': posts, 'image_list': image_list })
+class Home(ListView):
+    model = Post
+    template_name = 'Home.html'
+    paginate_by = 5
+    context_obect_name = 'post_list'
+    queryset = Post.objects.filter(category='News').order_by('-published_date')
 
 # About
-def AboutMeetsFormatCost(request):
-    return render(request, 'About/MeetsFormatCost.html')
-def AboutTackleStore(request):
-    return render(request, 'About/TackleStore.html')
-def AboutLibrary(request):
-    return render(request, 'About/Library.html')
-def AboutConstitutionSafety(request):
-    return render(request, 'About/ConstitutionSafety.html')
-def AboutExpo(request):
-    return render(request, 'About/Expo.html')
-def AboutTripsAbroad(request):
-    return render(request, 'About/TripsAbroad.html')
-def AboutBureaucracy(request):
-    return render(request, 'About/Bureaucracy.html')
+class AboutMeetsFormatCost(TemplateView):
+    template_name = 'About/MeetsFormatCost.html'
+class AboutTackleStore(TemplateView):
+    template_name = 'About/TackleStore.html'
+class AboutLibrary(TemplateView):
+    template_name = 'About/Library.html'
+class AboutConstitutionSafety(TemplateView):
+    template_name = 'About/ConstitutionSafety.html'
+class AboutExpo(TemplateView):
+    template_name = 'About/Expo.html'
+class AboutTripsAbroad(TemplateView):
+    template_name = 'About/TripsAbroad.html'
+class AboutBureaucracy(TemplateView):
+    template_name = 'About/Bureaucracy.html'
 
 # Contact
 def ContactCommittee(request):
@@ -45,61 +36,43 @@ def ContactCommittee(request):
     committee_list = Committee.objects.all().order_by('-year')
     context = {'user_list': user_list, 'legacy_user_list': legacy_user_list, 'rank_list': rank_list, 'committee_list': committee_list}
     return render(request, 'Contact/Committee.html', context)
-def ContactMailingList(request):
-    return render(request, 'Contact/MailingList.html')
+class ContactMailingList(TemplateView):
+    template_name = 'Contact/MailingList.html'
 
 # Meets
-def MeetsCalendar(request):
-    return render(request, 'Meets/Calendar.html')
-def MeetsPub(request):
-    return render(request, 'Meets/Pub.html')
-def MeetsSocial(request):
-    post_list = Post.objects.filter(category='Social').order_by('-published_date')
-    image_list = Image.objects.all()
-    page = request.GET.get('page', 1)
-    paginator = Paginator(post_list, 10)
-    try:
-        posts = paginator.page(page)
-    except PageNotAnInteger:
-        posts = paginator.page(1)
-    except EmptyPage:
-        posts = paginator.page(paginator.num_pages)
-    return render(request, 'Meets/Social.html', { 'posts': posts, 'image_list': image_list })
-def MeetsTraining(request):
-    post_list = Post.objects.filter(category='Training').order_by('-published_date')
-    image_list = Image.objects.all()
-    page = request.GET.get('page', 1)
-    paginator = Paginator(post_list, 10)
-    try:
-        posts = paginator.page(page)
-    except PageNotAnInteger:
-        posts = paginator.page(1)
-    except EmptyPage:
-        posts = paginator.page(paginator.num_pages)
-    return render(request, 'Meets/Training.html', { 'posts': posts, 'image_list': image_list })
-def MeetsCaving(request):
-    post_list = Post.objects.filter(category='Caving').order_by('-published_date')
-    image_list = Image.objects.all()
-    page = request.GET.get('page', 1)
-    paginator = Paginator(post_list, 10)
-    try:
-        posts = paginator.page(page)
-    except PageNotAnInteger:
-        posts = paginator.page(1)
-    except EmptyPage:
-        posts = paginator.page(paginator.num_pages)
-    return render(request, 'Meets/Caving.html', { 'posts': posts, 'image_list': image_list })
-def MeetsDinners(request):
-    return render(request, 'Meets/Dinners.html')
+class MeetsCalendar(TemplateView):
+    template_name = 'Meets/Calendar.html'
+class MeetsPub(TemplateView):
+    template_name = 'Meets/Pub.html'
+class MeetsSocial(ListView):
+    model = Post
+    template_name = 'Meets/Social.html'
+    paginate_by = 5
+    context_obect_name = 'post_list'
+    queryset = Post.objects.filter(category='Social').order_by('-published_date')
+class MeetsTraining(ListView):
+    model = Post
+    template_name = 'Meets/Training.html'
+    paginate_by = 5
+    context_obect_name = 'post_list'
+    queryset = Post.objects.filter(category='Training').order_by('-published_date')
+class MeetsCaving(ListView):
+    model = Post
+    template_name = 'Meets/Caving.html'
+    paginate_by = 5
+    context_obect_name = 'post_list'
+    queryset = Post.objects.filter(category='Caving').order_by('-published_date')
+class MeetsDinners(TemplateView):
+    template_name = 'Meets/Dinners.html'
 
 
 # Gear
-def GearFirstAid(request):
-    return render(request, 'Gear/FirstAid.html')
-def GearHire(request):
-    return render(request, 'Gear/Hire.html')
-def GearInventory(request):
-    return render(request, 'Gear/Inventory.html')
+class GearFirstAid(TemplateView):
+    template_name = 'Gear/FirstAid.html'
+class GearHire(TemplateView):
+    template_name = 'Gear/Hire.html'
+class GearInventory(TemplateView):
+    template_name = 'Gear/Inventory.html'
 def GearTape(request):
     user_list = CustomUser.objects.all().order_by('full_name')
     legacy_user_list = LegacyUser.objects.all().order_by('full_name')
@@ -107,95 +80,95 @@ def GearTape(request):
     return render(request, 'Gear/Tape.html', context)
 
 # Get Involved
-def GetInvolvedHowToJoin(request):
-    return render(request, 'GetInvolved/HowToJoin.html')
+class GetInvolvedHowToJoin(TemplateView):
+    template_name = 'GetInvolved/HowToJoin.html'
 
 # Library
-def LibraryBooks(request):
-    return render(request, 'Library/Books.html')
-def LibraryMissingBooks(request):
-    return render(request, 'Library/MissingBooks.html')
+class LibraryBooks(TemplateView):
+    template_name = 'Library/Books.html'
+class LibraryMissingBooks(TemplateView):
+    template_name = 'Library/MissingBooks.html'
 
 # Misc
-def MiscCommitteeFunctions(request):
-    return render(request, 'Misc/CommitteeFunctions.html')
-def MiscNCAGuidelines(request):
-    return render(request, 'Misc/NCAGuidelines.html')
-def MiscExCS(request):
-    return render(request, 'Misc/ExCS.html')
-def MiscNoviceChecklist(request):
-    return render(request, 'Misc/NoviceChecklist.html')
-def MiscLeaderChecklist(request):
-    return render(request, 'Misc/LeaderChecklist.html')
+class MiscCommitteeFunctions(TemplateView):
+    template_name = 'Misc/CommitteeFunctions.html'
+class MiscNCAGuidelines(TemplateView):
+    template_name = 'Misc/NCAGuidelines.html'
+class MiscExCS(TemplateView):
+    template_name = 'Misc/ExCS.html'
+class MiscNoviceChecklist(TemplateView):
+    template_name = 'Misc/NoviceChecklist.html'
+class MiscLeaderChecklist(TemplateView):
+    template_name = 'Misc/LeaderChecklist.html'
 
 # Ardeche
-def ArdecheAgas(request):
-    return render(request, 'Ardeche/Agas.html')
-def ArdecheBarry(request):
-    return render(request, 'Ardeche/Barry.html')
-def ArdecheBunis(request):
-    return render(request, 'Ardeche/Bunis.html')
-def ArdecheCadet(request):
-    return render(request, 'Ardeche/Cadet.html')
-def ArdecheCamilie(request):
-    return render(request, 'Ardeche/Camilie.html')
-def ArdecheCentura(request):
-    return render(request, 'Ardeche/Centura.html')
-def ArdecheChampclos(request):
-    return render(request, 'Ardeche/Champclos.html')
-def ArdecheChataigniers(request):
-    return render(request, 'Ardeche/Chataigniers.html')
-def ArdecheChazot(request):
-    return render(request, 'Ardeche/Chazot.html')
-def ArdecheChenivesse(request):
-    return render(request, 'Ardeche/Chenivesse.html')
-def ArdecheChevre(request):
-    return render(request, 'Ardeche/Chevre.html')
-def ArdecheCombeRajeau(request):
-    return render(request, 'Ardeche/CombeRajeau.html')
-def ArdecheCotepatiere(request):
-    return render(request, 'Ardeche/Cotepatiere.html')
-def ArdecheCourtinen(request):
-    return render(request, 'Ardeche/Courtinen.html')
-def ArdecheDerocs(request):
-    return render(request, 'Ardeche/Derocs.html')
-def ArdecheDragonniere(request):
-    return render(request, 'Ardeche/Dragonniere.html')
-def ArdecheFauxMarzal(request):
-    return render(request, 'Ardeche/FauxMarzal.html')
-def ArdecheFontlongue(request):
-    return render(request, 'Ardeche/Fontlongue.html')
-def ArdecheFoussoubie(request):
-    return render(request, 'Ardeche/Foussoubie.html')
-def ArdecheGauthier(request):
-    return render(request, 'Ardeche/Gauthier.html')
-def ArdecheGrandBadingue(request):
-    return render(request, 'Ardeche/GrandBadingue.html')
-def ArdecheGregoire(request):
-    return render(request, 'Ardeche/Gregoire.html')
-def ArdecheMarteau(request):
-    return render(request, 'Ardeche/Marteau.html')
-def ArdecheNeufGorges(request):
-    return render(request, 'Ardeche/NeufGorges.html')
-def ArdecheNoel(request):
-    return render(request, 'Ardeche/Noel.html')
-def ArdechePebres(request):
-    return render(request, 'Ardeche/Pebres.html')
-def ArdechePeyrejal(request):
-    return render(request, 'Ardeche/Peyrejal.html')
-def ArdecheReynaud(request):
-    return render(request, 'Ardeche/Reynaud.html')
-def ArdecheRichard(request):
-    return render(request, 'Ardeche/Richard.html')
-def ArdecheRochas(request):
-    return render(request, 'Ardeche/Rochas.html')
-def ArdecheRosa(request):
-    return render(request, 'Ardeche/Rosa.html')
-def ArdecheRouveyrette(request):
-    return render(request, 'Ardeche/Rouveyrette.html')
-def ArdecheStMarcel(request):
-    return render(request, 'Ardeche/StMarcel.html')
-def ArdecheVarade(request):
-    return render(request, 'Ardeche/Varade.html')
-def ArdecheVigneClose(request):
-    return render(request, 'Ardeche/VigneClose.html')
+class ArdecheAgas(TemplateView):
+    template_name = 'Ardeche/Agas.html'
+class ArdecheBarry(TemplateView):
+    template_name = 'Ardeche/Barry.html'
+class ArdecheBunis(TemplateView):
+    template_name = 'Ardeche/Bunis.html'
+class ArdecheCadet(TemplateView):
+    template_name = 'Ardeche/Cadet.html'
+class ArdecheCamilie(TemplateView):
+    template_name = 'Ardeche/Camilie.html'
+class ArdecheCentura(TemplateView):
+    template_name = 'Ardeche/Centura.html'
+class ArdecheChampclos(TemplateView):
+    template_name = 'Ardeche/Champclos.html'
+class ArdecheChataigniers(TemplateView):
+    template_name = 'Ardeche/Chataigniers.html'
+class ArdecheChazot(TemplateView):
+    template_name = 'Ardeche/Chazot.html'
+class ArdecheChenivesse(TemplateView):
+    template_name = 'Ardeche/Chenivesse.html'
+class ArdecheChevre(TemplateView):
+    template_name = 'Ardeche/Chevre.html'
+class ArdecheCombeRajeau(TemplateView):
+    template_name = 'Ardeche/CombeRajeau.html'
+class ArdecheCotepatiere(TemplateView):
+    template_name = 'Ardeche/Cotepatiere.html'
+class ArdecheCourtinen(TemplateView):
+    template_name = 'Ardeche/Courtinen.html'
+class ArdecheDerocs(TemplateView):
+    template_name = 'Ardeche/Derocs.html'
+class ArdecheDragonniere(TemplateView):
+    template_name = 'Ardeche/Dragonniere.html'
+class ArdecheFauxMarzal(TemplateView):
+    template_name = 'Ardeche/FauxMarzal.html'
+class ArdecheFontlongue(TemplateView):
+    template_name = 'Ardeche/Fontlongue.html'
+class ArdecheFoussoubie(TemplateView):
+    template_name = 'Ardeche/Foussoubie.html'
+class ArdecheGauthier(TemplateView):
+    template_name = 'Ardeche/Gauthier.html'
+class ArdecheGrandBadingue(TemplateView):
+    template_name = 'Ardeche/GrandBadingue.html'
+class ArdecheGregoire(TemplateView):
+    template_name = 'Ardeche/Gregoire.html'
+class ArdecheMarteau(TemplateView):
+    template_name = 'Ardeche/Marteau.html'
+class ArdecheNeufGorges(TemplateView):
+    template_name = 'Ardeche/NeufGorges.html'
+class ArdecheNoel(TemplateView):
+    template_name = 'Ardeche/Noel.html'
+class ArdechePebres(TemplateView):
+    template_name = 'Ardeche/Pebres.html'
+class ArdechePeyrejal(TemplateView):
+    template_name = 'Ardeche/Peyrejal.html'
+class ArdecheReynaud(TemplateView):
+    template_name = 'Ardeche/Reynaud.html'
+class ArdecheRichard(TemplateView):
+    template_name = 'Ardeche/Richard.html'
+class ArdecheRochas(TemplateView):
+    template_name = 'Ardeche/Rochas.html'
+class ArdecheRosa(TemplateView):
+    template_name = 'Ardeche/Rosa.html'
+class ArdecheRouveyrette(TemplateView):
+    template_name = 'Ardeche/Rouveyrette.html'
+class ArdecheStMarcel(TemplateView):
+    template_name = 'Ardeche/StMarcel.html'
+class ArdecheVarade(TemplateView):
+    template_name = 'Ardeche/Varade.html'
+class ArdecheVigneClose(TemplateView):
+    template_name = 'Ardeche/VigneClose.html'

@@ -1,0 +1,51 @@
+<!-- Must have paginated post_list object in parent -->
+
+{% if post_list %}
+  <table class="w3-padding-16 w3-table w3-striped">
+    {% for p in post_list %}
+      <tr><td>
+        <div class="w3-container w3-twothird w3-cell w3-mobile">
+          <h2>{{ p.title }}
+            {% if user == p.author or user.username == 'webmaster' %}
+            <a class="w3-button w3-right w3-large w3-theme-d4 w3-hover-black" href="{% url 'BlogEdit' pk=p.pk %}">Edit</a>
+            <a class="w3-button w3-right w3-large w3-theme-d4 w3-hover-black" href="{% url 'BlogDelete' pk=p.pk %}">Delete</a>
+            {% endif %}
+          </h2>
+          <p style="white-space: pre-wrap;">{{ p.text }}</p>
+          <p class=w3-small><i>-- {{ p.author.full_name }}, {{ p.published_date.date }}</i></p>
+        </div>
+        <div class="w3-center w3-container w3-third w3-cell w3-mobile">
+          <!-- put images here -->
+        </div>
+      </td></tr>
+    {% endfor %}
+  </table>
+
+  {% if is_paginated %}
+    <div class="pagination w3-center w3-padding">
+      <span class="page-links">
+          {% if page_obj.has_previous %}
+              <a class="w3-button w3-hover-black" href="?page={{ page_obj.previous_page_number }}">&laquo;</a>
+          {% else %}
+              <span class="disabled w3-button">&laquo;</span>
+          {% endif %}
+
+          {% for i in page_obj.paginator.page_range %}
+            {% if page_obj.number == i %}
+              <span class="active w3-button w3-black">{{ i }} <span class="sr-only">(current)</span></span>
+            {% else %}
+              <a class="w3-button w3-hover-black" href="?page={{ i }}">{{ i }}</a>
+            {% endif %}
+          {% endfor %}
+
+          {% if page_obj.has_next %}
+            <a class="w3-button w3-hover-black" href="?page={{ page_obj.next_page_number }}">&raquo;</a>
+          {% else %}
+            <span class="disabled w3-button">&raquo;</span>
+          {% endif %}
+      </span>
+    </div>
+  {% endif %}
+{% else %}
+  <p>No posts found</p>
+{% endif %}
