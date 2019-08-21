@@ -1,8 +1,10 @@
 # accounts/urls.py
 from django.urls import path
 from . import views
+from django.views.generic.base import RedirectView
 
 urlpatterns = [
+    path('', RedirectView.as_view(url='/Portal/login/'), name='PortalRedirect'),
     path('SignUp/', views.SignUp.as_view(), name='SignUp'),
     path('EditProfile/<slug:slug>/', views.EditProfile.as_view(), name='EditProfile'),
     path('SuperEditProfile/<slug:slug>/', views.SuperEditProfile.as_view(), name='SuperEditProfile'),

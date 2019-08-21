@@ -10,6 +10,7 @@ from django.shortcuts import get_object_or_404
 from django.utils.decorators import method_decorator
 from django.urls import reverse_lazy
 
+
 class GearFirstAid(TemplateView):
     template_name = 'Gear/FirstAid.html'
 class GearTape(ListView):
