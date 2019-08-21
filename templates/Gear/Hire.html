@@ -19,30 +19,236 @@
       <th>Signed Out By</th>
       <th></th>
     </tr>
-    {% for r in rope_list %}
-      {% if r.available %}
+    {% for item in rope_list %}
+      {% if item.available %}
         <tr class="w3-green">
-          <td>{{ r.length }}</td>
-          <td>{{ r.diameter }}</td>
-          <td>{{ r.purchased_year }}</td>
-          <td>{{ r.notes }}</td>
+          <td>{{ item.length }}</td>
+          <td>{{ item.diameter }}</td>
+          <td>{{ item.purchased_year }}</td>
+          <td>{{ item.notes }}</td>
           <td>Available</td>
-          <td><a class="w3-button w3-block w3-theme-d4 w3-hover-black" href="{% url 'RopeSignOut' pk=r.pk %}">Sign Out</a></td>
+          <td><a class="w3-button w3-block w3-theme-d4 w3-hover-black" href="{% url 'RopeSignOut' pk=item.pk %}">Sign Out</a></td>
         </tr>
       {% else %}
         <tr class="w3-red">
-          <td>{{ r.length }}</td>
-          <td>{{ r.diameter }}</td>
-          <td>{{ r.purchased_year }}</td>
-          <td>{{ r.notes }}</td>
-          <td>{% for rh in hirerope_list %}{% if rh.rope == r and rh.signed_in == None %}{{ rh.signed_out_by.full_name }}{% endif %}{% endfor %}</td>
-          <td><a class="w3-button w3-block w3-theme-d4 w3-hover-black" href="{% url 'RopeSignIn' pk=r.pk %}">Sign In</a></td>
+          <td>{{ item.length }}</td>
+          <td>{{ item.diameter }}</td>
+          <td>{{ item.purchased_year }}</td>
+          <td>{{ item.notes }}</td>
+          <td>{% for hire in hirerope_list %}{% if hire.rope == item and hire.signed_in == None %}{{ hire.signed_out_by.full_name }}{% endif %}{% endfor %}</td>
+          <td><a class="w3-button w3-block w3-theme-d4 w3-hover-black" href="{% url 'RopeSignIn' pk=item.pk %}">Sign In</a></td>
         </tr>
       {% endif %}
     {% endfor %}
     </table>
   {% else %}
-  <p>No Ropes Found</p>
+    <p>No Ropes Found</p>
+  {% endif %}
+
+  <h2>Helmets</h2>
+  {% if helmet_list %}
+    <table class="w3-table w3-table-all w3-striped w3-card">
+    <tr class="w3-theme-d3">
+      <th>UID</th>
+      <th>Year</th>
+      <th>Notes</th>
+      <th>Signed Out By</th>
+      <th></th>
+    </tr>
+    {% for item in helmet_list %}
+      {% if item.available %}
+        <tr class="w3-green">
+          <td>{{ item.uid }}</td>
+          <td>{{ item.purchased_year }}</td>
+          <td>{{ item.notes }}</td>
+          <td>Available</td>
+          <td><a class="w3-button w3-block w3-theme-d4 w3-hover-black" href="{% url 'HelmetSignOut' pk=item.pk %}">Sign Out</a></td>
+        </tr>
+      {% else %}
+        <tr class="w3-red">
+          <td>{{ item.uid }}</td>
+          <td>{{ item.purchased_year }}</td>
+          <td>{{ item.notes }}</td>
+          <td>{% for hire in hirehelmet_list %}{% if hire.helmet == item and hire.signed_in == None %}{{ hire.signed_out_by.full_name }}{% endif %}{% endfor %}</td>
+          <td><a class="w3-button w3-block w3-theme-d4 w3-hover-black" href="{% url 'HelmetSignIn' pk=item.pk %}">Sign In</a></td>
+        </tr>
+      {% endif %}
+    {% endfor %}
+    </table>
+  {% else %}
+    <p>No Helmets Found</p>
+  {% endif %}
+
+  <h2>SRT Kits</h2>
+  {% if srtkit_list %}
+    <table class="w3-table w3-table-all w3-striped w3-card">
+    <tr class="w3-theme-d3">
+      <th>Colours</th>
+      <th>Notes</th>
+      <th>Signed Out By</th>
+      <th></th>
+    </tr>
+    {% for item in srtkit_list %}
+      {% if item.available %}
+        <tr class="w3-green">
+          <td>{{ item.colour_code }}</td>
+          <td>{{ item.notes }}</td>
+          <td>Available</td>
+          <td><a class="w3-button w3-block w3-theme-d4 w3-hover-black" href="{% url 'SRTKitSignOut' pk=item.pk %}">Sign Out</a></td>
+        </tr>
+      {% else %}
+        <tr class="w3-red">
+          <td>{{ item.colour_code }}</td>
+          <td>{{ item.notes }}</td>
+          <td>{% for hire in hiresrtkit_list %}{% if hire.kit == item and hire.signed_in == None %}{{ hire.signed_out_by.full_name }}{% endif %}{% endfor %}</td>
+          <td><a class="w3-button w3-block w3-theme-d4 w3-hover-black" href="{% url 'SRTKitSignIn' pk=item.pk %}">Sign In</a></td>
+        </tr>
+      {% endif %}
+    {% endfor %}
+    </table>
+  {% else %}
+    <p>No SRT Kits Found</p>
+  {% endif %}
+
+  <h2>Harnesses</h2>
+  {% if harness_list %}
+    <table class="w3-table w3-table-all w3-striped w3-card">
+    <tr class="w3-theme-d3">
+      <th>UID</th>
+      <th>Year</th>
+      <th>Notes</th>
+      <th>Signed Out By</th>
+      <th></th>
+    </tr>
+    {% for item in harness_list %}
+      {% if item.available %}
+        <tr class="w3-green">
+          <td>{{ item.uid }}</td>
+          <td>{{ item.purchased_year }}</td>
+          <td>{{ item.notes }}</td>
+          <td>Available</td>
+          <td><a class="w3-button w3-block w3-theme-d4 w3-hover-black" href="{% url 'HarnessSignOut' pk=item.pk %}">Sign Out</a></td>
+        </tr>
+      {% else %}
+        <tr class="w3-red">
+          <td>{{ item.uid }}</td>
+          <td>{{ item.purchased_year }}</td>
+          <td>{{ item.notes }}</td>
+          <td>{% for hire in hireharness_list %}{% if hire.harness == item and hire.signed_in == None %}{{ hire.signed_out_by.full_name }}{% endif %}{% endfor %}</td>
+          <td><a class="w3-button w3-block w3-theme-d4 w3-hover-black" href="{% url 'HarnessSignIn' pk=item.pk %}">Sign In</a></td>
+        </tr>
+      {% endif %}
+    {% endfor %}
+    </table>
+  {% else %}
+    <p>No Harnesses Found</p>
+  {% endif %}
+
+  <h2>Undersuits</h2>
+  {% if undersuit_list %}
+    <table class="w3-table w3-table-all w3-striped w3-card">
+    <tr class="w3-theme-d3">
+      <th>UID</th>
+      <th>Size</th>
+      <th>Notes</th>
+      <th>Signed Out By</th>
+      <th></th>
+    </tr>
+    {% for item in undersuit_list %}
+      {% if item.available %}
+        <tr class="w3-green">
+          <td>{{ item.uid }}</td>
+          <td>{{ item.size }}</td>
+          <td>{{ item.notes }}</td>
+          <td>Available</td>
+          <td><a class="w3-button w3-block w3-theme-d4 w3-hover-black" href="{% url 'UndersuitSignOut' pk=item.pk %}">Sign Out</a></td>
+        </tr>
+      {% else %}
+        <tr class="w3-red">
+          <td>{{ item.uid }}</td>
+          <td>{{ item.size }}</td>
+          <td>{{ item.notes }}</td>
+          <td>{% for hire in hireundersuit_list %}{% if hire.undersuit == item and hire.signed_in == None %}{{ hire.signed_out_by.full_name }}{% endif %}{% endfor %}</td>
+          <td><a class="w3-button w3-block w3-theme-d4 w3-hover-black" href="{% url 'UndersuitSignIn' pk=item.pk %}">Sign In</a></td>
+        </tr>
+      {% endif %}
+    {% endfor %}
+    </table>
+  {% else %}
+    <p>No Undersuits Found</p>
+  {% endif %}
+
+  <h2>Oversuits</h2>
+  {% if oversuit_list %}
+    <table class="w3-table w3-table-all w3-striped w3-card">
+    <tr class="w3-theme-d3">
+      <th>UID</th>
+      <th>Size</th>
+      <th>Notes</th>
+      <th>Signed Out By</th>
+      <th></th>
+    </tr>
+    {% for item in oversuit_list %}
+      {% if item.available %}
+        <tr class="w3-green">
+          <td>{{ item.uid }}</td>
+          <td>{{ item.size }}</td>
+          <td>{{ item.notes }}</td>
+          <td>Available</td>
+          <td><a class="w3-button w3-block w3-theme-d4 w3-hover-black" href="{% url 'OversuitSignOut' pk=item.pk %}">Sign Out</a></td>
+        </tr>
+      {% else %}
+        <tr class="w3-red">
+          <td>{{ item.uid }}</td>
+          <td>{{ item.size }}</td>
+          <td>{{ item.notes }}</td>
+          <td>{% for hire in hireoversuit_list %}{% if hire.oversuit == item and hire.signed_in == None %}{{ hire.signed_out_by.full_name }}{% endif %}{% endfor %}</td>
+          <td><a class="w3-button w3-block w3-theme-d4 w3-hover-black" href="{% url 'OversuitSignIn' pk=item.pk %}">Sign In</a></td>
+        </tr>
+      {% endif %}
+    {% endfor %}
+    </table>
+  {% else %}
+    <p>No Oversuits Found</p>
+  {% endif %}
+
+  <h2>Other Gear</h2>
+  {% if othergear_list %}
+    <table class="w3-table w3-table-all w3-striped w3-card">
+    <tr class="w3-theme-d3">
+      <th>Name</th>
+      <th>Notes</th>
+      <th>On Loan</th>
+      <th>Available</th>
+      <th></th>
+    </tr>
+    {% for item in othergear_list %}
+      <tr class="w3-green">
+        <td>{{ item.name }}</td>
+        <td>{{ item.notes }}</td>
+        <td>{{ item.on_loan }}/{{ item.quantity }}</td>
+        <td>{{ item.available }}/{{ item.quantity }}</td>
+        <td class="w3-bar w3-responsive">
+          {% if item.available != 0 %}
+            <form method="POST" action="{% url 'OtherGearSignOut' pk=item.pk %}" class="w3-block">
+                {% csrf_token %}
+                <input class="w3-bar-item w3-mobile w3-block" type="number" name="amount" min="0" max="{{ item.available }}" value=0>
+                <input class="w3-bar-item w3-button w3-block w3-theme-d4 w3-hover-black w3-mobile" type="submit" value="Sign Out">
+            </form>
+          {% endif %}
+          {% if item.on_loan != 0 %}
+          <form method="POST" action="{% url 'OtherGearSignIn' pk=item.pk %}"  class="w3-block">
+              {% csrf_token %}
+              <input class="w3-bar-item w3-mobile w3-block" type="number" name="amount" min="0" max="{{ item.on_loan }}" value=0>
+              <input class="w3-bar-item w3-button w3-block w3-theme-d4 w3-hover-black w3-mobile" type="submit" value="Sign In">
+          </form>
+          {% endif %}
+        </td>
+      </tr>
+    {% endfor %}
+    </table>
+  {% else %}
+    <p>No Other Gear Found</p>
   {% endif %}
 
 {% endblock %}
