@@ -1,21 +1,173 @@
 from django.shortcuts import render, redirect
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.contrib.auth.decorators import login_required, permission_required
 from .models import *
 from UserPortal.models import CustomUser
 from django.utils import timezone
 from django.views.generic.list import ListView
 from django.views.generic.base import TemplateView
 from django.shortcuts import get_object_or_404
+from django.utils.decorators import method_decorator
+from django.urls import reverse_lazy
 
 class GearFirstAid(TemplateView):
     template_name = 'Gear/FirstAid.html'
-class GearInventory(TemplateView):
-    template_name = 'Gear/Inventory.html'
 class GearTape(ListView):
     model = CustomUser
     template_name = 'Gear/Tape.html'
     queryset = CustomUser.objects.all().order_by('full_name')
     context_object_name = 'user_list'
+
+@method_decorator(permission_required('Gear.register_gear'), name='dispatch')
+class EditRope(UpdateView):
+    model = Rope
+    template_name = 'Gear/EditForm.html'
+    template_name_suffix = '_update_form'
+    success_url = reverse_lazy('GearHire')
+    fields = '__all__'
+
+@method_decorator(permission_required('Gear.register_gear'), name='dispatch')
+class DeleteRope(DeleteView):
+    model = Rope
+    template_name = 'Gear/DeleteForm.html'
+    success_url = reverse_lazy('GearHire')
+
+@method_decorator(permission_required('Gear.register_gear'), name='dispatch')
+class AddRope(CreateView):
+    model = Rope
+    template_name = 'Gear/AddForm.html'
+    fields = '__all__'
+    success_url = reverse_lazy('GearHire')
+
+@method_decorator(permission_required('Gear.register_gear'), name='dispatch')
+class EditHelmet(UpdateView):
+    model = Helmet
+    template_name = 'Gear/EditForm.html'
+    template_name_suffix = '_update_form'
+    success_url = reverse_lazy('GearHire')
+    fields = '__all__'
+
+@method_decorator(permission_required('Gear.register_gear'), name='dispatch')
+class DeleteHelmet(DeleteView):
+    model = Helmet
+    template_name = 'Gear/DeleteForm.html'
+    success_url = reverse_lazy('GearHire')
+
+@method_decorator(permission_required('Gear.register_gear'), name='dispatch')
+class AddHelmet(CreateView):
+    model = Helmet
+    template_name = 'Gear/AddForm.html'
+    fields = '__all__'
+    success_url = reverse_lazy('GearHire')
+
+@method_decorator(permission_required('Gear.register_gear'), name='dispatch')
+class EditSRTKit(UpdateView):
+    model = SRTKit
+    template_name = 'Gear/EditForm.html'
+    template_name_suffix = '_update_form'
+    success_url = reverse_lazy('GearHire')
+    fields = '__all__'
+
+@method_decorator(permission_required('Gear.register_gear'), name='dispatch')
+class DeleteSRTKit(DeleteView):
+    model = SRTKit
+    template_name = 'Gear/DeleteForm.html'
+    success_url = reverse_lazy('GearHire')
+
+@method_decorator(permission_required('Gear.register_gear'), name='dispatch')
+class AddSRTKit(CreateView):
+    model = SRTKit
+    template_name = 'Gear/AddForm.html'
+    fields = '__all__'
+    success_url = reverse_lazy('GearHire')
+
+@method_decorator(permission_required('Gear.register_gear'), name='dispatch')
+class EditHarness(UpdateView):
+    model = Harness
+    template_name = 'Gear/EditForm.html'
+    template_name_suffix = '_update_form'
+    success_url = reverse_lazy('GearHire')
+    fields = '__all__'
+
+@method_decorator(permission_required('Gear.register_gear'), name='dispatch')
+class DeleteHarness(DeleteView):
+    model = Harness
+    template_name = 'Gear/DeleteForm.html'
+    success_url = reverse_lazy('GearHire')
+
+@method_decorator(permission_required('Gear.register_gear'), name='dispatch')
+class AddHarness(CreateView):
+    model = Harness
+    template_name = 'Gear/AddForm.html'
+    fields = '__all__'
+    success_url = reverse_lazy('GearHire')
+
+@method_decorator(permission_required('Gear.register_gear'), name='dispatch')
+class EditUndersuit(UpdateView):
+    model = Undersuit
+    template_name = 'Gear/EditForm.html'
+    template_name_suffix = '_update_form'
+    success_url = reverse_lazy('GearHire')
+    fields = '__all__'
+
+@method_decorator(permission_required('Gear.register_gear'), name='dispatch')
+class DeleteUndersuit(DeleteView):
+    model = Undersuit
+    template_name = 'Gear/DeleteForm.html'
+    success_url = reverse_lazy('GearHire')
+
+@method_decorator(permission_required('Gear.register_gear'), name='dispatch')
+class AddUndersuit(CreateView):
+    model = Undersuit
+    template_name = 'Gear/AddForm.html'
+    fields = '__all__'
+    success_url = reverse_lazy('GearHire')
+
+@method_decorator(permission_required('Gear.register_gear'), name='dispatch')
+class EditOversuit(UpdateView):
+    model = Oversuit
+    template_name = 'Gear/EditForm.html'
+    template_name_suffix = '_update_form'
+    success_url = reverse_lazy('GearHire')
+    fields = '__all__'
+
+@method_decorator(permission_required('Gear.register_gear'), name='dispatch')
+class DeleteOversuit(DeleteView):
+    model = Oversuit
+    template_name = 'Gear/DeleteForm.html'
+    success_url = reverse_lazy('GearHire')
+
+@method_decorator(permission_required('Gear.register_gear'), name='dispatch')
+class AddOversuit(CreateView):
+    model = Oversuit
+    template_name = 'Gear/AddForm.html'
+    fields = '__all__'
+    success_url = reverse_lazy('GearHire')
+
+@method_decorator(permission_required('Gear.register_gear'), name='dispatch')
+class EditOtherGear(UpdateView):
+    model = OtherGear
+    template_name = 'Gear/EditForm.html'
+    template_name_suffix = '_update_form'
+    success_url = reverse_lazy('GearHire')
+    fields = '__all__'
+
+@method_decorator(permission_required('Gear.register_gear'), name='dispatch')
+class DeleteOtherGear(DeleteView):
+    model = OtherGear
+    template_name = 'Gear/DeleteForm.html'
+    success_url = reverse_lazy('GearHire')
+
+@method_decorator(permission_required('Gear.register_gear'), name='dispatch')
+class AddOtherGear(CreateView):
+    model = OtherGear
+    template_name = 'Gear/AddForm.html'
+    fields = ['name', 'quantity', 'on_loan', 'notes']
+    success_url = reverse_lazy('GearHire')
+    def form_valid(self, form):
+        form.instance.available = form.instance.quantity - form.instance.on_loan
+        return super().form_valid(form)
+
 class GearHire(TemplateView):
     template_name = 'Gear/Hire.html'
     def get_context_data(self, **kwargs):

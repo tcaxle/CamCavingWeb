@@ -9,6 +9,7 @@ class HireSupport(models.Model):
         permissions = [
             ("hire_self", "Can hire gear on their own behalf"),
             ("hire_other", "Can hire gear on behalf of others"),
+            ("register_gear", "Can register gear in the database")
         ]
 
 # Rope
