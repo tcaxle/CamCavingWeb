@@ -58,4 +58,10 @@ urlpatterns = [
 	path('Delete/OtherGear/<int:pk>', views.DeleteOtherGear.as_view(), name='DeleteOtherGear'),
 
 	path('ViewHires/Rope/', views.ViewHiresRope.as_view(), name='ViewHiresRope'),
+	path('ViewHires/Helmet/', views.ViewHiresHelmet.as_view(), name='ViewHiresHelmet'),
+	path('ViewHires/SRTKit/', views.ViewHiresSRTKit.as_view(), name='ViewHiresSRTKit'),
+	path('ViewHires/Harness/', views.ViewHiresHarness.as_view(), name='ViewHiresHarness'),
+	path('ViewHires/Undersuit/', views.ViewHiresUndersuit.as_view(), name='ViewHiresUndersuit'),
+	path('ViewHires/Oversuit/', views.ViewHiresOversuit.as_view(), name='ViewHiresOversuit'),
+	path('ViewHires/OtherGear/', views.ViewHiresOtherGear.as_view(), name='ViewHiresOtherGear'),
 ]

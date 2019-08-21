@@ -18,12 +18,59 @@ class GearTape(ListView):
     queryset = CustomUser.objects.all().order_by('full_name')
     context_object_name = 'user_list'
 
+
 @method_decorator(permission_required('Gear.view_hires'), name='dispatch')
 class ViewHiresRope(ListView):
     model = HireRope
     context_object_name = 'hires_list'
     template_name = 'Gear/ViewHires.html'
     queryset = HireRope.objects.all().order_by('-signed_out')
+
+@method_decorator(permission_required('Gear.view_hires'), name='dispatch')
+class ViewHiresHelmet(ListView):
+    model = HireHelmet
+    context_object_name = 'hires_list'
+    template_name = 'Gear/ViewHires.html'
+    queryset = HireHelmet.objects.all().order_by('-signed_out')
+
+@method_decorator(permission_required('Gear.view_hires'), name='dispatch')
+class ViewHiresSRTKit(ListView):
+    model = HireSRTKit
+    context_object_name = 'hires_list'
+    template_name = 'Gear/ViewHires.html'
+    queryset = HireSRTKit.objects.all().order_by('-signed_out')
+
+@method_decorator(permission_required('Gear.view_hires'), name='dispatch')
+class ViewHiresHarness(ListView):
+    model = HireHarness
+    context_object_name = 'hires_list'
+    template_name = 'Gear/ViewHires.html'
+    queryset = HireHarness.objects.all().order_by('-signed_out')
+
+@method_decorator(permission_required('Gear.view_hires'), name='dispatch')
+class ViewHiresUndersuit(ListView):
+    model = HireUndersuit
+    context_object_name = 'hires_list'
+    template_name = 'Gear/ViewHires.html'
+    queryset = HireUndersuit.objects.all().order_by('-signed_out')
+
+@method_decorator(permission_required('Gear.view_hires'), name='dispatch')
+class ViewHiresOversuit(ListView):
+    model = HireOversuit
+    context_object_name = 'hires_list'
+    template_name = 'Gear/ViewHires.html'
+    queryset = HireOversuit.objects.all().order_by('-signed_out')
+
+@method_decorator(permission_required('Gear.view_hires'), name='dispatch')
+class ViewHiresOtherGear(ListView):
+    model = SignOutOtherGear
+    template_name = 'Gear/ViewHiresOther.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['sign_out_list'] = SignOutOtherGear.objects.all().order_by('-signed_out')
+        context['sign_in_list'] = SignInOtherGear.objects.all().order_by('-signed_in')
+        return context
+
 
 @method_decorator(permission_required('Gear.register_gear'), name='dispatch')
 class EditRope(UpdateView):
