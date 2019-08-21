@@ -1,5 +1,6 @@
 {% if user.is_authenticated and perms.Gear.register_gear %}
   <h2>Gear Actions</h2>
+  <h3>Add Entries to Inventory</h3>
   <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'AddRope' %}">Add Rope Entry</a>
   <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'AddHelmet' %}">Add Helmet Entry</a>
   <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'AddSRTKit' %}">Add SRT Kit Entry</a>
@@ -7,4 +8,7 @@
   <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'AddUndersuit' %}">Add Undersuit Entry</a>
   <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'AddOversuit' %}">Add Oversuit Entry</a>
   <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'AddOtherGear' %}">Add Other Gear Entry</a>
+
+  <h3>View Hire Instances</h3>
+  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'ViewHiresRope' %}">View Rope Hires</a>
 {% endif %}

@@ -56,4 +56,6 @@ urlpatterns = [
 	path('Add/OtherGear/', views.AddOtherGear.as_view(), name='AddOtherGear'),
 	path('Edit/OtherGear/<int:pk>', views.EditOtherGear.as_view(), name='EditOtherGear'),
 	path('Delete/OtherGear/<int:pk>', views.DeleteOtherGear.as_view(), name='DeleteOtherGear'),
+
+	path('ViewHires/Rope/', views.ViewHiresRope.as_view(), name='ViewHiresRope'),
 ]

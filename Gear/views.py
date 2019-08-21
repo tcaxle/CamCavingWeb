@@ -18,6 +18,13 @@ class GearTape(ListView):
     queryset = CustomUser.objects.all().order_by('full_name')
     context_object_name = 'user_list'
 
+@method_decorator(permission_required('Gear.view_hires'), name='dispatch')
+class ViewHiresRope(ListView):
+    model = HireRope
+    context_object_name = 'hires_list'
+    template_name = 'Gear/ViewHires.html'
+    queryset = HireRope.objects.all().order_by('-signed_out')
+
 @method_decorator(permission_required('Gear.register_gear'), name='dispatch')
 class EditRope(UpdateView):
     model = Rope

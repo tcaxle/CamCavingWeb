@@ -9,7 +9,9 @@ class HireSupport(models.Model):
         permissions = [
             ("hire_self", "Can hire gear on their own behalf"),
             ("hire_other", "Can hire gear on behalf of others"),
-            ("register_gear", "Can register gear in the database")
+            ("register_gear", "Can register gear in the database"),
+            ("view_hires", "Can view lists of Hire Instances"),
+            ("edit_hires", "Can edit and delete Hire Instances"),
         ]
 
 # Rope
@@ -99,7 +101,7 @@ class HireHarness(models.Model):
 # Undersuits
 class Undersuit(models.Model):
     uid = models.IntegerField(blank=False, verbose_name='UID')
-    size = models.CharField(max_length=1, blank=False)
+    size = models.CharField(max_length=10, blank=False)
     notes = models.TextField(blank=True)
     available = models.BooleanField(default=True)
 
@@ -120,7 +122,7 @@ class HireUndersuit(models.Model):
 # Oversuits
 class Oversuit(models.Model):
     uid = models.IntegerField(blank=False, verbose_name='UID')
-    size = models.CharField(max_length=1, blank=False)
+    size = models.CharField(max_length=10, blank=False)
     notes = models.TextField(blank=True)
     available = models.BooleanField(default=True)
 
