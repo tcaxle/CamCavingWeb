@@ -2,6 +2,15 @@ from UserPortal.models import CustomUser
 from django.db import models
 from django.utils import timezone
 
+class HireSupport(models.Model):
+
+    class Meta:
+        managed = False  # No database table creation or deletion operations will be performed for this model.
+        permissions = [
+            ("hire_self", "Can hire gear on their own behalf"),
+            ("hire_other", "Can hire gear on behalf of others"),
+        ]
+
 # Rope
 class Rope(models.Model):
     purchased_year = models.IntegerField(blank=False)
@@ -19,6 +28,7 @@ class HireRope(models.Model):
     signed_in_by = models.ForeignKey(CustomUser, blank=True, null=True, on_delete=models.CASCADE)
     signed_out = models.DateTimeField(default=timezone.now, blank=False)
     signed_in = models.DateTimeField(blank=True, null=True)
+    open = models.BooleanField(default=True)
 
     def __str__(self):
         return str(self.rope)+' - '+str(self.signed_out)
@@ -39,6 +49,7 @@ class HireHelmet(models.Model):
     signed_in_by = models.ForeignKey(CustomUser, blank=True, null=True, on_delete=models.CASCADE)
     signed_out = models.DateTimeField(default=timezone.now, blank=False)
     signed_in = models.DateTimeField(blank=True, null=True)
+    open = models.BooleanField(default=True)
 
     def __str__(self):
         return str(self.helmet)+' - '+str(self.signed_out)
@@ -57,7 +68,8 @@ class HireSRTKit(models.Model):
     signed_out_by = models.ForeignKey(CustomUser, blank=False, on_delete=models.CASCADE, related_name='%(class) signed_out')
     signed_in_by = models.ForeignKey(CustomUser, blank=True, null=True, on_delete=models.CASCADE)
     signed_out = models.DateTimeField(default=timezone.now, blank=False)
-    signed_in = models.DateTimeField(blank=True, null=True)
+    signed_in = models.DateTimeField(blank=True, null=True)#
+    open = models.BooleanField(default=True)
 
     def __str__(self):
         return str(self.kit)+' - '+str(self.signed_out)
@@ -78,6 +90,7 @@ class HireHarness(models.Model):
     signed_in_by = models.ForeignKey(CustomUser, blank=True, null=True, on_delete=models.CASCADE)
     signed_out = models.DateTimeField(default=timezone.now, blank=False)
     signed_in = models.DateTimeField(blank=True, null=True)
+    open = models.BooleanField(default=True)
 
     def __str__(self):
         return str(self.harness)+' - '+str(self.signed_out)
@@ -98,6 +111,7 @@ class HireUndersuit(models.Model):
     signed_in_by = models.ForeignKey(CustomUser, blank=True, null=True, on_delete=models.CASCADE)
     signed_out = models.DateTimeField(default=timezone.now, blank=False)
     signed_in = models.DateTimeField(blank=True, null=True)
+    open = models.BooleanField(default=True)
 
     def __str__(self):
         return str(self.undersuit)+' - '+str(self.signed_out)
@@ -118,6 +132,7 @@ class HireOversuit(models.Model):
     signed_in_by = models.ForeignKey(CustomUser, blank=True, null=True, on_delete=models.CASCADE)
     signed_out = models.DateTimeField(default=timezone.now, blank=False)
     signed_in = models.DateTimeField(blank=True, null=True)
+    open = models.BooleanField(default=True)
 
     def __str__(self):
         return str(self.oversuit)+' - '+str(self.signed_out)

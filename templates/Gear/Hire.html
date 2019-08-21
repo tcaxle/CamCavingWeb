@@ -27,7 +27,22 @@
           <td>{{ item.purchased_year }}</td>
           <td>{{ item.notes }}</td>
           <td>Available</td>
-          <td><a class="w3-button w3-block w3-theme-d4 w3-hover-black" href="{% url 'RopeSignOut' pk=item.pk %}">Sign Out</a></td>
+          <td class="w3-bar w3-right">
+            {% if perms.Gear.hire_self %}
+              <form method="POST" action="{% url 'RopeSignOut' pk=item.pk %}">
+                {% csrf_token %}
+                <select {% if not perms.Gear.hire_other %}style="display:none"{% endif %} class="w3-input w3-bar-item w3-mobile w3-block w3-right" name="user" >
+                  <option value="{{ user.username }}">{{ user.full_name }}</option>
+                  {% for u in user_list %}
+                    {% if u != user %}
+                      <option value="{{ u.username }}">{{ u.full_name }}</option>
+                    {% endif %}
+                  {% endfor %}
+                </select>
+                <input type="submit" class="w3-button w3-bar-item w3-mobile w3-block w3-theme-d4 w3-hover-black w3-right" value="SignOut">
+              </form>
+            {% endif %}
+          </td>
         </tr>
       {% else %}
         <tr class="w3-red">
@@ -36,7 +51,11 @@
           <td>{{ item.purchased_year }}</td>
           <td>{{ item.notes }}</td>
           <td>{% for hire in hirerope_list %}{% if hire.rope == item and hire.signed_in == None %}{{ hire.signed_out_by.full_name }}{% endif %}{% endfor %}</td>
-          <td><a class="w3-button w3-block w3-theme-d4 w3-hover-black" href="{% url 'RopeSignIn' pk=item.pk %}">Sign In</a></td>
+          <td class="w3-bar w3-right">
+            {% if perms.Gear.hire_self %}
+              <a class="w3-button w3-bar-item w3-mobile w3-block w3-theme-d4 w3-hover-black w3-right" href="{% url 'RopeSignIn' pk=item.pk %}">Sign In</a>
+            {% endif %}
+          </td>
         </tr>
       {% endif %}
     {% endfor %}
@@ -62,7 +81,22 @@
           <td>{{ item.purchased_year }}</td>
           <td>{{ item.notes }}</td>
           <td>Available</td>
-          <td><a class="w3-button w3-block w3-theme-d4 w3-hover-black" href="{% url 'HelmetSignOut' pk=item.pk %}">Sign Out</a></td>
+          <td class="w3-bar w3-right">
+            {% if perms.Gear.hire_self %}
+              <form method="POST" action="{% url 'HelmetSignOut' pk=item.pk %}">
+                {% csrf_token %}
+                <select {% if not perms.Gear.hire_other %}style="display:none"{% endif %} class="w3-input w3-bar-item w3-mobile w3-block w3-right" name="user" >
+                  <option value="{{ user.username }}">{{ user.full_name }}</option>
+                  {% for u in user_list %}
+                    {% if u != user %}
+                      <option value="{{ u.username }}">{{ u.full_name }}</option>
+                    {% endif %}
+                  {% endfor %}
+                </select>
+                <input type="submit" class="w3-button w3-bar-item w3-mobile w3-block w3-theme-d4 w3-hover-black w3-right" value="SignOut">
+              </form>
+            {% endif %}
+          </td>
         </tr>
       {% else %}
         <tr class="w3-red">
@@ -70,7 +104,11 @@
           <td>{{ item.purchased_year }}</td>
           <td>{{ item.notes }}</td>
           <td>{% for hire in hirehelmet_list %}{% if hire.helmet == item and hire.signed_in == None %}{{ hire.signed_out_by.full_name }}{% endif %}{% endfor %}</td>
-          <td><a class="w3-button w3-block w3-theme-d4 w3-hover-black" href="{% url 'HelmetSignIn' pk=item.pk %}">Sign In</a></td>
+          <td class="w3-bar w3-right">
+            {% if perms.Gear.hire_self %}
+              <a class="w3-button w3-bar-item w3-mobile w3-block w3-theme-d4 w3-hover-black w3-right" href="{% url 'HelmetSignIn' pk=item.pk %}">Sign In</a>
+            {% endif %}
+          </td>
         </tr>
       {% endif %}
     {% endfor %}
@@ -94,14 +132,33 @@
           <td>{{ item.colour_code }}</td>
           <td>{{ item.notes }}</td>
           <td>Available</td>
-          <td><a class="w3-button w3-block w3-theme-d4 w3-hover-black" href="{% url 'SRTKitSignOut' pk=item.pk %}">Sign Out</a></td>
+          <td class="w3-bar w3-right">
+            {% if perms.Gear.hire_self %}
+              <form method="POST" action="{% url 'SRTKitSignOut' pk=item.pk %}">
+                {% csrf_token %}
+                <select {% if not perms.Gear.hire_other %}style="display:none"{% endif %} class="w3-input w3-bar-item w3-mobile w3-block w3-right" name="user" >
+                  <option value="{{ user.username }}">{{ user.full_name }}</option>
+                  {% for u in user_list %}
+                    {% if u != user %}
+                      <option value="{{ u.username }}">{{ u.full_name }}</option>
+                    {% endif %}
+                  {% endfor %}
+                </select>
+                <input type="submit" class="w3-button w3-bar-item w3-mobile w3-block w3-theme-d4 w3-hover-black w3-right" value="SignOut">
+              </form>
+            {% endif %}
+          </td>
         </tr>
       {% else %}
         <tr class="w3-red">
           <td>{{ item.colour_code }}</td>
           <td>{{ item.notes }}</td>
           <td>{% for hire in hiresrtkit_list %}{% if hire.kit == item and hire.signed_in == None %}{{ hire.signed_out_by.full_name }}{% endif %}{% endfor %}</td>
-          <td><a class="w3-button w3-block w3-theme-d4 w3-hover-black" href="{% url 'SRTKitSignIn' pk=item.pk %}">Sign In</a></td>
+          <td class="w3-bar w3-right">
+            {% if perms.Gear.hire_self %}
+              <a class="w3-button w3-bar-item w3-mobile w3-block w3-theme-d4 w3-hover-black w3-right" href="{% url 'SRTKitSignIn' pk=item.pk %}">Sign In</a>
+            {% endif %}
+          </td>
         </tr>
       {% endif %}
     {% endfor %}
@@ -127,7 +184,22 @@
           <td>{{ item.purchased_year }}</td>
           <td>{{ item.notes }}</td>
           <td>Available</td>
-          <td><a class="w3-button w3-block w3-theme-d4 w3-hover-black" href="{% url 'HarnessSignOut' pk=item.pk %}">Sign Out</a></td>
+          <td class="w3-bar w3-right">
+            {% if perms.Gear.hire_self %}
+              <form method="POST" action="{% url 'HarnessSignOut' pk=item.pk %}">
+                {% csrf_token %}
+                <select {% if not perms.Gear.hire_other %}style="display:none"{% endif %} class="w3-input w3-bar-item w3-mobile w3-block w3-right" name="user" >
+                  <option value="{{ user.username }}">{{ user.full_name }}</option>
+                  {% for u in user_list %}
+                    {% if u != user %}
+                      <option value="{{ u.username }}">{{ u.full_name }}</option>
+                    {% endif %}
+                  {% endfor %}
+                </select>
+                <input type="submit" class="w3-button w3-bar-item w3-mobile w3-block w3-theme-d4 w3-hover-black w3-right" value="SignOut">
+              </form>
+            {% endif %}
+          </td>
         </tr>
       {% else %}
         <tr class="w3-red">
@@ -135,7 +207,11 @@
           <td>{{ item.purchased_year }}</td>
           <td>{{ item.notes }}</td>
           <td>{% for hire in hireharness_list %}{% if hire.harness == item and hire.signed_in == None %}{{ hire.signed_out_by.full_name }}{% endif %}{% endfor %}</td>
-          <td><a class="w3-button w3-block w3-theme-d4 w3-hover-black" href="{% url 'HarnessSignIn' pk=item.pk %}">Sign In</a></td>
+          <td class="w3-bar w3-right">
+            {% if perms.Gear.hire_self %}
+              <a class="w3-button w3-bar-item w3-mobile w3-block w3-theme-d4 w3-hover-black w3-right" href="{% url 'HarnessSignIn' pk=item.pk %}">Sign In</a>
+            {% endif %}
+          </td>
         </tr>
       {% endif %}
     {% endfor %}
@@ -161,7 +237,22 @@
           <td>{{ item.size }}</td>
           <td>{{ item.notes }}</td>
           <td>Available</td>
-          <td><a class="w3-button w3-block w3-theme-d4 w3-hover-black" href="{% url 'UndersuitSignOut' pk=item.pk %}">Sign Out</a></td>
+          <td class="w3-bar w3-right">
+            {% if perms.Gear.hire_self %}
+              <form method="POST" action="{% url 'UndersuitSignOut' pk=item.pk %}">
+                {% csrf_token %}
+                <select {% if not perms.Gear.hire_other %}style="display:none"{% endif %} class="w3-input w3-bar-item w3-mobile w3-block w3-right" name="user" >
+                  <option value="{{ user.username }}">{{ user.full_name }}</option>
+                  {% for u in user_list %}
+                    {% if u != user %}
+                      <option value="{{ u.username }}">{{ u.full_name }}</option>
+                    {% endif %}
+                  {% endfor %}
+                </select>
+                <input type="submit" class="w3-button w3-bar-item w3-mobile w3-block w3-theme-d4 w3-hover-black w3-right" value="SignOut">
+              </form>
+            {% endif %}
+          </td>
         </tr>
       {% else %}
         <tr class="w3-red">
@@ -169,7 +260,11 @@
           <td>{{ item.size }}</td>
           <td>{{ item.notes }}</td>
           <td>{% for hire in hireundersuit_list %}{% if hire.undersuit == item and hire.signed_in == None %}{{ hire.signed_out_by.full_name }}{% endif %}{% endfor %}</td>
-          <td><a class="w3-button w3-block w3-theme-d4 w3-hover-black" href="{% url 'UndersuitSignIn' pk=item.pk %}">Sign In</a></td>
+          <td class="w3-bar w3-right">
+            {% if perms.Gear.hire_self %}
+              <a class="w3-button w3-bar-item w3-mobile w3-block w3-theme-d4 w3-hover-black w3-right" href="{% url 'UndersuitSignIn' pk=item.pk %}">Sign In</a>
+            {% endif %}
+          </td>
         </tr>
       {% endif %}
     {% endfor %}
@@ -195,7 +290,22 @@
           <td>{{ item.size }}</td>
           <td>{{ item.notes }}</td>
           <td>Available</td>
-          <td><a class="w3-button w3-block w3-theme-d4 w3-hover-black" href="{% url 'OversuitSignOut' pk=item.pk %}">Sign Out</a></td>
+          <td class="w3-bar w3-right">
+            {% if perms.Gear.hire_self %}
+              <form method="POST" action="{% url 'OversuitSignOut' pk=item.pk %}">
+                {% csrf_token %}
+                <select {% if not perms.Gear.hire_other %}style="display:none"{% endif %} class="w3-input w3-bar-item w3-mobile w3-block w3-right" name="user" >
+                  <option value="{{ user.username }}">{{ user.full_name }}</option>
+                  {% for u in user_list %}
+                    {% if u != user %}
+                      <option value="{{ u.username }}">{{ u.full_name }}</option>
+                    {% endif %}
+                  {% endfor %}
+                </select>
+                <input type="submit" class="w3-button w3-bar-item w3-mobile w3-block w3-theme-d4 w3-hover-black w3-right" value="SignOut">
+              </form>
+            {% endif %}
+          </td>
         </tr>
       {% else %}
         <tr class="w3-red">
@@ -203,7 +313,11 @@
           <td>{{ item.size }}</td>
           <td>{{ item.notes }}</td>
           <td>{% for hire in hireoversuit_list %}{% if hire.oversuit == item and hire.signed_in == None %}{{ hire.signed_out_by.full_name }}{% endif %}{% endfor %}</td>
-          <td><a class="w3-button w3-block w3-theme-d4 w3-hover-black" href="{% url 'OversuitSignIn' pk=item.pk %}">Sign In</a></td>
+          <td class="w3-bar w3-right">
+            {% if perms.Gear.hire_self %}
+              <a class="w3-button w3-bar-item w3-mobile w3-block w3-theme-d4 w3-hover-black w3-right" href="{% url 'OversuitSignIn' pk=item.pk %}">Sign In</a>
+            {% endif %}
+          </td>
         </tr>
       {% endif %}
     {% endfor %}
@@ -228,20 +342,30 @@
         <td>{{ item.notes }}</td>
         <td>{{ item.on_loan }}/{{ item.quantity }}</td>
         <td>{{ item.available }}/{{ item.quantity }}</td>
-        <td class="w3-bar w3-responsive">
-          {% if item.available != 0 %}
-            <form method="POST" action="{% url 'OtherGearSignOut' pk=item.pk %}" class="w3-block">
+        <td class="w3-bar w3-responsive w3-right">
+          {% if perms.Gear.hire_self %}
+            {% if item.available != 0 %}
+              <form method="POST" class="w3-right" action="{% url 'OtherGearSignOut' pk=item.pk %}">
+                  {% csrf_token %}
+                  <select {% if not perms.Gear.hire_other %}style="display:none"{% endif %} class="w3-input w3-bar-item w3-mobile" name="user" >
+                    <option value="{{ user.username }}">{{ user.full_name }}</option>
+                    {% for u in user_list %}
+                      {% if u != user %}
+                        <option value="{{ u.username }}">{{ u.full_name }}</option>
+                      {% endif %}
+                    {% endfor %}
+                  </select>
+                  <input class="w3-bar-item w3-mobile w3-right" style="width:100px" type="number" name="amount" min="0" max="{{ item.available }}" value=0>
+                  <input class="w3-bar-item w3-button w3-theme-d4 w3-hover-black w3-mobile w3-right" type="submit" value="Sign Out">
+              </form>
+            {% endif %}
+            {% if item.on_loan != 0 %}
+            <form method="POST" action="{% url 'OtherGearSignIn' pk=item.pk %}">
                 {% csrf_token %}
-                <input class="w3-bar-item w3-mobile w3-block" type="number" name="amount" min="0" max="{{ item.available }}" value=0>
-                <input class="w3-bar-item w3-button w3-block w3-theme-d4 w3-hover-black w3-mobile" type="submit" value="Sign Out">
+                <input class="w3-bar-item w3-mobile w3-right" style="width:100px" type="number" name="amount" min="0" max="{{ item.on_loan }}" value=0>
+                <input class="w3-bar-item w3-button w3-theme-d4 w3-hover-black w3-mobile w3-right" type="submit" value="Sign In">
             </form>
-          {% endif %}
-          {% if item.on_loan != 0 %}
-          <form method="POST" action="{% url 'OtherGearSignIn' pk=item.pk %}"  class="w3-block">
-              {% csrf_token %}
-              <input class="w3-bar-item w3-mobile w3-block" type="number" name="amount" min="0" max="{{ item.on_loan }}" value=0>
-              <input class="w3-bar-item w3-button w3-block w3-theme-d4 w3-hover-black w3-mobile" type="submit" value="Sign In">
-          </form>
+            {% endif %}
           {% endif %}
         </td>
       </tr>
@@ -254,5 +378,5 @@
 {% endblock %}
 
 {% block side-content %}
-  <h2>Actions</h2>
+  {% include 'ActionSets/Gear.html' %}
 {% endblock %}

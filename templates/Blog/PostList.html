@@ -10,7 +10,6 @@
               <h2>{{ p.title }}</h2>
               <p style="white-space: pre-wrap;">{{ p.text }}</p>
               <p class=w3-small><i>-- {{ p.author.full_name }}, {{ p.published_date.date }}. Category: {{ p.category }}</i></p>
-            {% if p.images.exists %}
             {% if user == p.author or user.is_superuser %}
               <span class="w3-container">
                 <a class="w3-button w3-block w3-theme-d4 w3-hover-black w3-half w3-center" href="{% url 'BlogEdit' pk=p.pk %}">Edit</a>
@@ -18,6 +17,7 @@
               </span>
             {% endif %}
           </div>
+          {% if p.images.exists %}
           <div class="w3-center w3-container w3-third w3-cell w3-mobile">
             {% for i in p.images.all %}
               <img class="w3-image" src="{{ i.image.url }}" alt="{{ p.title }} - {{ i.name }}">

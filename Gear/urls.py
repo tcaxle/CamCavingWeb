@@ -8,8 +8,8 @@ urlpatterns = [
     path('Tape/', views.GearTape.as_view(), name='GearTape'),
 
 	# Signing in and out of gear
-	path('SignOut/Rope/<int:pk>', views.RopeSignOut, name='RopeSignOut'),
-	path('SignIn/Rope/<int:pk>', views.RopeSignIn, name='RopeSignIn'),
+	path('SignOut/Rope/<int:pk>/', views.RopeSignOut, name='RopeSignOut'),
+	path('SignIn/Rope/<int:pk>/', views.RopeSignIn, name='RopeSignIn'),
 
 	path('SignOut/Helmet/<int:pk>', views.HelmetSignOut, name='HelmetSignOut'),
 	path('SignIn/Helmet/<int:pk>', views.HelmetSignIn, name='HelmetSignIn'),

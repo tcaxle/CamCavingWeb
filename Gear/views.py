@@ -21,23 +21,25 @@ class GearHire(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
+        context['user_list'] = CustomUser.objects.all()
+
         context['rope_list'] = Rope.objects.all()
-        context['hirerope_list'] = HireRope.objects.all()
+        context['hirerope_list'] = HireRope.objects.filter(open=True)
 
         context['helmet_list'] = Helmet.objects.all()
-        context['hirehelmet_list'] = HireHelmet.objects.all()
+        context['hirehelmet_list'] = HireHelmet.objects.filter(open=True)
 
         context['srtkit_list'] = SRTKit.objects.all()
-        context['hiresrtkit_list'] = HireSRTKit.objects.all()
+        context['hiresrtkit_list'] = HireSRTKit.objects.filter(open=True)
 
         context['harness_list'] = Harness.objects.all()
-        context['hireharness_list'] = HireHarness.objects.all()
+        context['hireharness_list'] = HireHarness.objects.filter(open=True)
 
         context['undersuit_list'] = Undersuit.objects.all()
-        context['hireundersuit_list'] = Undersuit.objects.all()
+        context['hireundersuit_list'] = HireUndersuit.objects.filter(open=True)
 
         context['oversuit_list'] = Oversuit.objects.all()
-        context['hireoversuit_list'] = Oversuit.objects.all()
+        context['hireoversuit_list'] = HireOversuit.objects.filter(open=True)
 
         context['othergear_list'] = OtherGear.objects.all()
         return context
@@ -46,11 +48,13 @@ class GearHire(TemplateView):
 
 # Rope
 def RopeSignOut(request, pk):
-    rope = get_object_or_404(Rope, pk=pk, available=True)
-    HireInstance = HireRope(rope=rope, signed_out_by=request.user)
-    rope.available = False
-    HireInstance.save()
-    rope.save()
+    if request.method == 'POST':
+        rope = get_object_or_404(Rope, pk=pk, available=True)
+        user = get_object_or_404(CustomUser, username=request.POST['user'])
+        HireInstance = HireRope(rope=rope, signed_out_by=user)
+        rope.available = False
+        HireInstance.save()
+        rope.save()
     return redirect('GearHire')
 
 def RopeSignIn(request, pk):
@@ -59,17 +63,20 @@ def RopeSignIn(request, pk):
     rope.available = True
     HireInstance.signed_in_by = request.user
     HireInstance.signed_in = timezone.now()
+    HireInstance.open = False
     HireInstance.save()
     rope.save()
     return redirect('GearHire')
 
 # Helmets
 def HelmetSignOut(request, pk):
-    helmet = get_object_or_404(Helmet, pk=pk, available=True)
-    HireInstance = HireHelmet(helmet=helmet, signed_out_by=request.user)
-    helmet.available = False
-    HireInstance.save()
-    helmet.save()
+    if request.method == 'POST':
+        helmet = get_object_or_404(Helmet, pk=pk, available=True)
+        user = get_object_or_404(CustomUser, username=request.POST['user'])
+        HireInstance = HireHelmet(helmet=helmet, signed_out_by=user)
+        helmet.available = False
+        HireInstance.save()
+        helmet.save()
     return redirect('GearHire')
 
 def HelmetSignIn(request, pk):
@@ -78,17 +85,20 @@ def HelmetSignIn(request, pk):
     helmet.available = True
     HireInstance.signed_in_by = request.user
     HireInstance.signed_in = timezone.now()
+    HireInstance.open = False
     HireInstance.save()
     helmet.save()
     return redirect('GearHire')
 
 # SRT Kits
 def SRTKitSignOut(request, pk):
-    kit = get_object_or_404(SRTKit, pk=pk, available=True)
-    HireInstance = HireSRTKit(kit=kit, signed_out_by=request.user)
-    kit.available = False
-    HireInstance.save()
-    kit.save()
+    if request.method == 'POST':
+        kit = get_object_or_404(SRTKit, pk=pk, available=True)
+        user = get_object_or_404(CustomUser, username=request.POST['user'])
+        HireInstance = HireSRTKit(kit=kit, signed_out_by=user)
+        kit.available = False
+        HireInstance.save()
+        kit.save()
     return redirect('GearHire')
 
 def SRTKitSignIn(request, pk):
@@ -97,17 +107,20 @@ def SRTKitSignIn(request, pk):
     kit.available = True
     HireInstance.signed_in_by = request.user
     HireInstance.signed_in = timezone.now()
+    HireInstance.open = False
     HireInstance.save()
     kit.save()
     return redirect('GearHire')
 
 # Harnesses
 def HarnessSignOut(request, pk):
-    harness = get_object_or_404(Harness, pk=pk, available=True)
-    HireInstance = HireHarness(harness=harness, signed_out_by=request.user)
-    harness.available = False
-    HireInstance.save()
-    harness.save()
+    if request.method == 'POST':
+        harness = get_object_or_404(Harness, pk=pk, available=True)
+        user = get_object_or_404(CustomUser, username=request.POST['user'])
+        HireInstance = HireHarness(harness=harness, signed_out_by=user)
+        harness.available = False
+        HireInstance.save()
+        harness.save()
     return redirect('GearHire')
 
 def HarnessSignIn(request, pk):
@@ -116,17 +129,20 @@ def HarnessSignIn(request, pk):
     harness.available = True
     HireInstance.signed_in_by = request.user
     HireInstance.signed_in = timezone.now()
+    HireInstance.open = False
     HireInstance.save()
     harness.save()
     return redirect('GearHire')
 
 # Undersuits
 def UndersuitSignOut(request, pk):
-    undersuit = get_object_or_404(Undersuit, pk=pk, available=True)
-    HireInstance = HireUndersuit(undersuit=undersuit, signed_out_by=request.user)
-    undersuit.available = False
-    HireInstance.save()
-    undersuit.save()
+    if request.method == 'POST':
+        undersuit = get_object_or_404(Undersuit, pk=pk, available=True)
+        user = get_object_or_404(CustomUser, username=request.POST['user'])
+        HireInstance = HireUndersuit(undersuit=undersuit, signed_out_by=user)
+        undersuit.available = False
+        HireInstance.save()
+        undersuit.save()
     return redirect('GearHire')
 
 def UndersuitSignIn(request, pk):
@@ -135,17 +151,20 @@ def UndersuitSignIn(request, pk):
     undersuit.available = True
     HireInstance.signed_in_by = request.user
     HireInstance.signed_in = timezone.now()
+    HireInstance.open = False
     HireInstance.save()
     undersuit.save()
     return redirect('GearHire')
 
 # Oversuits
 def OversuitSignOut(request, pk):
-    oversuit = get_object_or_404(Oversuit, pk=pk, available=True)
-    HireInstance = HireOversuit(oversuit=oversuit, signed_out_by=request.user)
-    oversuit.available = False
-    HireInstance.save()
-    oversuit.save()
+    if request.method == 'POST':
+        oversuit = get_object_or_404(Oversuit, pk=pk, available=True)
+        user = get_object_or_404(CustomUser, username=request.POST['user'])
+        HireInstance = HireOversuit(oversuit=oversuit, signed_out_by=user)
+        oversuit.available = False
+        HireInstance.save()
+        oversuit.save()
     return redirect('GearHire')
 
 def OversuitSignIn(request, pk):
@@ -154,6 +173,7 @@ def OversuitSignIn(request, pk):
     oversuit.available = True
     HireInstance.signed_in_by = request.user
     HireInstance.signed_in = timezone.now()
+    HireInstance.open = False
     HireInstance.save()
     oversuit.save()
     return redirect('GearHire')
@@ -163,7 +183,8 @@ def OtherGearSignOut(request, pk):
     if request.method == 'POST':
         quantity = int(request.POST['amount'])
         gear = get_object_or_404(OtherGear, pk=pk)
-        SignOutInstance = SignOutOtherGear(gear=gear, signed_out_by=request.user, quantity=quantity)
+        user = get_object_or_404(CustomUser, username=request.POST['user'])
+        SignOutInstance = SignOutOtherGear(gear=gear, signed_out_by=user, quantity=quantity)
         gear.on_loan += quantity
         gear.available -= quantity
         SignOutInstance.save()
