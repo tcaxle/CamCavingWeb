@@ -19,7 +19,6 @@ class GearTape(ListView):
     queryset = CustomUser.objects.all().order_by('full_name')
     context_object_name = 'user_list'
 
-
 @method_decorator(permission_required('Gear.view_hires'), name='dispatch')
 class ViewHiresRope(ListView):
     model = HireRope
@@ -230,25 +229,25 @@ class GearHire(TemplateView):
 
         context['user_list'] = CustomUser.objects.filter(is_human=True)
 
-        context['rope_list'] = Rope.objects.all()
+        context['rope_list'] = Rope.objects.all().order_by('length')
         context['hirerope_list'] = HireRope.objects.filter(open=True)
 
-        context['helmet_list'] = Helmet.objects.all()
+        context['helmet_list'] = Helmet.objects.all().order_by('uid')
         context['hirehelmet_list'] = HireHelmet.objects.filter(open=True)
 
-        context['srtkit_list'] = SRTKit.objects.all()
+        context['srtkit_list'] = SRTKit.objects.all().order_by('colour_code')
         context['hiresrtkit_list'] = HireSRTKit.objects.filter(open=True)
 
-        context['harness_list'] = Harness.objects.all()
+        context['harness_list'] = Harness.objects.all().order_by('uid')
         context['hireharness_list'] = HireHarness.objects.filter(open=True)
 
-        context['undersuit_list'] = Undersuit.objects.all()
+        context['undersuit_list'] = Undersuit.objects.all().order_by('uid')
         context['hireundersuit_list'] = HireUndersuit.objects.filter(open=True)
 
-        context['oversuit_list'] = Oversuit.objects.all()
+        context['oversuit_list'] = Oversuit.objects.all().order_by('uid')
         context['hireoversuit_list'] = HireOversuit.objects.filter(open=True)
 
-        context['othergear_list'] = OtherGear.objects.all()
+        context['othergear_list'] = OtherGear.objects.all().order_by('name')
         return context
 
 # Signing in and out views as redirects that create and edit HireInstance Models
