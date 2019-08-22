@@ -24,7 +24,7 @@ class EditUser(forms.ModelForm):
 
     class Meta:
         model = CustomUser
-        fields = ('username', 'full_name', 'email', 'mailing_list', 'phone_number', 'emergency_contact_name', 'emergency_phone_number', 'status', 'bio', 'tape_colour_1', 'tape_colour_2', 'tape_colour_3', 'tape_colour_notes')
+        fields = ('username', 'full_name', 'college', 'email', 'mailing_list', 'phone_number', 'emergency_contact_name', 'emergency_phone_number', 'status', 'bio', 'tape_colour_1', 'tape_colour_2', 'tape_colour_3', 'tape_colour_notes')
 
 class SuperEditUser(forms.ModelForm):
 
@@ -35,4 +35,4 @@ class SuperEditUser(forms.ModelForm):
             'user_permissions': forms.CheckboxSelectMultiple,
         }
         model = CustomUser
-        fields = ('username', 'full_name', 'email', 'mailing_list', 'phone_number', 'emergency_contact_name', 'emergency_phone_number', 'status', 'bio', 'tape_colour_1', 'tape_colour_2', 'tape_colour_3', 'tape_colour_notes', 'groups', 'rank', 'is_superuser', 'is_staff', 'user_permissions')
+        fields = ('username', 'full_name', 'college', 'email', 'mailing_list', 'phone_number', 'emergency_contact_name', 'emergency_phone_number', 'status', 'bio', 'tape_colour_1', 'tape_colour_2', 'tape_colour_3', 'tape_colour_notes', 'groups', 'rank', 'is_superuser', 'is_staff', 'is_human', 'user_permissions')

@@ -48,6 +48,7 @@ class CustomUser(AbstractUser):
     phone_number = models.CharField(max_length=20, blank=True, help_text="See information below on use of emergency contact information.")
     emergency_phone_number = models.CharField(max_length=20, blank=True, help_text="See information below on use of emergency contact information.")
     emergency_contact_name = models.CharField(max_length=50, blank=True, help_text="See information below on use of emergency contact information.")
+    is_human = models.BooleanField(default=True)
 
     def rank_display(self):
         return ', '.join([i.name for i in self.rank.all()])

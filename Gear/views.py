@@ -228,7 +228,7 @@ class GearHire(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
 
-        context['user_list'] = CustomUser.objects.all()
+        context['user_list'] = CustomUser.objects.filter(is_human=True)
 
         context['rope_list'] = Rope.objects.all()
         context['hirerope_list'] = HireRope.objects.filter(open=True)
