@@ -1,0 +1,18 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block title %}
+  <title>CUCC | Bank | View Account</title>
+{% endblock %}
+
+{% block main-content %}
+  <h1>Viewing account for {{ account.owner.full_name }}</h1>
+  <p>Balance (GBP): {{ balance.amount__sum }}</p>
+  {% for transaction in transaction_list %}
+  <p>{{ transaction }}</p>
+  {% endfor %}
+{% endblock %}
+
+{% block side-content %}
+  <h2>Side Bar</h2>
+{% endblock %}
