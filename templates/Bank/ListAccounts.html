@@ -1,17 +1,35 @@
 {% extends 'Base.html' %}
 {% load static %}
+{% load currency %}
 
 {% block title %}
   <title>CUCC | Bank | List Accounts</title>
 {% endblock %}
 
 {% block main-content %}
-  <h1>Select and Account to View</h1>
-  {% for account in accounts_list %}
-    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'ViewAccount' account.account_key %}">{{ account.owner.username }} - {{ account.owner.full_name }}</a>
-  {% endfor %}
+  <h1>Select an Account to View</h1>
+  <form method="GET">
+    {% csrf_token %}
+    <div class="w3-bar">
+      <div class="w3-bar-item w3-mobile w3-theme-d4">From:</div>
+      <input class="w3-input w3-bar-item w3-mobile" type="date" name="start_date" value="">
+      <div class="w3-bar-item w3-mobile w3-theme-d4">To:</div>
+      <input class="w3-input w3-bar-item w3-mobile" type="date" name="end_date" value="">
+      <div class="w3-bar-item w3-mobile">(Leave blank to see all transactions)</div>
+    </div>
+    <br><br>
+    <table class="w3-table-all w3-striped">
+    {% for account, balance in account_dict.items %}
+    <tr class="w3-hover-black"><td><a class="w3-button w3-container w3-bar w3-hover-black" type="submit" name="account" value="" href="{% url 'ViewAccount' account.account_key %}">
+      <div class="w3-bar-item">{{ account.owner.full_name }} ({{ account.owner.username }})</div>
+      <div class="w3-bar-item w3-right">{{ balance|currency }}</div>
+    </a></td></tr>
+    {% endfor %}
+    </table>
+  </form>
+
 {% endblock %}
 
 {% block side-content %}
-  <h2></h2>
+  {% include 'ActionSets/Bank.html' %}
 {% endblock %}

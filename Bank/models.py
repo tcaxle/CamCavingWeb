@@ -1,7 +1,19 @@
 from UserPortal.models import CustomUser
 from django.db import models
-from django.utils import timezone
+from datetime import datetime
 import uuid
+
+TRANSACTION_TYPES = (
+    ('Expense Claim', 'Expense Claim'), # A member claims the £35.66 they spent on petrol
+    ('Charge', 'Charge'), # The club charges a member £39.00 for a meet
+    ('Swap', 'Swap'), # Club members ggive each other money
+    ('Reimbursement', 'Reimbursement'), # The club pays a member what they are owed OR a member pays the club what they owed
+    ('Payment', 'Payment'), # The club pays a fee, for instance the deposit on a hut booking
+    ('Purchase', 'Purchase'), # The club buys some gear
+    ('Grant', 'Grant'), # The University gives the club a grant
+    ('Uncategorised', 'Uncategorised'), # There is no suitable operation for this transaction
+    ('Correctional', 'Correctional'), # The accounting system is out of line with the real world and the treasurer is correcting that
+)
 
 class Account(models.Model):
     account_key = models.UUIDField(default=uuid.uuid4, editable=False)
@@ -17,7 +29,7 @@ class Account(models.Model):
 
 class Transaction(models.Model):
     account = models.ForeignKey(Account, blank=False, on_delete=models.PROTECT) # Cannot delete an account if they have transactions that exist
-    date = models.DateTimeField(blank=False, default=timezone.now) # When did the transaction occur?
+    date = models.DateTimeField(blank=False, default=datetime.now) # When did the transaction occur?
     amount = models.DecimalField(max_digits=7, decimal_places=2, help_text='For a virtual account, a positive transaction is a credit. For a real account, a positive transaction is an increase in wealth.')
     """
     How much money went in/out of the account?
@@ -30,16 +42,6 @@ class Transaction(models.Model):
     - a positive transaction represents an increase in wealth (the club account now has more money in it)
     - a negative transaction represents a decrease in wealth (the club account now has more money in it)
     """
-    TRANSACTION_TYPES = (
-        ('expense_claim', 'Expense Claim'), # A member claims the £35.66 they spent on petrol
-        ('charge', 'Charge'), # The club charges a member £39.00 for a meet
-        ('grant', 'Grant'), # The University gives the club a grant
-        ('reimbursement', 'Reimbursement'), # The club pays a member what they are owed OR a member pays the club what they owed
-        ('purchase', 'Purchase'), # The club buys some gear
-        ('payment', 'Payment'), # The club pays a fee, for instance the deposit on a hut booking
-        ('uncategorised', 'Uncategorised'), # There is no suitable operation for this transaction
-        ('correctional', 'Correctional'), # The accounting system is out of line with the real world and the treasurer is correcting that
-    )
     category = models.CharField(max_length=50, choices=TRANSACTION_TYPES, blank=False)
     notes = models.TextField(blank=True) # Any notes about the transaction.
     approved = models.BooleanField(default=False) # Has the treasurer or other authorised person approved this transaction?
@@ -128,7 +130,7 @@ class TransactionPair(models.Model):
         elif not account_a.is_virtual and account_b.is_virtual:
             # Real to Virtual, as in the club pays a member its debt
             amount_a = -amount # Decrease wealth of account A
-            amount_b = -mount # Debit account B
+            amount_b = -amount # Debit account B
         elif not account_a.is_virtual and not account_b.is_virtual:
             # Real to Real, as in the club transfers money between its own accounts
             amount_a = -amount # Decrease wealth of account A
@@ -138,15 +140,15 @@ class TransactionPair(models.Model):
             date = date,
             amount = amount_a,
             category = category,
-            notes = notes,
+            notes = '[Transaction Pair: ('+str(amount)+') From '+str(account_a.owner.full_name)+' ('+str(account_a.owner.username)+') To '+str(account_b.owner.full_name)+' ('+str(account_b.owner.username)+')]'+notes,
             approved = approved,
         )
-        TransactionA = Transaction(
+        TransactionB = Transaction(
             account = account_b,
             date = date,
             amount = amount_b,
             category = category,
-            notes = notes,
+            notes = '[Transaction Pair: ('+str(amount)+') From '+account_a.owner.full_name+' ('+account_a.owner.username+') To '+account_b.owner.full_name+'('+account_b.owner.username+')]'+notes,
             approved = approved,
         )
         Pair = cls(transaction_a = TransactionA, transaction_b = TransactionB)

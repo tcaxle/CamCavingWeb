@@ -4,11 +4,11 @@
 {% load currency %}
 
 {% block title %}
-  <title>CUCC | Bank | View Account</title>
+  <title>CUCC | Bank | List Transactions</title>
 {% endblock %}
 
 {% block main-content %}
-  <h1>Viewing account for {{ account.owner.full_name }}</h1>
+  <h1>Viewing Transactions on All Accounts</h1>
 
   <div class="w3-bar">
     <form method="GET">
@@ -17,38 +17,28 @@
       <input class="w3-input w3-bar-item w3-mobile" type="date" name="start_date" value="{{ start_date.date.isoformat }}">
       <div class="w3-bar-item w3-mobile w3-theme-d3">To:</div>
       <input class="w3-input w3-bar-item w3-mobile" type="date" name="end_date" value="{{ end_date.date.isoformat }}">
-      <input class="w3-button w3-block w3-theme-d4 w3-hover-black w3-bar-item w3-mobile" type="submit" name="account" value="Update" formaction="{% url 'ViewAccount' account.account_key %}">
+      <input class="w3-button w3-block w3-theme-d4 w3-hover-black w3-bar-item w3-mobile" type="submit" name="account" value="Update" formaction="{% url 'ListTransactions' %}">
       <div class="w3-bar-item w3-mobile">(Leave blank to see all transactions)</div>
     </form>
   </div>
 
   <p>Showing data between <b>{{ start_date.date.isoformat }} {% if view_earliest %}(Start of Records){% endif %}</b> and <b>{{ end_date.date.isoformat }} {% if view_latest %}(End of Records){% endif %}</b></p>
-  <p>End Balance (GBP): <b>{{ end_balance|currency }}</b></p>
-  <p>Start Balance (GBP): <b>{{ start_balance|currency }}</b></p>
   <table class="w3-table w3-table-all w3-striped w3-card">
     <tr class="w3-theme-d3">
+      <th>Account</th>
       <th>Date</th>
       <th>Category</th>
       <th>Notes</th>
       <th>Amount</th>
-      <th>Balance</th>
       <th>Approved?</th>
     </tr>
+    {% for transaction in transaction_list %}
     <tr>
-      <td>{{ end_date.date.isoformat }}</td>
-      <td>-</td>
-      <td>End Balance</td>
-      <td>-</td>
-      <td class="{% if end_balance >= 0 %}w3-green{% else %}w3-red{% endif %}">{{ end_balance|currency }}</td>
-      <td>-</td>
-    </tr>
-    {% for transaction, balance in balance_list.items %}
-    <tr>
+      <td>{{ transaction.account.owner.name }} ({{ transaction.account.owner.username }})</td>
       <td>{{ transaction.date.date.isoformat }}</td>
       <td>{{ transaction.category }}</td>
       <td>{{ transaction.notes }}</td>
       <td class="{% if transaction.amount >= 0 %}w3-green{% else %}w3-red{% endif %}">{{ transaction.amount|currency }}</td>
-      <td class="{% if balance >= 0 %}w3-green{% else %}w3-red{% endif %}">{{ balance|currency }}</td>
       {% if transaction.approved %}
       <td class="w3-green">Yes</td>
       {% else %}
@@ -56,14 +46,6 @@
       {% endif %}
     </tr>
     {% endfor %}
-    <tr>
-      <td>{{ start_date.date.isoformat }}</td>
-      <td>-</td>
-      <td>Start Balance</td>
-      <td>-</td>
-      <td class="{% if start_balance >= 0 %}w3-green{% else %}w3-red{% endif %}">{{ start_balance|currency }}</td>
-      <td>-</td>
-    </tr>
   </table>
 {% endblock %}
 

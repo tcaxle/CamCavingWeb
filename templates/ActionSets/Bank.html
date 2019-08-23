@@ -1,0 +1,9 @@
+{% if user.is_authenticated %}
+  <h2>Bank Actions</h2>
+  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'AddTransaction' %}">Add a transaction</a>
+  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'AddTransactionPair' %}">Add a transaction pair</a>
+  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'ViewOwnAccount' %}">View Own Account</a>
+  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'ListAccounts' %}">List Accounts</a>
+  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'ListTransactions' %}">List All Transactions</a>
+
+{% endif %}
