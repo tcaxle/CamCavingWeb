@@ -2,22 +2,23 @@
 {% load static %}
 
 {% block form %}
+  <h2>Select Creditor</h2>
   <form method="post" action="{% url 'CreateTransactionDebtor' %}">
   {% csrf_token %}
   <table class="w3-table w3-striped">
-    <tr>
-      <td>Date:</td>
-      <td><input class="w3-input" type="date" name="date" value="{{ date.date.isoformat }}"></td>
-    </tr>
     <tr>
       <td>Creditor</td>
       <td>
         <select class="w3-input" name="creditor">
           {% for account in account_list %}
-            <option value="{{ account.account_key }}">{{ account }}</option>
+            <option value="{{ account.account_key }}" {% if account == user.bank_account %}selected{% endif %}>{{ account }}</option>
           {% endfor %}
         </select>
       </td>
+    </tr>
+    <tr>
+      <td>Date:</td>
+      <td><input class="w3-input" type="date" name="date" value="{{ date.date.isoformat }}"></td>
     </tr>
   </table>
   <div class="w3-padding-16">

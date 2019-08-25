@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block form %}
+  <h2>Input Data</h2>
   <form method="post" action="{% url 'CreateTransactionAction' %}">
   {% csrf_token %}
   <input type="hidden" name="creditor" value="{{ creditor.account_key }}">
@@ -16,7 +17,10 @@
     </tr>
     <tr>
       <td><b>Debtor:</b></td>
-      <td><b>Credit from Debtor:</b></td>
+      <td>
+        <b>Credit:</b><br>
+        <i>The amount (in GBP) to credit the creditor account by. For a debit, put a negative number.</i>
+      </td>
     </tr>
     {% for account in account_list %}
       <tr>
@@ -27,12 +31,12 @@
       </tr>
     {% endfor %}
     <tr>
-      <td>Notes:</td>
+      <td>Notes:<br><i>Be consice</i></td>
       <td><input class="w3-input" type="textarea" name="notes"></td>
     </tr>
   </table>
   <div class="w3-padding-16">
-    <button class="w3-button w3-theme-d3 w3-hover-black w3-mobile" type="submit">Next</button>
+    <button class="w3-button w3-theme-d3 w3-hover-black w3-mobile" type="submit">Submit</button>
   </div>
   </form>
 {% endblock %}

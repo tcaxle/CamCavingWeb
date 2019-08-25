@@ -32,7 +32,7 @@ class CreateAccount(CreateView):
     model = Account
     template_name = 'Bank/AddAccount.html'
     fields = '__all__'
-    success_url = reverse_lazy('CreateAccount')
+    success_url = reverse_lazy('UserPortalDashboard')
 
 class ViewAccount(DetailView):
     # Returns a transaction list with date filtering options for an account
@@ -110,6 +110,8 @@ class CreateTransactionData(TemplateView):
             key = account.account_key
             if str(key) in data.keys() and data.get(str(key)) == 'TRUE':
                 account_list = account_list.union(all_accounts.filter(account_key=key))
+        if not account_list.first(): # Check for no debtors selected
+            raise Http404('You must have debtors in your transaction.') # Complain
         context = super().get_context_data(**kwargs)
         context['account_list'] = account_list
         context['creditor'] = creditor
