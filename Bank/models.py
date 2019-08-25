@@ -85,6 +85,9 @@ class Entry(models.Model):
         elif account_a.type == 'Pool' and account_b.type == 'User':
             credit_a = credit_a # Credit From Account
             credit_b = -credit_a # Debit To Account
+        elif account_a.type == 'Pool' and account_b.type == 'Pool':
+            credit_a = credit_a # Credit From Account
+            credit_b = -credit_a # Debit To Account
         else:
             raise Exception("Cannot make transaction between account.type=='Pool' and account.type='Bank'")
         entry = cls(account_a=account_a, account_b=account_b, credit_a=credit_a, credit_b=credit_b, date=date, notes=notes)

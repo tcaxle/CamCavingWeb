@@ -11,6 +11,7 @@ from .models import *
 from .forms import *
 from UserPortal.models import CustomUser
 from django.shortcuts import get_object_or_404
+from django.http import Http404
 
 class CreateEntry(FormView):
     form_class = CreateEntry
@@ -68,14 +69,52 @@ class ReviewTransaction(DetailView):
     # and to migrate it to a book transaction, or two books and a bank tranaction
     pass
 
-class CreateTransaction(TemplateView):
+class CreateTransactionCreditor(TemplateView):
     # Allows the treasurer to create transactions
-    template_name = 'Bank/AddTransaction.html'
+    template_name = 'Bank/AddTransaction/SelectCreditor.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['account_list'] = Account.objects.all().order_by('type')
         context['date'] = datetime.now()
         return context
+
+class CreateTransactionDebtor(TemplateView):
+    # Allows the treasurer to create transactions
+    template_name = 'Bank/AddTransaction/SelectDebtor.html'
+    def post(self, request, *args, **kwargs):
+        data = request.POST
+        date = datetime.strptime(data.get('date'), '%Y-%m-%d')
+        creditor = get_object_or_404(Account, account_key=data.get('creditor'))
+        # Banks and Pools CANNOT transact:
+        if creditor.type == 'Bank':
+            account_list = Account.objects.exclude(type='Pool').order_by('name')
+        elif creditor.type == 'Pool':
+            account_list = Account.objects.exclude(type='Bank').order_by('name')
+        else:
+            account_list = Account.objects.all().order_by('name')
+        context = super().get_context_data(**kwargs)
+        context['account_list'] = account_list
+        context['creditor'] = creditor
+        context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
+        return render(request, self.template_name, context)
+
+class CreateTransactionData(TemplateView):
+    template_name = 'Bank/AddTransaction/InputData.html'
+    def post(self, request, *args, **kwargs):
+        data = request.POST
+        date = datetime.strptime(data.get('date'), '%Y-%m-%d')
+        creditor = get_object_or_404(Account, account_key=data.get('creditor'))
+        all_accounts = Account.objects.all()
+        account_list = Account.objects.none()
+        for account in all_accounts:
+            key = account.account_key
+            if str(key) in data.keys() and data.get(str(key)) == 'TRUE':
+                account_list = account_list.union(all_accounts.filter(account_key=key))
+        context = super().get_context_data(**kwargs)
+        context['account_list'] = account_list
+        context['creditor'] = creditor
+        context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
+        return render(request, self.template_name, context)
 
 def CreateTransactionAction(request):
     if request.method == 'POST':
@@ -96,7 +135,7 @@ def CreateTransactionAction(request):
                 entry.save()
                 transaction.entry_set.add(entry) # Create and add each entry to the object
         transaction.save()
-    return redirect('CreateTransaction')
+    return redirect('CreateTransactionCreditor')
 
 class EditTransaction(TemplateView):
     # Allos the treasurer to edit transactions

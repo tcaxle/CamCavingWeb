@@ -1,0 +1,27 @@
+{% extends 'Bank/AddTransaction/AddTransactionBase.html' %}
+{% load static %}
+
+{% block form %}
+  <form method="post" action="{% url 'CreateTransactionDebtor' %}">
+  {% csrf_token %}
+  <table class="w3-table w3-striped">
+    <tr>
+      <td>Date:</td>
+      <td><input class="w3-input" type="date" name="date" value="{{ date.date.isoformat }}"></td>
+    </tr>
+    <tr>
+      <td>Creditor</td>
+      <td>
+        <select class="w3-input" name="creditor">
+          {% for account in account_list %}
+            <option value="{{ account.account_key }}">{{ account }}</option>
+          {% endfor %}
+        </select>
+      </td>
+    </tr>
+  </table>
+  <div class="w3-padding-16">
+    <button class="w3-button w3-theme-d3 w3-hover-black w3-mobile" type="submit">Next</button>
+  </div>
+  </form>
+{% endblock %}

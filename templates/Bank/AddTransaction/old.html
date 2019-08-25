@@ -1,12 +1,7 @@
-{% extends 'Base.html' %}
+{% extends 'Bank/AddTransaction/AddTransactionBase.html' %}
 {% load static %}
 
-{% block title %}
-  <title>CUCC | Bank | Add Transaction</title>
-{% endblock %}
-
-{% block main-content %}
-  <h1>Add Many-to-One Transaction</h1>
+{% block form %}
   <form method="post" action="{% url 'CreateTransactionAction' %}">
   {% csrf_token %}
   <table class="w3-table w3-striped">
@@ -45,8 +40,4 @@
     <button class="w3-button w3-theme-d3 w3-hover-black w3-mobile" type="submit">Submit</button>
   </div>
   </form>
-{% endblock %}
-
-{% block side-content %}
-  <h2>Side Bar</h2>
 {% endblock %}
