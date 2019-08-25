@@ -3,153 +3,157 @@ from django.db import models
 from datetime import datetime
 import uuid
 
-TRANSACTION_TYPES = (
-    ('Expense Claim', 'Expense Claim'), # A member claims the £35.66 they spent on petrol
-    ('Charge', 'Charge'), # The club charges a member £39.00 for a meet
-    ('Swap', 'Swap'), # Club members ggive each other money
-    ('Reimbursement', 'Reimbursement'), # The club pays a member what they are owed OR a member pays the club what they owed
-    ('Payment', 'Payment'), # The club pays a fee, for instance the deposit on a hut booking
-    ('Purchase', 'Purchase'), # The club buys some gear
-    ('Grant', 'Grant'), # The University gives the club a grant
-    ('Uncategorised', 'Uncategorised'), # There is no suitable operation for this transaction
-    ('Correctional', 'Correctional'), # The accounting system is out of line with the real world and the treasurer is correcting that
+ACCOUNT_TYPES = (
+    ('Bank', 'Bank'),
+    ('User', 'User'),
+    ('Pool', 'Pool')
 )
 
+"""
+Some Terminology:
+Book:
+    Representitive of pools or categories of money.
+    Transactions that appear on a Book show the flow of credit and debt for that category.
+    If a book shows a positve sum balance, then this is a source of income for the club.
+    If a book shows a negative sum balance, then this is a source of outgoings for the club.
+    Each transaction on a book shows:
+    - Account: The account of the entity involved in the transaction
+    - Credit/Debit: The amount that has been credited/debited. The book credit = the account debit (and vice-versa)
+    - Date: When the transaction took place
+    - Notes (Optional): Any useful notes about the transaction
+
+Ledger:
+    Representitive of a real bank account.
+    Transactions on the ledger each correspond exactly to a transacion on the bank account.
+    Each transaction on the ledger shows:
+    - Account: The account of the entity involved in the transaction
+    - Credit/Debit: The amount of money that went from one to the other
+    - Date: When the transaction took place
+    - Notes (Optional): Any useful notes about the transaction
+
+Statement:
+    Similar to a book, but refers to the record of transactions on an external entity's account
+    Each transaction on a statement shows:
+    - Type: Book, Bank, or Swap?
+    - Account: The book, bank account, or entity account involved in the transacion
+    - Credit/Debit: How much the entity has been credited/Debited by
+"""
+
 class Account(models.Model):
+    # Representitive of legal entities. This could be the actual club account, a retailer that the club purchases from, or a member of the club
     account_key = models.UUIDField(default=uuid.uuid4, editable=False)
-    owner = models.OneToOneField(CustomUser, blank=False, on_delete=models.PROTECT, related_name='bank_account') # Cannot delete user account if they have a bank account that exists
-    is_virtual = models.BooleanField(default=True) # Allows tracking of virtual (user) vs real (actual physical account) account types without multiple models
+    owner = models.OneToOneField(CustomUser, blank=True, null=True, on_delete=models.SET_NULL, related_name='bank_account', help_text='If account is to be owned by a person, please select that user here.')
+    name = models.CharField(max_length=100, blank=True, help_text='If account is unowned, please give it a sensible name.')
+    type = models.CharField(max_length=100, blank=False, choices=ACCOUNT_TYPES)
 
-    """
-    balance = models.DecimalField(max_digits=7, decimal_places=2) # Cannot have more than 2dp for money values. Accounts can't go beyond +/- £99,999.99
-    SHOULD BE LIVE-CALCULATED FROM TRANSACTIONS
-    """
     def __str__(self):
-        return str(self.owner)
+        if self.name:
+            return '('+self.type+') '+self.name
+        elif self.owner is not None:
+            return '('+self.type+') '+self.owner.name()
+        else:
+            return '('+self.type+') **Nameless Account**'
 
-class Transaction(models.Model):
-    account = models.ForeignKey(Account, blank=False, on_delete=models.PROTECT) # Cannot delete an account if they have transactions that exist
+class Entry(models.Model):
+    # The smallest unit of the transation family. Records an individual double-entry transaction
+    entry_key = models.UUIDField(default=uuid.uuid4, editable=False)
+    account_a = models.ForeignKey(Account, blank=False, on_delete=models.PROTECT, related_name='transacton_set_a')
+    account_b = models.ForeignKey(Account, blank=False, on_delete=models.PROTECT, related_name='transaction_set_b')
+    credit_a = models.DecimalField(max_digits=7, decimal_places=2, blank=False) # Amount that account a has been credited by
+    credit_b = models.DecimalField(max_digits=7, decimal_places=2, blank=False) # Amount that account b has been credited by
     date = models.DateTimeField(blank=False, default=datetime.now) # When did the transaction occur?
-    amount = models.DecimalField(max_digits=7, decimal_places=2, help_text='For a virtual account, a positive transaction is a credit. For a real account, a positive transaction is an increase in wealth.')
-    """
-    How much money went in/out of the account?
-
-    For a virtual account:
-    - a positive transaction represents a credit (they now owe the club less money than before)
-    - a negative transaction represents a debit (they now owe the club more money than before)
-
-    For a non-virtual account:
-    - a positive transaction represents an increase in wealth (the club account now has more money in it)
-    - a negative transaction represents a decrease in wealth (the club account now has more money in it)
-    """
-    category = models.CharField(max_length=50, choices=TRANSACTION_TYPES, blank=False)
-    notes = models.TextField(blank=True) # Any notes about the transaction.
-    approved = models.BooleanField(default=False) # Has the treasurer or other authorised person approved this transaction?
-    def __str__(self):
-        return '['+str(self.date)+']['+str(self.category)+'] '+str(self.account.owner)+': '+str(self.amount)
-
-"""
-    Example flow of transactions, assuming everyone involved started at £0.00
-
-    1. The club recieves a grant of £500.00 from the university:
-        account = Treasury
-        date = 2019.08.22
-        amount = 500.00
-        category = 'grant'
-        notes = 'University grant'
-        approved = True
-        balance_after_transaction = Treasury.balance = 500.00
-
-    2. The club pays a £50.00 deposit on a hut booking:
-        account = Treasury
-        date = 2019.08.23
-        amount = -50.00
-        category = 'payment'
-        notes = 'Hut booking deposit for upcoming caving meet'
-        approved = True
-        balance_after_transaction = Treasury.balance = 450.00
-
-    3. People go caving, one of them pays the £45.00 remaining hut fee from their own pocket:
-        account = GenerousMember
-        date = 2019.08.25
-        amount = 45.00
-        category = 'expense_claim'
-        notes = 'Paid hut fees on caving meet'
-        approved = True
-        balance_after_transaction = GenerousMember.balance = 45.00
-
-    3. The meet leader logs the trip in the system, and charges everyone the £35.00 meet fee
-        account = GenerousMember
-        date = 2019.08.27
-        amount = -35.00
-        category = 'charge'
-        notes = 'Charge from caving meet'
-        approved = True
-        balance_after_transaction = GenerousMember.balance = 10.00
-
-    4. The club pay the member the oustanding £10.00 balance
-        Transaction 1:
-            account = Treasury
-            date = 2019.08.29
-            amount = -10.00
-            category = 'reimbursement'
-            notes = 'Paid outstanding balance'
-            approved = True
-            balance_after_transaction = Treasury.balance = 430.00
-        Transaction 2:
-            account = GenerousMember
-            date = 2019.08.29
-            amount = -10.00
-            category = 'reimbursement'
-            notes = 'Paid outstanding balance'
-            approved = True
-            balance_after_transaction = GenerousMember.balance = 0.00
-        These two transactions would be created alongside a "TransactionPair," which ties particular fields together
-"""
-
-class TransactionPair(models.Model):
-    # Ties two transactions together, useful when transactions are internal
-    transaction_a = models.ForeignKey(Transaction, blank=False, related_name='transaction_a', null=True, on_delete=models.SET_NULL)
-    transaction_b = models.ForeignKey(Transaction, blank=False, related_name='transaction_b', null=True, on_delete=models.SET_NULL)
-
-    def __str__(self):
-        return '['+str(self.transaction_a.date)+']['+str(self.transaction_a.category)+'] From '+str(self.transaction_a.account.owner)+' To '+str(self.transaction_b.account.owner)+': '+str(self.transaction_a.amount)
+    notes = models.TextField(blank=True)
+    is_approved = models.BooleanField(default=False)
 
     @classmethod
-    def create(cls, account_a, account_b, date, amount, category, notes, approved=False):
-        # Creates two transactions, and ties their dates, amounts, categories, notes, and approved status together. ORDER OF ACCOUNTS MATTERS!
-        # "amount" represents how much money is going from one account to the other
-        if account_a.is_virtual and account_b.is_virtual:
-            # Virtual to Virtual, as in a member to member swap
-            amount_a = amount # Credit account A
-            amount_b = -amount # Debit account B
-        elif account_a.is_virtual and not account_b.is_virtual:
-            # Virtual to Real, as in a member pays their debt
-            amount_a = amount # Credit account A
-            amount_b = amount # Increase wealth of account B
-        elif not account_a.is_virtual and account_b.is_virtual:
-            # Real to Virtual, as in the club pays a member its debt
-            amount_a = -amount # Decrease wealth of account A
-            amount_b = -amount # Debit account B
-        elif not account_a.is_virtual and not account_b.is_virtual:
-            # Real to Real, as in the club transfers money between its own accounts
-            amount_a = -amount # Decrease wealth of account A
-            amount_b = amount # Increase wealth of account B
-        TransactionA = Transaction(
-            account = account_a,
-            date = date,
-            amount = amount_a,
-            category = category,
-            notes = '[Transaction Pair: ('+str(amount)+') From '+str(account_a.owner.full_name)+' ('+str(account_a.owner.username)+') To '+str(account_b.owner.full_name)+' ('+str(account_b.owner.username)+')]'+notes,
-            approved = approved,
-        )
-        TransactionB = Transaction(
-            account = account_b,
-            date = date,
-            amount = amount_b,
-            category = category,
-            notes = '[Transaction Pair: ('+str(amount)+') From '+account_a.owner.full_name+' ('+account_a.owner.username+') To '+account_b.owner.full_name+'('+account_b.owner.username+')]'+notes,
-            approved = approved,
-        )
-        Pair = cls(transaction_a = TransactionA, transaction_b = TransactionB)
-        return Pair
+    def create(cls, account_a, account_b, credit_a, date, notes):
+        if account_a.type == 'Bank' and account_b.type == 'Bank':
+            credit_a = credit_a # Credit Account A
+            credit_b = -credit_a # Debit To Account B
+        elif account_a.type == 'Bank' and account_b.type == 'User':
+            credit_a = credit_a # Credit From Account
+            credit_b = credit_a # Credit To Account
+        elif account_a.type == 'User' and account_b.type == 'Bank':
+            credit_a = credit_a # Credit From Account
+            credit_b = credit_a # Credit To Account
+        elif account_a.type == 'User' and account_b.type == 'User':
+            credit_a = credit_a # Credit From Account
+            credit_b = -credit_a # Debit To Account
+        elif account_a.type == 'User' and account_b.type == 'Pool':
+            credit_a = credit_a # Credit From Account
+            credit_b = -credit_a # Debit To Account
+        elif account_a.type == 'Pool' and account_b.type == 'User':
+            credit_a = credit_a # Credit From Account
+            credit_b = -credit_a # Debit To Account
+        else:
+            raise Exception("Cannot make transaction between account.type=='Pool' and account.type='Bank'")
+        entry = cls(account_a=account_a, account_b=account_b, credit_a=credit_a, credit_b=credit_b, date=date, notes=notes)
+        return entry
+
+    def __str__(self):
+        if self.credit_a >= 0 and self.credit_b >= 0:
+            return '['+str(self.account_a)+' +'+str(self.credit_a)+']['+str(self.account_b)+' +'+str(self.credit_b)+']'
+        if self.credit_a >= 0 and self.credit_b < 0:
+            return '['+str(self.account_a)+' +'+str(self.credit_a)+']['+str(self.account_b)+' '+str(self.credit_b)+']'
+        if self.credit_a < 0 and self.credit_b >= 0:
+            return '['+str(self.account_a)+' '+str(self.credit_a)+']['+str(self.account_b)+' +'+str(self.credit_b)+']'
+        if self.credit_a < 0 and self.credit_b < 0:
+            return '['+str(self.account_a)+' '+str(self.credit_a)+']['+str(self.account_b)+' '+str(self.credit_b)+']'
+
+
+class Transaction(models.Model):
+    # Parents the Entry model, allowing Many-To-One Transactions across multiple accounts
+    transaction_key = models.UUIDField(default=uuid.uuid4, editable=False)
+    entry_set = models.ManyToManyField(Entry, blank=True, null=True)
+
+    def set_date(self, date):
+        # Sets the date for every entry
+        for entry in self.entry_set.all():
+            entry.date = date
+
+    def set_notes(self, notes):
+        # Sets the notes on every entry
+        for entry in self.entry_set.all():
+            entry.notes = notes
+
+    def set_approved(self, approved):
+        # Sets the approved status on every entry
+        for entry in self.entry_set.all():
+            entry.is_approved = approved
+
+    def CreateEntry(self, account_a, account_b, credit_a, date, notes):
+        # Calls the entry create entry method then adds it to the entry_set
+        entry = Entry.create(account_a=account_a, account_b=account_b, credit_a=credit_a, date=date, notes=notes) # Create it
+        entry.save() # Save it
+        transacton.entry_set.add(entry) # Add it
+        # Bop it
+
+    @classmethod
+    def create(cls, creditor, debtor_dict, date, notes):
+        # Takes a single creditor, and a dictionary of {debtor: amount} items \
+        # and produces an entry for each debtor, crediting the creditor and \
+        # of each by the relevant amounts
+        transaction = cls() # Create an empty transaction object
+        for debtor, amount in debtor_dict:
+            transacton.CreateEntry(account_a=creditor, account_b=debtor, credit_a=amount, date=date, notes=notes) # Create and add each entry to the object
+        return transaction
+
+class TransactionGroup(models.Model):
+    # Holds multiple groups of Transaction objects, allowing single objects containing an entire set off accounts
+    group_key = models.UUIDField(default=uuid.uuid4, editable=False)
+    transaction_set = models.ManyToManyField(Transaction, blank=True, null=True)
+
+    def set_date(self, date):
+        # Sets the date for every transaction
+        for transaction in self.transacton_set:
+            transaction.set_date(date)
+
+    def set_notes(self, notes):
+        # Sets the notes on every transaction
+        for transaction in self.transacton_set:
+            transaction.set_notes(notes)
+
+    def set_approved(self, approved):
+        # Sets the approved status on every transaction
+        for transaction in self.transacton_set:
+            transaction.set_approved(approved)

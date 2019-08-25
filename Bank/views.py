@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic.base import TemplateView
 from django.views.generic.detail import DetailView
@@ -10,172 +10,98 @@ from datetime import datetime, timedelta
 from .models import *
 from .forms import *
 from UserPortal.models import CustomUser
+from django.shortcuts import get_object_or_404
 
-def TransactionsToDate(account, date=timezone.now()):
-    # Returns a query set of all transactions up to a date on an account
-    return account.transaction_set.filter(date__lte=date)
+class CreateEntry(FormView):
+    form_class = CreateEntry
+    template_name = 'Bank/AddEntry.html'
+    success_url = reverse_lazy('CreateEntry')
 
-def BalanceAtDate(account, date=timezone.now()):
-    # Returns the balance as a float
-    balance = account.transaction_set.filter(date__lte=date).aggregate(Sum('amount')).get('amount__sum')
-    if balance == None:
-        return float(0.00)
-    else:
-        return float(balance)
+    def form_valid(self, form):
+        from_account = form.cleaned_data['creditor']
+        to_account = form.cleaned_data['debtor']
+        amount = form.cleaned_data['amount']
+        date = form.cleaned_data['date']
+        notes = form.cleaned_data['notes']
+        entry = Entry.create(from_account, to_account, amount, date, notes)
+        entry.save()
+        return super().form_valid(form)
 
-def BalanceList(transaction_list):
-    # takes a list of transaction objects, and returns a dictionary of {transaction: balance}
-    balance_list = []
-    for transaction in transaction_list:
-        balance_list.append(BalanceAtDate(transaction.account, transaction.date))
-    return dict(zip(transaction_list, balance_list))
+class CreateAccount(CreateView):
+    model = Account
+    template_name = 'Bank/AddAccount.html'
+    fields = '__all__'
+    success_url = reverse_lazy('CreateAccount')
 
 class ViewAccount(DetailView):
-    model = Account
-    template_name = 'Bank/ViewAccount.html'
-    slug_field = 'account_key'
-    context_object_name = 'account'
+    # Returns a transaction list with date filtering options for an account
+    pass
+
+class ViewTransactions(ListView):
+    # Returns a transaction list with date filtering options for all accounts
+    pass
+
+
+class CreateExpense(FormView):
+    # Allows users to create pending transactions to claim expenses
+    pass
+
+class CreateOneToOneSwap(FormView):
+    # Allows users to create person to person swaps
+    pass
+
+class CreateManyToOneSwap(FormView):
+    # Allows users to create many to one swaps (splits)
+    pass
+
+class CreateManyToManySwap(FormView):
+    # Allows users to create many to one swaps (splits)
+    pass
+
+class CreateMeetAccounts(FormView):
+    # Allows users to easily record a meet's accounts
+    # Create's prending transactions for each member on the trip
+    pass
+
+class ReviewTransaction(DetailView):
+    # Allows the treasurer to review a pendig transaction
+    # and to migrate it to a book transaction, or two books and a bank tranaction
+    pass
+
+class CreateTransaction(TemplateView):
+    # Allows the treasurer to create transactions
+    template_name = 'Bank/AddTransaction.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        account = context['account']
-        if self.request.method == 'GET':
-            if 'end_date' in self.request.GET and self.request.GET['end_date']:
-                start_date = datetime.strptime(self.request.GET['start_date'], '%Y-%m-%d')
-                start_date = datetime(start_date.year, start_date.month, start_date.day, 0, 0, 0)
-                context['view_earliest'] = False
-            else:
-                start_date = account.transaction_set.order_by('date')[0].date
-                start_date = datetime(start_date.year, start_date.month, start_date.day, 0, 0, 0)
-                context['view_earliest'] = True
-            context['start_date'] = start_date
-            if 'end_date' in self.request.GET and self.request.GET['end_date']:
-                end_date = datetime.strptime(self.request.GET['end_date'], '%Y-%m-%d')
-                end_date = datetime(end_date.year, end_date.month, end_date.day, 23, 59, 5)
-                context['view_latest'] = False
-            else:
-                end_date = datetime.now()
-                end_date = datetime(end_date.year, end_date.month, end_date.day, 23, 59, 5)
-                context['view_latest'] = True
-            context['end_date'] = end_date
-            context['start_balance'] = BalanceAtDate(account, start_date)
-            context['end_balance'] = BalanceAtDate(account, end_date)
-            context['balance_list'] = BalanceList(list(TransactionsToDate(account, end_date).difference(TransactionsToDate(account, start_date)).order_by('-date')))
+        context['account_list'] = Account.objects.all().order_by('type')
+        context['date'] = datetime.now()
         return context
 
-class ViewOwnAccount(TemplateView):
-    template_name = 'Bank/ViewAccount.html'
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        account = self.request.user.bank_account
-        context['account'] = account
-        start_date = account.transaction_set.order_by('date')[0].date
-        start_date = datetime(start_date.year, start_date.month, start_date.day, 0, 0, 0)
-        context['view_earliest'] = True
-        context['start_date'] = start_date
-        end_date = datetime.now()
-        end_date = datetime(end_date.year, end_date.month, end_date.day, 23, 59, 5)
-        context['view_latest'] = True
-        context['end_date'] = end_date
-        context['start_balance'] = BalanceAtDate(account, start_date)
-        context['end_balance'] = BalanceAtDate(account, end_date)
-        context['balance_list'] = BalanceList(list(TransactionsToDate(account, end_date).difference(TransactionsToDate(account, start_date)).order_by('-date')))
-        return context
+def CreateTransactionAction(request):
+    if request.method == 'POST':
+        transaction = Transaction()
+        transaction.save()
+        data = request.POST
+        account_list = Account.objects.all()
+        creditor = get_object_or_404(Account, account_key=data.get('creditor'))
+        date = datetime.strptime(data.get('date'), '%Y-%m-%d')
+        date = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
+        notes = data.get('notes')
+        for account in account_list:
+            key = str(account.account_key)
+            if key in data.keys() and data.get(key):
+                debtor = account
+                amount = data.get(key)
+                entry = Entry.create(account_a=creditor, account_b=debtor, credit_a=float(amount), date=date, notes=notes)
+                entry.save()
+                transaction.entry_set.add(entry) # Create and add each entry to the object
+        transaction.save()
+    return redirect('CreateTransaction')
 
-class ListTransactions(ListView):
-    model = Transaction
-    template_name = 'Bank/ListTransactions.html'
-    context_object_name = 'transaction_list'
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        transaction_list = context['transaction_list']
-        if self.request.method == 'GET':
-            if 'start_date' in self.request.GET and self.request.GET['start_date']:
-                start_date = datetime.strptime(self.request.GET['start_date'], '%Y-%m-%d')
-                start_date = datetime(start_date.year, start_date.month, start_date.day, 0, 0, 0)
-                context['view_earliest'] = False
-            else:
-                start_date = transaction_list.order_by('date')[0].date
-                start_date = datetime(start_date.year, start_date.month, start_date.day, 0, 0, 0)
-                context['view_earliest'] = True
-            context['start_date'] = start_date
-            if 'end_date' in self.request.GET and self.request.GET['end_date']:
-                end_date = datetime.strptime(self.request.GET['end_date'], '%Y-%m-%d')
-                end_date = datetime(end_date.year, end_date.month, end_date.day, 23, 59, 5)
-                context['view_latest'] = False
-            else:
-                end_date = datetime.now()
-                end_date = datetime(end_date.year, end_date.month, end_date.day, 23, 59, 5)
-                context['view_latest'] = True
-            context['end_date'] = end_date
-        else:
-            start_date = transaction_list.order_by('date')[0].date
-            start_date = datetime(start_date.year, start_date.month, start_date.day, 0, 0, 0)
-            context['view_earliest'] = True
-            context['start_date'] = start_date
-            end_date = datetime.now()
-            end_date = datetime(end_date.year, end_date.month, end_date.day, 23, 59, 5)
-            context['view_latest'] = True
-            context['end_date'] = end_date
-        return context
+class EditTransaction(TemplateView):
+    # Allos the treasurer to edit transactions
+    pass
 
-class ListAccounts(ListView):
-    model = Account
-    template_name = 'Bank/ListAccounts.html'
-    context_object_name = 'accounts_list'
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        accounts_list = context['accounts_list']
-        balance_list = []
-        for account in accounts_list:
-            balance_list.append(BalanceAtDate(account))
-        context['account_dict'] = dict(zip(accounts_list, balance_list))
-        return context
-
-class AddTransaction(CreateView):
-    model = Transaction
-    form_class = AddTransaction
-    template_name = 'Bank/AddTransaction.html'
-    success_url = reverse_lazy('ViewOwnAccount')
-
-class AddTransactionPair(FormView):
-    form_class = AddTransactionPair
-    template_name = 'Bank/AddTransaction.html'
-    success_url = reverse_lazy('ViewOwnAccount')
-    def form_valid(self, form):
-        account_a = form.cleaned_data['from_account']
-        account_b = form.cleaned_data['to_account']
-        date = form.cleaned_data['date']
-        date = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions take place at Mid-Day so that when you are viewing transactions for a single day, you get all of them
-        amount = form.cleaned_data['amount']
-        category = form.cleaned_data['category']
-        notes = form.cleaned_data['notes']
-        transaction_pair = TransactionPair.create(account_a, account_b, date, amount, category, notes)
-        transaction_pair.transaction_a.save()
-        transaction_pair.transaction_b.save()
-        transaction_pair.save()
-        return super().form_valid(form)
-
-class SuperAddTransactionPair(FormView):
-    form_class = SuperAddTransactionPair
-    template_name = 'Bank/AddTransaction.html'
-    success_url = reverse_lazy('ViewOwnAccount')
-    def form_valid(self, form):
-        account_a = form.cleaned_data['from_account']
-        account_b = form.cleaned_data['to_account']
-        date = form.cleaned_data['date']
-        date = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions take place at Mid-Day so that when you are viewing transactions for a single day, you get all of them
-        amount = form.cleaned_data['amount']
-        category = form.cleaned_data['category']
-        notes = form.cleaned_data['notes']
-        approved = form.cleaned_data['approved']
-        transaction_pair = TransactionPair.create(account_a, account_b, date, amount, category, notes)
-        transaction_pair.transaction_a.save()
-        transaction_pair.transaction_b.save()
-        transaction_pair.save()
-        return super().form_valid(form)
-
-
-class SuperAddTransaction(CreateView):
-    model = Transaction
-    form_class = SuperAddTransaction
-    template_name = 'Bank/AddTransaction.html'
+class DeleteTransaction(DeleteView):
+    # Allows the treasurer to delete transactions
+    pass

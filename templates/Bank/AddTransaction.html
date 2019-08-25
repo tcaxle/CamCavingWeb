@@ -2,15 +2,44 @@
 {% load static %}
 
 {% block title %}
-  <title>CUCC | Bank | Add Transaction </title>
+  <title>CUCC | Bank | Add Transaction</title>
 {% endblock %}
 
 {% block main-content %}
-  <h1>Add Transaction</h1>
-  <form method="post">
+  <h1>Add Many-to-One Transaction</h1>
+  <form method="post" action="{% url 'CreateTransactionAction' %}">
   {% csrf_token %}
   <table class="w3-table w3-striped">
-  {{ form.as_table }}
+    <tr>
+      <td>Date:</td>
+      <td><input class="w3-input" type="date" name="date" value="{{ date.date.isoformat }}"></td>
+    </tr>
+    <tr>
+      <td>Creditor</td>
+      <td>
+        <select class="w3-input" name="creditor">
+          {% for account in account_list %}
+            <option value="{{ account.account_key }}">{{ account }}</option>
+          {% endfor %}
+        </select>
+      </td>
+    </tr>
+    <tr>
+      <td><b>Debtor</b></td>
+      <td><b>Credit from Debtor</b></td>
+    </tr>
+    {% for account in account_list %}
+      <tr>
+        <td>{{ account }}:</td>
+        <td>
+          <input class="w3-input" type="number" step="0.01" name="{{ account.account_key }}">
+          </td>
+      </tr>
+    {% endfor %}
+    <tr>
+      <td>Notes:</td>
+      <td><input class="w3-input" type="textarea" name="notes"></td>
+    </tr>
   </table>
   <div class="w3-padding-16">
     <button class="w3-button w3-theme-d3 w3-hover-black w3-mobile" type="submit">Submit</button>

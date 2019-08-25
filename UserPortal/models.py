@@ -55,7 +55,7 @@ class CustomUser(AbstractUser):
     rank_display.short_description = 'Rank Display'
 
     def name(self):
-        return self.full_name
+        return self.full_name+' ('+self.username+')'
 
     def __str__(self):
         return self.username
