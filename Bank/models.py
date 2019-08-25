@@ -104,7 +104,7 @@ class Entry(models.Model):
 class Transaction(models.Model):
     # Parents the Entry model, allowing Many-To-One Transactions across multiple accounts
     transaction_key = models.UUIDField(default=uuid.uuid4, editable=False)
-    entry_set = models.ManyToManyField(Entry, blank=True, null=True)
+    entry_set = models.ManyToManyField(Entry, blank=True, null=True, editable=False)
 
     def set_date(self, date):
         # Sets the date for every entry
