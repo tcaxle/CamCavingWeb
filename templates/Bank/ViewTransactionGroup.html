@@ -12,6 +12,7 @@
   <p><i>Created on {{ transaction_group.created_on.date.isoformat }} at {{ transaction_group.created_on.time.isoformat }} by {{ transaction_group.created_by }}</i></p>
   <p><b>Date:</b> {{ transaction_group.transaction_set.first.entry_set.first.date.date.isoformat }}</p>
   <p><b>Notes:</b> {{ transaction_group.transaction_set.first.entry_set.first.notes }}</p>
+  <p><b>Approved:</b> {{ transaction_group.is_approved }}</p>
 
   <table class="w3-table w3-striped">
     <tr class="w3-theme-d3">
@@ -50,11 +51,13 @@
 
 {% block side-content %}
   <h2>Transaction Group Actions</h2>
-    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditTransactionGroupCreditor' transaction_group.group_key %}">Edit Transaction Group Creditors</a>
-    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditTransactionGroupDebtor' transaction_group.group_key %}">Edit Transaction Group Debtors</a>
-    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditTransactionGroupData' transaction_group.group_key %}">Edit Transaction Group Data</a>
+  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'ToggleApproveTransactionGroup' transaction_group.group_key %}">Toggle Approved Status</a>
+  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'DeleteTransactionGroup' transaction_group.group_key %}">Delete This Transaction Group</a>
+  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditTransactionGroupCreditor' transaction_group.group_key %}">Edit Transaction Group Creditors</a>
+  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditTransactionGroupDebtor' transaction_group.group_key %}">Edit Transaction Group Debtors</a>
+  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditTransactionGroupData' transaction_group.group_key %}">Edit Transaction Group Data</a>
 
-    <p><i>This transaction is owned by an event. You can only edit the highest level of a financial object. See the "heritage" section for the highest level of this object.</i></p>
+  <p><i>This transaction is owned by an event. You can only edit the highest level of a financial object. See the "heritage" section for the highest level of this object.</i></p>
 
   {% include 'ActionSets/Bank.html' %}
 {% endblock %}

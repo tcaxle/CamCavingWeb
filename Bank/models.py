@@ -30,21 +30,7 @@ class TransactionGroup(models.Model):
     group_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     created_by = models.ForeignKey(CustomUser, blank=False, null=True, editable=False, on_delete=models.PROTECT) # Who created the object
     created_on = models.DateTimeField(blank=False, default=datetime.now, editable=False) # When was the object created?
-
-    def set_date(self, date):
-        # Sets the date for every transaction
-        for transaction in self.transacton_set:
-            transaction.set_date(date)
-
-    def set_notes(self, notes):
-        # Sets the notes on every transaction
-        for transaction in self.transacton_set:
-            transaction.set_notes(notes)
-
-    def set_approved(self, approved):
-        # Sets the approved status on every transaction
-        for transaction in self.transacton_set:
-            transaction.set_approved(approved)
+    is_approved = models.BooleanField(default=False)
 
     def __str__(self):
         return 'Transaction Group '+str(self.pk)
@@ -55,21 +41,7 @@ class Transaction(models.Model):
     created_by = models.ForeignKey(CustomUser, blank=False, null=True, editable=False, on_delete=models.PROTECT) # Who created the object
     created_on = models.DateTimeField(blank=False, default=datetime.now, editable=False) # When was the object created?
     transaction_group = models.ForeignKey(TransactionGroup, blank=True, null=True, on_delete=models.PROTECT)
-
-    def set_date(self, date):
-        # Sets the date for every entry
-        for entry in self.entry_set.all():
-            entry.date = date
-
-    def set_notes(self, notes):
-        # Sets the notes on every entry
-        for entry in self.entry_set.all():
-            entry.notes = notes
-
-    def set_approved(self, approved):
-        # Sets the approved status on every entry
-        for entry in self.entry_set.all():
-            entry.is_approved = approved
+    is_approved = models.BooleanField(default=False)
 
     def CreateEntry(self, account_a, account_b, credit_a, date, notes):
         # Calls the entry create entry method then adds it to the entry_set

@@ -12,6 +12,7 @@
   <p><i>Created on {{ transaction.created_on.date.isoformat }} at {{ transaction.created_on.time.isoformat }} by {{ transaction.created_by }}</i></p>
   <p><b>Date:</b> {{ transaction.entry_set.first.date.date.isoformat }}</p>
   <p><b>Notes:</b> {{ transaction.entry_set.first.notes }}</p>
+  <p><b>Approved:</b> {{ transaction.is_approved }}</p>
   {% if transaction.transaction_group is not None %}
     <p><b>Parent:</b> <a href="{% url 'ViewTransactionGroup' transaction.transaction_group.group_key %}">{{ transaction.transaction_group }}</a></p>
   {% endif %}
@@ -49,6 +50,8 @@
 {% block side-content %}
   <h2>Transaction Actions</h2>
   {% if transaction.transaction_group is None %}
+    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'ToggleApproveTransaction' transaction.transaction_key %}">Toggle Approved Status</a>
+    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'DeleteTransaction' transaction.transaction_key %}">Delete This Transaction</a>
     <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditTransactionCreditor' transaction.transaction_key %}">Edit Transaction Creditor</a>
     <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditTransactionDebtor' transaction.transaction_key %}">Edit Transaction Debtors</a>
     <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditTransactionData' transaction.transaction_key %}">Edit Transaction Data</a>

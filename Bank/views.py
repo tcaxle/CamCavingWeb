@@ -12,6 +12,7 @@ from .forms import *
 from UserPortal.models import CustomUser
 from django.shortcuts import get_object_or_404
 from django.http import Http404
+from django.http import HttpResponseRedirect
 
 def TransactionsToDate(account, date=timezone.now()):
     # Returns a query set of all transactions up to a date on an account
@@ -54,6 +55,68 @@ class EditEntry(UpdateView):
     slug_field = 'entry_key'
     success_url = reverse_lazy('UserPortalDashboard')
     fields = ['account_a', 'account_b', 'credit_a', 'date', 'notes']
+
+def ToggleApproveEntry(request, slug):
+    entry = get_object_or_404(Entry, entry_key=slug)
+    entry.is_approved = not entry.is_approved
+    entry.save()
+    return redirect('ViewEntry', entry.entry_key)
+
+def ToggleApproveTransaction(request, slug):
+    transaction = get_object_or_404(Transaction, transaction_key=slug)
+    transaction.is_approved = not transaction.is_approved
+    transaction.save()
+    for entry in transaction.entry_set.all():
+            entry.is_approved = transaction.is_approved
+            entry.save()
+    return redirect('ViewTransaction', transaction.transaction_key)
+
+def ToggleApproveTransactionGroup(request, slug):
+    transaction_group = get_object_or_404(TransactionGroup, group_key=slug)
+    transaction_group.is_approved = not transaction_group.is_approved
+    for transaction in transaction_group.transaction_set.all():
+        transaction.is_approved = transaction_group.is_approved
+        transaction.save()
+        for entry in transaction.entry_set.all():
+                entry.is_approved = transaction_group.is_approved
+                entry.save()
+    transaction_group.save()
+    return redirect('ViewTransactionGroup', transaction_group.group_key)
+
+
+class DeleteEntry(DeleteView):
+    model = Entry
+    slug_field = 'entry_key'
+    success_url = reverse_lazy('UserPortalDashboard')
+    template_name = 'Bank/DeleteObject.html'
+
+class DeleteTransaction(DeleteView):
+    model = Transaction
+    slug_field = 'transaction_key'
+    success_url = reverse_lazy('UserPortalDashboard')
+    template_name = 'Bank/DeleteObject.html'
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        for entry in self.object.entry_set.all():
+            entry.delete()
+        self.object.delete()
+        return HttpResponseRedirect(success_url)
+
+class DeleteTransactionGroup(DeleteView):
+    model = TransactionGroup
+    slug_field = 'group_key'
+    success_url = reverse_lazy('UserPortalDashboard')
+    template_name = 'Bank/DeleteObject.html'
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        success_url = self.get_success_url()
+        for transaction in self.object.transaction_set.all():
+            for entry in transaction.entry_set.all():
+                entry.delete()
+            transaction.delete()
+        self.object.delete()
+        return HttpResponseRedirect(success_url)
 
 class CreateAccount(CreateView):
     model = Account
@@ -125,16 +188,6 @@ class ViewEntry(DetailView):
     slug_field = 'entry_key'
     context_object_name = 'entry'
     template_name = 'Bank/ViewEntry.html'
-
-class CreateMeetAccounts(FormView):
-    # Allows users to easily record a meet's accounts
-    # Create's prending transactions for each member on the trip
-    pass
-
-class ReviewTransaction(DetailView):
-    # Allows the treasurer to review a pendig transaction
-    # and to migrate it to a book transaction, or two books and a bank tranaction
-    pass
 
 class CreateTransactionCreditor(TemplateView):
     # Allows the treasurer to create transactions
@@ -530,8 +583,3 @@ def EditTransactionGroupAction(request):
                     entry.transaction = transaction
                     entry.save()
     return redirect('UserPortalDashboard')
-
-
-class DeleteTransaction(DeleteView):
-    # Allows the treasurer to delete transactions
-    pass

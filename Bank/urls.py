@@ -8,9 +8,17 @@ urlpatterns = [
     path('View/Account/<slug:slug>', views.ViewAccount.as_view(), name='ViewAccount'),
     path('List/Accounts/', views.ListAccounts.as_view(), name='ListAccounts'),
 
+    path('ToggleApprove/Entry/<slug:slug>', views.ToggleApproveEntry, name='ToggleApproveEntry'),
+    path('ToggleApprove/Trnsaction/<slug:slug>', views.ToggleApproveTransaction, name='ToggleApproveTransaction'),
+    path('ToggleApprove/TransactionGroup/<slug:slug>', views.ToggleApproveTransactionGroup, name='ToggleApproveTransactionGroup'),
+
     path('View/Entry/<slug:slug>', views.ViewEntry.as_view(), name='ViewEntry'),
     path('View/Transaction/<slug:slug>', views.ViewTransaction.as_view(), name='ViewTransaction'),
     path('View/TransactionGroup/<slug:slug>', views.ViewTransactionGroup.as_view(), name='ViewTransactionGroup'),
+
+    path('Delete/Entry/<slug:slug>', views.DeleteEntry.as_view(), name='DeleteEntry'),
+    path('Delete/Transaction/<slug:slug>', views.DeleteTransaction.as_view(), name='DeleteTransaction'),
+    path('Delete/TransactionGroup/<slug:slug>', views.DeleteTransactionGroup.as_view(), name='DeleteTransactionGroup'),
 
     path('Create/Account/', views.CreateAccount.as_view(), name='CreateAccount'),
 
