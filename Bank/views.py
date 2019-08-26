@@ -25,6 +25,7 @@ class CreateEntry(FormView):
         date = form.cleaned_data['date']
         notes = form.cleaned_data['notes']
         entry = Entry.create(from_account, to_account, amount, date, notes)
+        entry.created_by = self.request.user
         entry.save()
         return super().form_valid(form)
 
@@ -97,13 +98,14 @@ class CreateTransactionData(TemplateView):
             raise Http404('You must have debtors in your transaction.') # Complain
         context = super().get_context_data(**kwargs)
         context['account_list'] = account_list.order_by('type')
-        context['creditor'] = creditor.order_by('type')
+        context['creditor'] = creditor
         context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
         return render(request, self.template_name, context)
 
 def CreateTransactionAction(request):
     if request.method == 'POST':
         transaction = Transaction()
+        transaction.created_by = request.user
         transaction.save()
         data = request.POST
         account_list = Account.objects.all()
@@ -113,10 +115,11 @@ def CreateTransactionAction(request):
         notes = data.get('notes')
         for account in account_list:
             key = str(account.account_key)
-            if key in data.keys() and data.get(key):
+            if key in data.keys() and data.get(key) and float(data.get(key)) != 0.0:
                 debtor = account
                 amount = data.get(key)
                 entry = Entry.create(account_a=creditor, account_b=debtor, credit_a=float(amount), date=date, notes=notes)
+                entry.created_by = request.user
                 entry.save()
                 transaction.entry_set.add(entry) # Create and add each entry to the object
         transaction.save()
@@ -180,6 +183,7 @@ class CreateTransactionGroupData(TemplateView):
 def CreateTransactionGroupAction(request):
     if request.method == 'POST':
         transaction_group = TransactionGroup()
+        transaction_group.created_by = request.user
         transaction_group.save()
         data = request.POST
         account_list = Account.objects.all()
@@ -196,18 +200,19 @@ def CreateTransactionGroupAction(request):
         notes = data.get('notes')
         for creditor in creditor_list.all():
             transaction = Transaction()
+            transaction.created_by = request.user
             transaction.save()
             for debtor in debtor_list.all():
                 key = 'AMOUNT:'+str(debtor.account_key)+':'+str(creditor.account_key)
                 if key in data.keys() and data.get(key) and float(data.get(key)) != 0.0:
                     entry = Entry.create(account_a=creditor, account_b=debtor, credit_a=float(data.get(key)), date=date, notes=notes)
+                    entry.created_by = request.user
                     entry.save()
                     transaction.entry_set.add(entry) # Create and add each entry to the object
             transaction.save()
             transaction_group.transaction_set.add(transaction)
         transaction_group.save()
     return redirect('UserPortalDashboard')
-
 
 
 class EditTransaction(TemplateView):
