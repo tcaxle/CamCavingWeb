@@ -57,7 +57,7 @@ class CreateTransactionCreditor(TemplateView):
     template_name = 'Bank/AddTransaction/SelectCreditor.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['account_list'] = Account.objects.all().order_by('type', 'name')
+        context['account_list'] = Account.objects.all().order_by('type')
         context['date'] = datetime.now()
         return context
 
@@ -70,11 +70,11 @@ class CreateTransactionDebtor(TemplateView):
         creditor = get_object_or_404(Account, account_key=data.get('creditor'))
         # Banks and Pools CANNOT transact:
         if creditor.type == 'Bank':
-            account_list = Account.objects.exclude(type='Pool').order_by('type', 'name')
+            account_list = Account.objects.exclude(type='Pool').order_by('type')
         elif creditor.type == 'Pool':
-            account_list = Account.objects.exclude(type='Bank').order_by('type', 'name')
+            account_list = Account.objects.exclude(type='Bank').order_by('type')
         else:
-            account_list = Account.objects.all().order_by('type', 'name')
+            account_list = Account.objects.all().order_by('type')
         context = super().get_context_data(**kwargs)
         context['account_list'] = account_list
         context['creditor'] = creditor
@@ -96,8 +96,8 @@ class CreateTransactionData(TemplateView):
         if not account_list.first(): # Check for no debtors selected
             raise Http404('You must have debtors in your transaction.') # Complain
         context = super().get_context_data(**kwargs)
-        context['account_list'] = account_list.order_by('type', 'name')
-        context['creditor'] = creditor.order_by('type', 'name')
+        context['account_list'] = account_list.order_by('type')
+        context['creditor'] = creditor.order_by('type')
         context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
         return render(request, self.template_name, context)
 
@@ -129,7 +129,7 @@ class CreateTransactionGroupCreditor(TemplateView):
     template_name = 'Bank/AddTransactionGroup/SelectCreditor.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['account_list'] = Account.objects.all().order_by('type', 'name')
+        context['account_list'] = Account.objects.all().order_by('type')
         context['date'] = datetime.now()
         return context
 
@@ -148,8 +148,8 @@ class CreateTransactionGroupDebtor(TemplateView):
         if not creditor_list.first(): # Check for no debtors selected
             raise Http404('You must have creditors in your transaction.') # Complain
         context = super().get_context_data(**kwargs)
-        context['account_list'] = account_list.order_by('type', 'name')
-        context['creditor_list'] = creditor_list.order_by('type', 'name')
+        context['account_list'] = account_list.order_by('type')
+        context['creditor_list'] = creditor_list.order_by('type')
         context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
         return render(request, self.template_name, context)
 
@@ -172,8 +172,8 @@ class CreateTransactionGroupData(TemplateView):
         if not creditor_list.first(): # Check for no creditors selected
             raise Http404('You must have creditors in your transaction.') # Complain
         context = super().get_context_data(**kwargs)
-        context['creditor_list'] = creditor_list.order_by('type', 'name')
-        context['debtor_list'] = debtor_list.order_by('type', 'name')
+        context['creditor_list'] = creditor_list.order_by('type')
+        context['debtor_list'] = debtor_list.order_by('type')
         context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
         return render(request, self.template_name, context)
 
