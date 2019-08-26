@@ -1,15 +1,15 @@
-{% extends 'Bank/AddTransaction/AddTransactionBase.html' %}
+{% extends 'Bank/EditTransactionGroup/EditTransactionGroupBase.html' %}
 {% load static %}
 
 {% block form %}
   <h2>Select Debtors</h2>
-  <form method="post" action="{% url 'EditTransactionData' transaction.transaction_key %}">
+  <form method="post" action="{% url 'EditTransactionGroupData' transaction_group.group_key %}">
   {% csrf_token %}
-  <input type="hidden" name="creditor" value="{{ creditor.account_key }}">
+
   <table class="w3-table w3-striped">
     <tr>
-      <td>Creditor:</td>
-      <td>{{ creditor }}</td>
+      <td>Creditors:</td>
+      <td>{% for creditor in creditor_list %}<input type="hidden" name="CREDITOR:{{ creditor.account_key }}" value="creditor">{{ creditor }}, {% endfor %}</td>
     </tr>
     <tr>
       <td>Date:</td>
@@ -23,7 +23,7 @@
       <tr>
         <td>{{ account }}:</td>
         <td>
-          <input class="w3-input" type="checkbox" name="{{ account.account_key }}" value="TRUE" {% for entry in transaction.entry_set.all %}{% if account == entry.account_b %}checked {% endif %}{% endfor %}>
+          <input class="w3-input" type="checkbox" name="DEBTOR:{{ account.account_key }}" value="debtor" {% for transaction in transaction_group.transaction_set.all %}{% for entry in transaction.entry_set.all %}{% if account == entry.account_b %}checked {% endif %}{% endfor %}{% endfor %}>
         </td>
       </tr>
     {% endfor %}

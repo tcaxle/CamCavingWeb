@@ -29,5 +29,11 @@ urlpatterns = [
     path('Create/TransactionGroup/Debtor/', views.CreateTransactionGroupDebtor.as_view(), name='CreateTransactionGroupDebtor'),
     path('Create/TransactionGroup/Data/', views.CreateTransactionGroupData.as_view(), name='CreateTransactionGroupData'),
     path('Create/TransactionGroup/', RedirectView.as_view(url='Creditor/'), name='CreateTransactionGroup'),
-    path('Redirect/Create/TransactionGroup/', views.CreateTransactionGroupAction, name='CreateTransactionGroupAction')
+    path('Redirect/Create/TransactionGroup/', views.CreateTransactionGroupAction, name='CreateTransactionGroupAction'),
+
+    path('Edit/TransactionGroup/Creditor/<slug:slug>', views.EditTransactionGroupCreditor.as_view(), name='EditTransactionGroupCreditor'),
+    path('Edit/TransactionGroup/Debtor/<slug:slug>', views.EditTransactionGroupDebtor.as_view(), name='EditTransactionGroupDebtor'),
+    path('Edit/TransactionGroup/Data/<slug:slug>', views.EditTransactionGroupData.as_view(), name='EditTransactionGroupData'),
+    path('Redirect/Edit/TransactionGroup/', views.EditTransactionGroupAction, name='EditTransactionGroupAction'),
+
 ]

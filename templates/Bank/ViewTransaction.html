@@ -53,7 +53,7 @@
     <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditTransactionDebtor' transaction.transaction_key %}">Edit Transaction Debtors</a>
     <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditTransactionData' transaction.transaction_key %}">Edit Transaction Data</a>
   {% else %}
-    <p><i>This entry is part of a transaction. You can only edit the highest level of a financial object. See the "heritage" section for the highest level of this object.</i></p>
+    <p><i>This transaction is part of a transaction group. You can only edit the highest level of a financial object. See the "heritage" section for the highest level of this object.</i></p>
   {% endif %}
   {% include 'ActionSets/Bank.html' %}
 {% endblock %}

@@ -184,7 +184,7 @@ class Event(models.Model):
     name = models.CharField(max_length=100, blank=False)
     date = models.DateTimeField(blank=False, default=datetime.now) # When did the transaction occur?
     users = models.ManyToManyField(Account, blank=True, null=True) # User Accounts that can be credited
-    transaction_group = models.OneToOneField(TransactionGroup, blank=False, null=False, on_delete=models.PROTECT) # The transaction group tied to the event
+    transaction_group = models.OneToOneField(TransactionGroup, blank=False, null=False, on_delete=models.PROTECT, related_name='event') # The transaction group tied to the event
     created_by = models.ForeignKey(CustomUser, blank=False, null=True, editable=False, on_delete=models.PROTECT) # Who created the object
     created_on = models.DateTimeField(blank=False, default=datetime.now, editable=False) # When was the object created?
 
