@@ -9,42 +9,13 @@ ACCOUNT_TYPES = (
     ('Pool', 'Pool')
 )
 
-"""
-Some Terminology:
-Book:
-    Representitive of pools or categories of money.
-    Transactions that appear on a Book show the flow of credit and debt for that category.
-    If a book shows a positve sum balance, then this is a source of income for the club.
-    If a book shows a negative sum balance, then this is a source of outgoings for the club.
-    Each transaction on a book shows:
-    - Account: The account of the entity involved in the transaction
-    - Credit/Debit: The amount that has been credited/debited. The book credit = the account debit (and vice-versa)
-    - Date: When the transaction took place
-    - Notes (Optional): Any useful notes about the transaction
-
-Ledger:
-    Representitive of a real bank account.
-    Transactions on the ledger each correspond exactly to a transacion on the bank account.
-    Each transaction on the ledger shows:
-    - Account: The account of the entity involved in the transaction
-    - Credit/Debit: The amount of money that went from one to the other
-    - Date: When the transaction took place
-    - Notes (Optional): Any useful notes about the transaction
-
-Statement:
-    Similar to a book, but refers to the record of transactions on an external entity's account
-    Each transaction on a statement shows:
-    - Type: Book, Bank, or Swap?
-    - Account: The book, bank account, or entity account involved in the transacion
-    - Credit/Debit: How much the entity has been credited/Debited by
-"""
-
 class Account(models.Model):
     # Representitive of legal entities. This could be the actual club account, a retailer that the club purchases from, or a member of the club
-    account_key = models.UUIDField(default=uuid.uuid4, editable=False)
+    account_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     owner = models.OneToOneField(CustomUser, blank=True, null=True, on_delete=models.SET_NULL, related_name='bank_account', help_text='If account is to be owned by a person, please select that user here.')
     name = models.CharField(max_length=100, blank=True, help_text='If account is unowned, please give it a sensible name.')
     type = models.CharField(max_length=100, blank=False, choices=ACCOUNT_TYPES)
+    open = models.BooleanField(default=True) # Is the account currently open? Use to keep list of current members to active members only.
 
     def __str__(self):
         if self.name:
@@ -56,7 +27,9 @@ class Account(models.Model):
 
 class Entry(models.Model):
     # The smallest unit of the transation family. Records an individual double-entry transaction
-    entry_key = models.UUIDField(default=uuid.uuid4, editable=False)
+    entry_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    created_by = models.ForeignKey(CustomUser, blank=False, null=True, editable=False, on_delete=models.PROTECT) # Who created the object
+    created_on = models.DateTimeField(blank=False, default=datetime.now, editable=False) # When was the object created?
     account_a = models.ForeignKey(Account, blank=False, on_delete=models.PROTECT, related_name='transacton_set_a')
     account_b = models.ForeignKey(Account, blank=False, on_delete=models.PROTECT, related_name='transaction_set_b')
     credit_a = models.DecimalField(max_digits=7, decimal_places=2, blank=False) # Amount that account a has been credited by
@@ -106,8 +79,10 @@ class Entry(models.Model):
 
 class Transaction(models.Model):
     # Parents the Entry model, allowing Many-To-One Transactions across multiple accounts
-    transaction_key = models.UUIDField(default=uuid.uuid4, editable=False)
+    transaction_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     entry_set = models.ManyToManyField(Entry, blank=True, null=True, editable=False)
+    created_by = models.ForeignKey(CustomUser, blank=False, null=True, editable=False, on_delete=models.PROTECT) # Who created the object
+    created_on = models.DateTimeField(blank=False, default=datetime.now, editable=False) # When was the object created?
 
     def set_date(self, date):
         # Sets the date for every entry
@@ -143,8 +118,10 @@ class Transaction(models.Model):
 
 class TransactionGroup(models.Model):
     # Holds multiple groups of Transaction objects, allowing single objects containing an entire set off accounts
-    group_key = models.UUIDField(default=uuid.uuid4, editable=False)
+    group_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     transaction_set = models.ManyToManyField(Transaction, blank=True, null=True)
+    created_by = models.ForeignKey(CustomUser, blank=False, null=True, editable=False, on_delete=models.PROTECT) # Who created the object
+    created_on = models.DateTimeField(blank=False, default=datetime.now, editable=False) # When was the object created?
 
     def set_date(self, date):
         # Sets the date for every transaction
@@ -160,3 +137,48 @@ class TransactionGroup(models.Model):
         # Sets the approved status on every transaction
         for transaction in self.transacton_set:
             transaction.set_approved(approved)
+
+class CustomCurrency(models.Model):
+    # Allows custom "currencies," which are rates to be charged
+    # CustomCurrencies can only be credited to users, and always debit a pool (negative credits for a charge)
+    currency_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    name = models.CharField(max_length=100, blank=False)
+    credit = models.DecimalField(max_digits=7, decimal_places=2, blank=False) # "Rate" of currency; the amount to credit an account by per unit
+    pool = models.ForeignKey(Account, blank=False, null=False, on_delete=models.PROTECT) # The pool to be debited when someone is credited with this currency
+
+    def save(self, *args, **kwargs):
+        if self.pool is not None and self.pool.type != 'Pool':
+          raise Exception("You must select a Pool account")
+        super().save(*args, **kwargs)
+
+class EventFeeTemplate(models.Model):
+    # A set of currencies to provide the flesh of an Event model
+    template_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    name = models.CharField(max_length=100, blank=False)
+    CustomCurrencies = models.ManyToManyField(CustomCurrency, blank=True, null=True) # Custom currencies that can be credited to users
+    pools = models.ManyToManyField(Account, blank=True, null=True) # Pools that can be directly debited
+
+    def save(self, *args, **kwargs):
+        if self.pools is not None:
+            for pool in self.pools.all():
+                if pool.type != 'Pool':
+                    raise Exception("You must select only Pool accounts")
+        super().save(*args, **kwargs)
+
+class Event(models.Model):
+    # A wrapper for the TransactionGroup that integrates custom currecies \
+    # to make doing the accounts for an event (a meet, a dinner, etc.) easier
+    event_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    name = models.CharField(max_length=100, blank=False)
+    date = models.DateTimeField(blank=False, default=datetime.now) # When did the transaction occur?
+    users = models.ManyToManyField(Account, blank=True, null=True) # User Accounts that can be credited
+    transaction_group = models.OneToOneField(TransactionGroup, blank=False, null=False, on_delete=models.PROTECT) # The transaction group tied to the event
+    created_by = models.ForeignKey(CustomUser, blank=False, null=True, editable=False, on_delete=models.PROTECT) # Who created the object
+    created_on = models.DateTimeField(blank=False, default=datetime.now, editable=False) # When was the object created?
+
+    def save(self, *args, **kwargs):
+        if self.users is not None:
+            for user in self.users.all():
+                if user.type != 'Pool':
+                    raise Exception("You must select only User accounts")
+        super().save(*args, **kwargs)

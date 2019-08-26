@@ -16,3 +16,7 @@
 - [ ] Edit buttons on view entry/transaction/transaction group views
 - [ ] Permissions and security on all views
 - [ ] Add "Approve transaction" button with permissions onto view entry/transaction/transaction group views
+- [ ] Add "Event", "Fee Template", and "Currency" objects
+- [ ] Add/Edit/Delete currency view
+- [ ] Add/Edit/Delete fee template view
+- [ ] Add/Edit/Delete event views
