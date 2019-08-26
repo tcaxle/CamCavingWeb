@@ -133,10 +133,8 @@ class CustomCurrency(models.Model):
     credit = models.DecimalField(max_digits=7, decimal_places=2, blank=False) # "Rate" of currency; the amount to credit an account by per unit
     pool = models.ForeignKey(Account, blank=False, null=False, on_delete=models.PROTECT) # The pool to be debited when someone is credited with this currency
 
-    def save(self, *args, **kwargs):
-        if self.pool is not None and self.pool.type != 'Pool':
-          raise Exception("You must select a Pool account")
-        super().save(*args, **kwargs)
+    def __srt__(self):
+        return self.name
 
 class EventFeeTemplate(models.Model):
     # A set of currencies to provide the flesh of an Event model
@@ -145,27 +143,22 @@ class EventFeeTemplate(models.Model):
     CustomCurrencies = models.ManyToManyField(CustomCurrency, blank=True, null=True) # Custom currencies that can be credited to users
     pools = models.ManyToManyField(Account, blank=True, null=True) # Pools that can be directly debited
 
-    def save(self, *args, **kwargs):
-        if self.pools is not None:
-            for pool in self.pools.all():
-                if pool.type != 'Pool':
-                    raise Exception("You must select only Pool accounts")
-        super().save(*args, **kwargs)
+    def __str__(self):
+        return self.name
 
 class Event(models.Model):
     # A wrapper for the TransactionGroup that integrates custom currecies \
     # to make doing the accounts for an event (a meet, a dinner, etc.) easier
     event_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    fee_template = models.ForeignKey(EventFeeTemplate, blank=False, null=True, on_delete=models.PROTECT)
     name = models.CharField(max_length=100, blank=False)
     date = models.DateTimeField(blank=False, default=datetime.now) # When did the transaction occur?
     users = models.ManyToManyField(Account, blank=True, null=True) # User Accounts that can be credited
     transaction_group = models.OneToOneField(TransactionGroup, blank=False, null=False, on_delete=models.PROTECT, related_name='event') # The transaction group tied to the event
     created_by = models.ForeignKey(CustomUser, blank=False, null=True, editable=False, on_delete=models.PROTECT) # Who created the object
     created_on = models.DateTimeField(blank=False, default=datetime.now, editable=False) # When was the object created?
+    is_approved = models.BooleanField(default=False)
+    is_editable = models.BooleanField(default=False)
 
-    def save(self, *args, **kwargs):
-        if self.users is not None:
-            for user in self.users.all():
-                if user.type != 'Pool':
-                    raise Exception("You must select only User accounts")
-        super().save(*args, **kwargs)
+    def __str__(self):
+        return self.name
