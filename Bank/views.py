@@ -46,6 +46,7 @@ class CreateEntry(FormView):
         notes = form.cleaned_data['notes']
         entry = Entry.create(from_account, to_account, amount, date, notes)
         entry.created_by = self.request.user
+        entry.is_editable = True # set the editable bool on highest level
         entry.save()
         return super().form_valid(form)
 
@@ -57,13 +58,13 @@ class EditEntry(UpdateView):
     fields = ['account_a', 'account_b', 'credit_a', 'date', 'notes']
 
 def ToggleApproveEntry(request, slug):
-    entry = get_object_or_404(Entry, entry_key=slug)
+    entry = get_object_or_404(Entry, entry_key=slug, is_editable=True)
     entry.is_approved = not entry.is_approved
     entry.save()
     return redirect('ViewEntry', entry.entry_key)
 
 def ToggleApproveTransaction(request, slug):
-    transaction = get_object_or_404(Transaction, transaction_key=slug)
+    transaction = get_object_or_404(Transaction, transaction_key=slug, is_editable=True)
     transaction.is_approved = not transaction.is_approved
     transaction.save()
     for entry in transaction.entry_set.all():
@@ -72,7 +73,7 @@ def ToggleApproveTransaction(request, slug):
     return redirect('ViewTransaction', transaction.transaction_key)
 
 def ToggleApproveTransactionGroup(request, slug):
-    transaction_group = get_object_or_404(TransactionGroup, group_key=slug)
+    transaction_group = get_object_or_404(TransactionGroup, group_key=slug, is_editable=True)
     transaction_group.is_approved = not transaction_group.is_approved
     for transaction in transaction_group.transaction_set.all():
         transaction.is_approved = transaction_group.is_approved
@@ -141,10 +142,11 @@ class ViewAccount(DetailView):
                 context['view_earliest'] = False
             else:
                 if entry_set.exists():
-                    start_date = entry_set.order_by('-date')[0].date
+                    start_date = entry_set.order_by('date')[0].date
                 else:
                     start_date = datetime.now()
                 start_date = datetime(start_date.year, start_date.month, start_date.day, 0, 0, 0)
+                print(start_date)
                 context['view_earliest'] = True
             context['start_date'] = start_date
             if 'end_date' in self.request.GET and self.request.GET['end_date']:
@@ -158,7 +160,7 @@ class ViewAccount(DetailView):
             context['end_date'] = end_date
             context['start_balance'] = BalanceAtDate(account, start_date)
             context['end_balance'] = BalanceAtDate(account, end_date)
-            context['entry_set'] = account.transaction_set_a.filter(date__range=(start_date, end_date)).union(account.transaction_set_b.filter(date__range=(start_date, end_date))).order_by('date')
+            context['entry_set'] = account.transaction_set_a.filter(date__range=(start_date, end_date)).union(account.transaction_set_b.filter(date__range=(start_date, end_date))).order_by('-date')
         return context
 
 class ListAccounts(ListView):
@@ -243,7 +245,7 @@ class CreateTransactionData(TemplateView):
 
 def CreateTransactionAction(request):
     if request.method == 'POST':
-        transaction = Transaction()
+        transaction = Transaction(is_editable=True)
         transaction.created_by = request.user
         transaction.save()
         data = request.POST
@@ -430,7 +432,7 @@ class CreateTransactionGroupData(TemplateView):
 
 def CreateTransactionGroupAction(request):
     if request.method == 'POST':
-        transaction_group = TransactionGroup()
+        transaction_group = TransactionGroup(is_editable=True)
         transaction_group.created_by = request.user
         transaction_group.save()
         data = request.POST

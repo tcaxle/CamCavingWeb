@@ -49,7 +49,7 @@
 
 {% block side-content %}
   <h2>Transaction Actions</h2>
-  {% if transaction.transaction_group is None %}
+  {% if transaction.is_editable %}
     <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'ToggleApproveTransaction' transaction.transaction_key %}">Toggle Approved Status</a>
     <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'DeleteTransaction' transaction.transaction_key %}">Delete This Transaction</a>
     <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditTransactionCreditor' transaction.transaction_key %}">Edit Transaction Creditor</a>

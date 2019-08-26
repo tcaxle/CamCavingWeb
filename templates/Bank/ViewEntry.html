@@ -28,7 +28,7 @@
 
 {% block side-content %}
   <h2>Entry Actions</h2>
-  {% if entry.transaction is None %}
+  {% if entry.is_editable %}
     <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'ToggleApproveEntry' entry.entry_key %}">Toggle Approved Status</a>
     <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'DeleteEntry' entry.entry_key %}">Delete This Entry</a>
     <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditEntry' entry.entry_key %}">Edit This Entry</a>

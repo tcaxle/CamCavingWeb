@@ -31,6 +31,7 @@ class TransactionGroup(models.Model):
     created_by = models.ForeignKey(CustomUser, blank=False, null=True, editable=False, on_delete=models.PROTECT) # Who created the object
     created_on = models.DateTimeField(blank=False, default=datetime.now, editable=False) # When was the object created?
     is_approved = models.BooleanField(default=False)
+    is_editable = models.BooleanField(default=False)
 
     def __str__(self):
         return 'Transaction Group '+str(self.pk)
@@ -42,6 +43,7 @@ class Transaction(models.Model):
     created_on = models.DateTimeField(blank=False, default=datetime.now, editable=False) # When was the object created?
     transaction_group = models.ForeignKey(TransactionGroup, blank=True, null=True, on_delete=models.PROTECT)
     is_approved = models.BooleanField(default=False)
+    is_editable = models.BooleanField(default=False)
 
     def CreateEntry(self, account_a, account_b, credit_a, date, notes):
         # Calls the entry create entry method then adds it to the entry_set
@@ -76,6 +78,7 @@ class Entry(models.Model):
     notes = models.TextField(blank=True)
     is_approved = models.BooleanField(default=False)
     transaction = models.ForeignKey(Transaction, blank=True, null=True, on_delete=models.PROTECT)
+    is_editable = models.BooleanField(default=False)
 
     @classmethod
     def create(cls, account_a, account_b, credit_a, date, notes):

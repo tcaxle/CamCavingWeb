@@ -51,13 +51,15 @@
 
 {% block side-content %}
   <h2>Transaction Group Actions</h2>
-  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'ToggleApproveTransactionGroup' transaction_group.group_key %}">Toggle Approved Status</a>
-  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'DeleteTransactionGroup' transaction_group.group_key %}">Delete This Transaction Group</a>
-  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditTransactionGroupCreditor' transaction_group.group_key %}">Edit Transaction Group Creditors</a>
-  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditTransactionGroupDebtor' transaction_group.group_key %}">Edit Transaction Group Debtors</a>
-  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditTransactionGroupData' transaction_group.group_key %}">Edit Transaction Group Data</a>
-
+  {% if transaction_group.is_editable %}
+    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'ToggleApproveTransactionGroup' transaction_group.group_key %}">Toggle Approved Status</a>
+    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'DeleteTransactionGroup' transaction_group.group_key %}">Delete This Transaction Group</a>
+    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditTransactionGroupCreditor' transaction_group.group_key %}">Edit Transaction Group Creditors</a>
+    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditTransactionGroupDebtor' transaction_group.group_key %}">Edit Transaction Group Debtors</a>
+    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditTransactionGroupData' transaction_group.group_key %}">Edit Transaction Group Data</a>
+  {% else %}
   <p><i>This transaction is owned by an event. You can only edit the highest level of a financial object. See the "heritage" section for the highest level of this object.</i></p>
+  {% endif %}
 
   {% include 'ActionSets/Bank.html' %}
 {% endblock %}
