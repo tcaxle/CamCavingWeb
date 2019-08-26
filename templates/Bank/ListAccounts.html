@@ -8,25 +8,41 @@
 
 {% block main-content %}
   <h1>Select an Account to View</h1>
-  <form method="GET">
-    {% csrf_token %}
-    <div class="w3-bar">
-      <div class="w3-bar-item w3-mobile w3-theme-d4">From:</div>
-      <input class="w3-input w3-bar-item w3-mobile" type="date" name="start_date" value="">
-      <div class="w3-bar-item w3-mobile w3-theme-d4">To:</div>
-      <input class="w3-input w3-bar-item w3-mobile" type="date" name="end_date" value="">
-      <div class="w3-bar-item w3-mobile">(Leave blank to see all transactions)</div>
-    </div>
-    <br><br>
-    <table class="w3-table-all w3-striped">
+  <table class="w3-table-all w3-striped w3-card">
+    <tr>
+      <td colspan="2" class="w3-theme-d3"><b>User Accounts</b></td>
+    </tr>
     {% for account, balance in account_dict.items %}
-    <tr class="w3-hover-black"><td><a class="w3-button w3-container w3-bar w3-hover-black" type="submit" name="account" value="" href="{% url 'ViewAccount' account.account_key %}">
-      <div class="w3-bar-item">{{ account.owner.full_name }} ({{ account.owner.username }})</div>
-      <div class="w3-bar-item w3-right">{{ balance|currency }}</div>
-    </a></td></tr>
+      {% if account.type == 'User' %}
+        <tr class="w3-hover-black"><td><a class="w3-button w3-container w3-bar w3-hover-black" href="{% url 'ViewAccount' account.account_key %}">
+          <div class="w3-bar-item">{{ account }}</div>
+          <div class="w3-bar-item w3-right">{{ balance|currency }}</div>
+        </a></td></tr>
+      {% endif %}
     {% endfor %}
-    </table>
-  </form>
+    <tr>
+      <td colspan="2" class="w3-theme-d3"><b>Pool Accounts</b></td>
+    </tr>
+    {% for account, balance in account_dict.items %}
+      {% if account.type == 'Pool' %}
+        <tr class="w3-hover-black"><td><a class="w3-button w3-container w3-bar w3-hover-black" href="{% url 'ViewAccount' account.account_key %}">
+          <div class="w3-bar-item">{{ account }}</div>
+          <div class="w3-bar-item w3-right">{{ balance|currency }}</div>
+        </a></td></tr>
+      {% endif %}
+    {% endfor %}
+    <tr>
+      <td colspan="2" class="w3-theme-d3"><b>Bank Accounts</b></td>
+    </tr>
+    {% for account, balance in account_dict.items %}
+      {% if account.type == 'Bank' %}
+        <tr class="w3-hover-black"><td><a class="w3-button w3-container w3-bar w3-hover-black" href="{% url 'ViewAccount' account.account_key %}">
+          <div class="w3-bar-item">{{ account }}</div>
+          <div class="w3-bar-item w3-right">{{ balance|currency }}</div>
+        </a></td></tr>
+      {% endif %}
+    {% endfor %}
+  </table>
 
 {% endblock %}
 

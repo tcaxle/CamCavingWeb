@@ -13,6 +13,26 @@ from UserPortal.models import CustomUser
 from django.shortcuts import get_object_or_404
 from django.http import Http404
 
+def TransactionsToDate(account, date=timezone.now()):
+    # Returns a query set of all transactions up to a date on an account
+    return account.transaction_set.filter(date__lte=date)
+
+def BalanceAtDate(account, date=timezone.now()):
+    # Returns the balance of an account at a date as a float
+    balance_a = account.transaction_set_a.filter(date__lt=date).aggregate(Sum('credit_a')).get('credit_a__sum')
+    balance_b = account.transaction_set_b.filter(date__lt=date).aggregate(Sum('credit_b')).get('credit_b__sum')
+    balance = 0.0
+    if balance_a is not None:
+        balance = float(balance_a)
+    if balance_b is not None:
+        balance += float(balance_b)
+    if balance_a is None and balance_b is None:
+        balance = 0.0
+    if balance == None:
+        return float(0.00)
+    else:
+        return float(balance)
+
 class CreateEntry(FormView):
     form_class = CreateEntry
     template_name = 'Bank/AddEntry.html'
@@ -29,6 +49,13 @@ class CreateEntry(FormView):
         entry.save()
         return super().form_valid(form)
 
+class EditEntry(UpdateView):
+    model = Entry
+    form_class = CreateEntry
+    template_name = 'Bank/EditEntry.html'
+    slug_field = 'entry_key'
+    context_object_name = 'entry'
+
 class CreateAccount(CreateView):
     model = Account
     template_name = 'Bank/AddAccount.html'
@@ -36,12 +63,69 @@ class CreateAccount(CreateView):
     success_url = reverse_lazy('UserPortalDashboard')
 
 class ViewAccount(DetailView):
-    # Returns a transaction list with date filtering options for an account
-    pass
+    # Returns a entry list with date filtering options for an account
+    model = Account
+    template_name = 'Bank/ViewAccount.html'
+    slug_field = 'account_key'
+    context_object_name = 'account'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        account = context['account']
+        entry_set = account.transaction_set_a.all().union(account.transaction_set_b.all())
+        if self.request.method == 'GET':
+            if 'start_date' in self.request.GET and self.request.GET['start_date']:
+                start_date = datetime.strptime(self.request.GET['start_date'], '%Y-%m-%d')
+                start_date = datetime(start_date.year, start_date.month, start_date.day, 0, 0, 0)
+                context['view_earliest'] = False
+            else:
+                start_date = entry_set.order_by('-date')[0].date
+                start_date = datetime(start_date.year, start_date.month, start_date.day, 0, 0, 0)
+                context['view_earliest'] = True
+            context['start_date'] = start_date
+            if 'end_date' in self.request.GET and self.request.GET['end_date']:
+                end_date = datetime.strptime(self.request.GET['end_date'], '%Y-%m-%d')
+                end_date = datetime(end_date.year, end_date.month, end_date.day, 23, 59, 5)
+                context['view_latest'] = False
+            else:
+                end_date = datetime.now()
+                end_date = datetime(end_date.year, end_date.month, end_date.day, 23, 59, 5)
+                context['view_latest'] = True
+            context['end_date'] = end_date
+            context['start_balance'] = BalanceAtDate(account, start_date)
+            context['end_balance'] = BalanceAtDate(account, end_date)
+            context['entry_set'] = account.transaction_set_a.filter(date__range=(start_date, end_date)).union(account.transaction_set_b.filter(date__range=(start_date, end_date))).order_by('date')
+        return context
 
-class ViewTransactions(ListView):
-    # Returns a transaction list with date filtering options for all accounts
-    pass
+class ListAccounts(ListView):
+    model = Account
+    template_name = 'Bank/ListAccounts.html'
+    context_object_name = 'accounts_list'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        accounts_list = context['accounts_list']
+        balance_list = []
+        for account in accounts_list:
+            balance_list.append(BalanceAtDate(account))
+        context['account_dict'] = dict(zip(accounts_list, balance_list))
+        return context
+
+class ViewTransaction(DetailView):
+    model = Transaction
+    slug_field = 'transaction_key'
+    context_object_name = 'transaction'
+    template_name = 'Bank/ViewTransaction.html'
+
+class ViewTransactionGroup(DetailView):
+    model = TransactionGroup
+    slug_field = 'group_key'
+    context_object_name = 'transaction_group'
+    template_name = 'Bank/ViewTransactionGroup.html'
+
+class ViewEntry(DetailView):
+    model = Entry
+    slug_field = 'entry_key'
+    context_object_name = 'entry'
+    template_name = 'Bank/ViewEntry.html'
 
 class CreateMeetAccounts(FormView):
     # Allows users to easily record a meet's accounts
@@ -120,9 +204,8 @@ def CreateTransactionAction(request):
                 amount = data.get(key)
                 entry = Entry.create(account_a=creditor, account_b=debtor, credit_a=float(amount), date=date, notes=notes)
                 entry.created_by = request.user
+                entry.transaction = transaction
                 entry.save()
-                transaction.entry_set.add(entry) # Create and add each entry to the object
-        transaction.save()
     return redirect('UserPortalDashboard')
 
 
@@ -201,19 +284,16 @@ def CreateTransactionGroupAction(request):
         for creditor in creditor_list.all():
             transaction = Transaction()
             transaction.created_by = request.user
+            transaction.transaction_group = transaction_group
             transaction.save()
             for debtor in debtor_list.all():
                 key = 'AMOUNT:'+str(debtor.account_key)+':'+str(creditor.account_key)
                 if key in data.keys() and data.get(key) and float(data.get(key)) != 0.0:
                     entry = Entry.create(account_a=creditor, account_b=debtor, credit_a=float(data.get(key)), date=date, notes=notes)
                     entry.created_by = request.user
+                    entry.transaction = transaction
                     entry.save()
-                    transaction.entry_set.add(entry) # Create and add each entry to the object
-            transaction.save()
-            transaction_group.transaction_set.add(transaction)
-        transaction_group.save()
     return redirect('UserPortalDashboard')
-
 
 class EditTransaction(TemplateView):
     # Allos the treasurer to edit transactions

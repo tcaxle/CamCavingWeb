@@ -1,33 +1,23 @@
 {% extends 'Base.html' %}
 {% load static %}
-{% load humanize %}
 {% load currency %}
 
 {% block title %}
-  <title>CUCC | Bank | View Account</title>
+  <title>CUCC | Bank | View Transaction</title>
 {% endblock %}
 
 {% block main-content %}
-  <h1>Viewing account: {{ account }}</h1>
+  <h1>Viewing {{ transaction }}</h1>
 
-  <div class="w3-bar">
-    <form method="GET">
-      {% csrf_token %}
-      <div class="w3-bar-item w3-mobile w3-theme-d3">From:</div>
-      <input class="w3-input w3-bar-item w3-mobile" type="date" name="start_date" value="{{ start_date.date.isoformat }}">
-      <div class="w3-bar-item w3-mobile w3-theme-d3">To:</div>
-      <input class="w3-input w3-bar-item w3-mobile" type="date" name="end_date" value="{{ end_date.date.isoformat }}">
-      <input class="w3-button w3-block w3-theme-d4 w3-hover-black w3-bar-item w3-mobile" type="submit" name="account" value="Update" formaction="{% url 'ViewAccount' account.account_key %}">
-      <div class="w3-bar-item w3-mobile">(Leave blank to see all entrys)</div>
-    </form>
-  </div>
+  <p><i>Created on {{ transaction.created_on.date.isoformat }} at {{ transaction.created_on.time.isoformat }} by {{ transaction.created_by }}</i></p>
+  <p><b>Date:</b> {{ transaction.entry_set.first.date.date.isoformat }}</p>
+  <p><b>Notes:</b> {{ transaction.entry_set.first.notes }}</p>
+  {% if transaction.transaction_group is not None %}
+    <p><b>Parent:</b> <a href="{% url 'ViewTransactionGroup' transaction.transaction_group.group_key %}">{{ transaction.transaction_group }}</a></p>
+  {% endif %}
 
-  <p>Showing data between <b>{{ start_date.date.isoformat }} {% if view_earliest %}(Start of Records){% endif %}</b> and <b>{{ end_date.date.isoformat }} {% if view_latest %}(End of Records){% endif %}</b></p>
-  <p>End Balance: <b>{{ end_balance|currency }}</b></p>
-  <p>Start Balance: <b>{{ start_balance|currency }}</b></p>
-  <table class="w3-table w3-table-all w3-striped w3-card">
+  <table class="w3-table w3-striped">
     <tr class="w3-theme-d3">
-      <th>Date</th>
       <th>Account A</th>
       <th>Credit A</th>
       <th>Account B</th>
@@ -35,9 +25,8 @@
       <th>Approved?</th>
       <th>Heritage</th>
     </tr>
-    {% for entry in entry_set %}
+    {% for entry in transaction.entry_set.all %}
     <tr>
-      <td>{{ entry.date.date.isoformat }}</td>
       <td><a href="{% url 'ViewAccount' entry.account_a.account_key %}">{{ entry.account_a }}</a></td>
       <td>{{ entry.credit_a|currency }}</td>
       <td><a href="{% url 'ViewAccount' entry.account_b.account_key %}">{{ entry.account_b }}</a></td>

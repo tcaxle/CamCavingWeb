@@ -1,0 +1,30 @@
+{% extends 'Base.html' %}
+{% load static %}
+{% load humanize %}
+{% load currency %}
+
+{% block title %}
+  <title>CUCC | Bank | View Account</title>
+{% endblock %}
+
+{% block main-content %}
+  <h1>Viewing entry: {{ entry }}</h1>
+  <p><i>Created on {{ entry.created_on.date.isoformat }} at {{ entry.created_on.time.isoformat }} by {{ entry.created_by }}</i></p>
+  <p><b>Date:</b> {{ entry.date.date.isoformat }}</p>
+  <p><b>Account A:</b> <a href="{% url 'ViewAccount' entry.account_a.account_key %}">{{ entry.account_a }}</a>, {{ entry.credit_a|currency }}</p>
+  <p><b>Account B:</b> <a href="{% url 'ViewAccount' entry.account_b.account_key %}">{{ entry.account_b }}</a>, {{ entry.credit_b|currency }}</p>
+  <p><b>Notes:</b> {{ entry.notes }}</p>
+  {% if entry.transaction is not None %}
+    {% if entry.transaction.transaction_group is not None %}
+      <p><b>Heritage:</b> <a href="{% url 'ViewEntry' entry.entry_key %}">root</a>, <a href="{% url 'ViewTransaction' entry.transaction.transaction_key %}">{{ entry.transaction }}</a>, <a href="{% url 'ViewTransactionGroup' entry.transaction.transaction_group.group_key %}">{{ entry.transaction.transaction_group }}</a></p>
+    {% else %}
+      <p><b>Heritage:</b> <a href="{% url 'ViewEntry' entry.entry_key %}">root</a>, <a href="{% url 'ViewTransaction' entry.transaction.transaction_key %}">{{ entry.transaction }}</a></p>
+    {% endif %}
+  {% else %}
+    <p><b>Heritage:</b> <a href="{% url 'ViewEntry' entry.entry_key %}">root</a></p>
+  {% endif %}
+{% endblock %}
+
+{% block side-content %}
+  {% include 'ActionSets/Bank.html' %}
+{% endblock %}
