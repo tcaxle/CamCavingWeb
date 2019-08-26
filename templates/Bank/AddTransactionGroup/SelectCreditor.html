@@ -1,0 +1,26 @@
+{% extends 'Bank/AddTransactionGroup/AddTransactionGroupBase.html' %}
+{% load static %}
+
+{% block form %}
+  <h2>Select Creditors</h2>
+  <form method="post" action="{% url 'CreateTransactionGroupDebtor' %}">
+  {% csrf_token %}
+  <table class="w3-table w3-striped">
+    <tr>
+      <td>Date:</td>
+      <td><input class="w3-input" type="date" name="date" value="{{ date.date.isoformat }}"></td>
+    </tr>
+    {% for account in account_list %}
+      <tr>
+        <td>{{ account }}:</td>
+        <td>
+          <input class="w3-input" type="checkbox" name="{{ account.account_key }}" value="creditor">
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+  <div class="w3-padding-16">
+    <button class="w3-button w3-theme-d3 w3-hover-black w3-mobile" type="submit">Next</button>
+  </div>
+  </form>
+{% endblock %}

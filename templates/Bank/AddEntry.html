@@ -7,6 +7,7 @@
 
 {% block main-content %}
   <h1>Add One-to-One Transaction</h1>
+
   <form method="post">
   {% csrf_token %}
   <table class="w3-table w3-striped">
@@ -19,5 +20,8 @@
 {% endblock %}
 
 {% block side-content %}
+  <div class="w3-panel w3-yellow w3-card-4">
+    <p><b>Tip</b> - You cannot add transactions between Bank and Pool account types.</p>
+  </div>
   {% include 'ActionSets/Bank.html' %}
 {% endblock %}
