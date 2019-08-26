@@ -140,7 +140,10 @@ class ViewAccount(DetailView):
                 start_date = datetime(start_date.year, start_date.month, start_date.day, 0, 0, 0)
                 context['view_earliest'] = False
             else:
-                start_date = entry_set.order_by('-date')[0].date
+                if entry_set.exists():
+                    start_date = entry_set.order_by('-date')[0].date
+                else:
+                    start_date = datetime.now()
                 start_date = datetime(start_date.year, start_date.month, start_date.day, 0, 0, 0)
                 context['view_earliest'] = True
             context['start_date'] = start_date
