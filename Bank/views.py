@@ -37,7 +37,6 @@ class CreateEntry(FormView):
     form_class = CreateEntry
     template_name = 'Bank/AddEntry.html'
     success_url = reverse_lazy('UserPortalDashboard')
-
     def form_valid(self, form):
         from_account = form.cleaned_data['creditor']
         to_account = form.cleaned_data['debtor']
@@ -51,10 +50,10 @@ class CreateEntry(FormView):
 
 class EditEntry(UpdateView):
     model = Entry
-    form_class = CreateEntry
     template_name = 'Bank/EditEntry.html'
     slug_field = 'entry_key'
-    context_object_name = 'entry'
+    success_url = reverse_lazy('UserPortalDashboard')
+    fields = ['account_a', 'account_b', 'credit_a', 'date', 'notes']
 
 class CreateAccount(CreateView):
     model = Account
@@ -208,6 +207,116 @@ def CreateTransactionAction(request):
                 entry.save()
     return redirect('UserPortalDashboard')
 
+class EditTransactionCreditor(DetailView):
+    model = Transaction
+    slug_field = 'transaction_key'
+    context_object_name = 'transaction'
+    template_name = 'Bank/EditTransaction/SelectCreditor.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['account_list'] = Account.objects.all().order_by('type')
+        context['date'] = datetime.now()
+        return context
+
+class EditTransactionDebtor(DetailView):
+    # Allows the treasurer to create transactions
+    model = Transaction
+    slug_field = 'transaction_key'
+    context_object_name = 'transaction'
+    template_name = 'Bank/EditTransaction/SelectDebtor.html'
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        data = request.POST
+        date = datetime.strptime(data.get('date'), '%Y-%m-%d')
+        creditor = get_object_or_404(Account, account_key=data.get('creditor'))
+        # Banks and Pools CANNOT transact:
+        if creditor.type == 'Bank':
+            account_list = Account.objects.exclude(type='Pool').order_by('type')
+        elif creditor.type == 'Pool':
+            account_list = Account.objects.exclude(type='Bank').order_by('type')
+        else:
+            account_list = Account.objects.all().order_by('type')
+        context = super().get_context_data(**kwargs)
+        context['account_list'] = account_list
+        context['creditor'] = creditor
+        context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
+        return render(request, self.template_name, context)
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        date = self.object.entry_set.first().date
+        creditor = self.object.entry_set.first().account_a
+        # Banks and Pools CANNOT transact:
+        if creditor.type == 'Bank':
+            account_list = Account.objects.exclude(type='Pool').order_by('type')
+        elif creditor.type == 'Pool':
+            account_list = Account.objects.exclude(type='Bank').order_by('type')
+        else:
+            account_list = Account.objects.all().order_by('type')
+        context = super().get_context_data(**kwargs)
+        context['account_list'] = account_list
+        context['creditor'] = creditor
+        context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
+        return render(request, self.template_name, context)
+
+class EditTransactionData(DetailView):
+    model = Transaction
+    slug_field = 'transaction_key'
+    context_object_name = 'transaction'
+    template_name = 'Bank/EditTransaction/InputData.html'
+    def post(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        data = request.POST
+        date = datetime.strptime(data.get('date'), '%Y-%m-%d')
+        creditor = get_object_or_404(Account, account_key=data.get('creditor'))
+        all_accounts = Account.objects.all()
+        account_list = Account.objects.none()
+        for account in all_accounts:
+            key = account.account_key
+            if str(key) in data.keys() and data.get(str(key)) == 'TRUE':
+                account_list = account_list.union(all_accounts.filter(account_key=key))
+        if not account_list.first(): # Check for no debtors selected
+            raise Http404('You must have debtors in your transaction.') # Complain
+        context = super().get_context_data(**kwargs)
+        context['account_list'] = account_list.order_by('type')
+        context['creditor'] = creditor
+        context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
+        return render(request, self.template_name, context)
+
+    def get(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        date = self.object.entry_set.first().date
+        creditor = self.object.entry_set.first().account_a
+        account_list = Account.objects.none()
+        for entry in self.object.entry_set.all():
+            account_list = account_list.union(Account.objects.filter(account_key=entry.account_b.account_key))
+        context = super().get_context_data(**kwargs)
+        context['account_list'] = account_list.order_by('type')
+        context['creditor'] = creditor
+        context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
+        return render(request, self.template_name, context)
+
+def EditTransactionAction(request):
+    if request.method == 'POST':
+        data = request.POST
+        transaction = get_object_or_404(Transaction, transaction_key=data.get('transaction'))
+        for entry in transaction.entry_set.all():
+            entry.delete() # remove all previous entries
+        account_list = Account.objects.all()
+        creditor = get_object_or_404(Account, account_key=data.get('creditor'))
+        date = datetime.strptime(data.get('date'), '%Y-%m-%d')
+        date = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
+        notes = data.get('notes')
+        for account in account_list: # rebuild entries
+            key = str(account.account_key)
+            if key in data.keys() and data.get(key) and float(data.get(key)) != 0.0:
+                debtor = account
+                amount = data.get(key)
+                entry = Entry.create(account_a=creditor, account_b=debtor, credit_a=float(amount), date=date, notes=notes)
+                entry.created_by = request.user
+                entry.transaction = transaction
+                entry.save()
+    return redirect('UserPortalDashboard')
 
 
 class CreateTransactionGroupCreditor(TemplateView):
@@ -294,10 +403,6 @@ def CreateTransactionGroupAction(request):
                     entry.transaction = transaction
                     entry.save()
     return redirect('UserPortalDashboard')
-
-class EditTransaction(TemplateView):
-    # Allos the treasurer to edit transactions
-    pass
 
 class DeleteTransaction(DeleteView):
     # Allows the treasurer to delete transactions

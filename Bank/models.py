@@ -46,6 +46,9 @@ class TransactionGroup(models.Model):
         for transaction in self.transacton_set:
             transaction.set_approved(approved)
 
+    def __str__(self):
+        return 'Transaction Group '+str(self.pk)
+
 class Transaction(models.Model):
     # Parents the Entry model, allowing Many-To-One Transactions across multiple accounts
     transaction_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -85,6 +88,9 @@ class Transaction(models.Model):
             transacton.CreateEntry(account_a=creditor, account_b=debtor, credit_a=amount, date=date, notes=notes) # Create and add each entry to the object
         return transaction
 
+    def __str__(self):
+        return 'Transaction '+str(self.pk)
+
 class Entry(models.Model):
     # The smallest unit of the transation family. Records an individual double-entry transaction
     entry_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -101,31 +107,35 @@ class Entry(models.Model):
 
     @classmethod
     def create(cls, account_a, account_b, credit_a, date, notes):
-        if account_a.type == 'Bank' and account_b.type == 'Bank':
-            credit_a = credit_a # Credit Account A
-            credit_b = -credit_a # Debit To Account B
-        elif account_a.type == 'Bank' and account_b.type == 'User':
-            credit_a = credit_a # Credit From Account
-            credit_b = credit_a # Credit To Account
-        elif account_a.type == 'User' and account_b.type == 'Bank':
-            credit_a = credit_a # Credit From Account
-            credit_b = credit_a # Credit To Account
-        elif account_a.type == 'User' and account_b.type == 'User':
-            credit_a = credit_a # Credit From Account
-            credit_b = -credit_a # Debit To Account
-        elif account_a.type == 'User' and account_b.type == 'Pool':
-            credit_a = credit_a # Credit From Account
-            credit_b = -credit_a # Debit To Account
-        elif account_a.type == 'Pool' and account_b.type == 'User':
-            credit_a = credit_a # Credit From Account
-            credit_b = -credit_a # Debit To Account
-        elif account_a.type == 'Pool' and account_b.type == 'Pool':
-            credit_a = credit_a # Credit From Account
-            credit_b = -credit_a # Debit To Account
+        entry = cls(account_a=account_a, account_b=account_b, credit_a=credit_a, date=date, notes=notes)
+        return entry
+
+    def save(self, *args, **kwargs):
+        self.date = datetime(self.date.year, self.date.month, self.date.day, 12, 0, 0)
+        if self.account_a.type == 'Bank' and self.account_b.type == 'Bank':
+            self.credit_a = self.credit_a # Credit Account A
+            self.credit_b = -self.credit_a # Debit To Account B
+        elif self.account_a.type == 'Bank' and self.account_b.type == 'User':
+            self.credit_a = self.credit_a # Credit From Account
+            self.credit_b = self.credit_a # Credit To Account
+        elif self.account_a.type == 'User' and self.account_b.type == 'Bank':
+            self.credit_a = self.credit_a # Credit From Account
+            self.credit_b = self.credit_a # Credit To Account
+        elif self.account_a.type == 'User' and self.account_b.type == 'User':
+            self.credit_a = self.credit_a # Credit From Account
+            self.credit_b = -self.credit_a # Debit To Account
+        elif self.account_a.type == 'User' and self.account_b.type == 'Pool':
+            self.credit_a = self.credit_a # Credit From Account
+            self.credit_b = -self.credit_a # Debit To Account
+        elif self.account_a.type == 'Pool' and self.account_b.type == 'User':
+            self.credit_a = self.credit_a # Credit From Account
+            self.credit_b = -self.credit_a # Debit To Account
+        elif self.account_a.type == 'Pool' and self.account_b.type == 'Pool':
+            self.credit_a = self.credit_a # Credit From Account
+            self.credit_b = -self.credit_a # Debit To Account
         else:
             raise Exception("Cannot make transaction between account.type=='Pool' and account.type='Bank'")
-        entry = cls(account_a=account_a, account_b=account_b, credit_a=credit_a, credit_b=credit_b, date=date, notes=notes)
-        return entry
+        super().save(*args, **kwargs)
 
     def __str__(self):
         if self.credit_a >= 0 and self.credit_b >= 0:
@@ -136,6 +146,9 @@ class Entry(models.Model):
             return '['+str(self.account_a)+' '+str(self.credit_a)+']['+str(self.account_b)+' +'+str(self.credit_b)+']'
         if self.credit_a < 0 and self.credit_b < 0:
             return '['+str(self.account_a)+' '+str(self.credit_a)+']['+str(self.account_b)+' '+str(self.credit_b)+']'
+
+    def short_id(self):
+        return 'Entry '+str(self.pk)
 
 class CustomCurrency(models.Model):
     # Allows custom "currencies," which are rates to be charged

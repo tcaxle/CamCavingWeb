@@ -20,6 +20,11 @@ urlpatterns = [
     path('Create/Transaction/', RedirectView.as_view(url='Creditor/'), name='CreateTransaction'),
     path('Redirect/Create/Transaction/', views.CreateTransactionAction, name='CreateTransactionAction'),
 
+    path('Edit/Transaction/Creditor/<slug:slug>', views.EditTransactionCreditor.as_view(), name='EditTransactionCreditor'),
+    path('Edit/Transaction/Debtor/<slug:slug>', views.EditTransactionDebtor.as_view(), name='EditTransactionDebtor'),
+    path('Edit/Transaction/Data/<slug:slug>', views.EditTransactionData.as_view(), name='EditTransactionData'),
+    path('Redirect/Edit/Transaction/', views.EditTransactionAction, name='EditTransactionAction'),
+
     path('Create/TransactionGroup/Creditor/', views.CreateTransactionGroupCreditor.as_view(), name='CreateTransactionGroupCreditor'),
     path('Create/TransactionGroup/Debtor/', views.CreateTransactionGroupDebtor.as_view(), name='CreateTransactionGroupDebtor'),
     path('Create/TransactionGroup/Data/', views.CreateTransactionGroupData.as_view(), name='CreateTransactionGroupData'),

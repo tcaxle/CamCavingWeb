@@ -7,7 +7,7 @@
 {% endblock %}
 
 {% block main-content %}
-  <h1>Viewing {{ transaction_group }}</h1>
+  <h1>Viewing: {{ transaction_group }}</h1>
 
   <p><i>Created on {{ transaction_group.created_on.date.isoformat }} at {{ transaction_group.created_on.time.isoformat }} by {{ transaction_group.created_by }}</i></p>
   <p><b>Date:</b> {{ transaction_group.transaction_set.first.entry_set.first.date.date.isoformat }}</p>
@@ -35,12 +35,12 @@
           <td>{{ entry.is_approved }}</td>
           {% if entry.transaction is not None %}
             {% if entry.transaction.transaction_group is not None %}
-              <td><a href="{% url 'ViewEntry' entry.entry_key %}">root</a>, <a href="{% url 'ViewTransaction' entry.transaction.transaction_key %}">{{ entry.transaction }}</a>, <a href="{% url 'ViewTransactionGroup' entry.transaction.transaction_group.group_key %}">{{ entry.transaction.transaction_group }}</a></td>
+              <td><a href="{% url 'ViewEntry' entry.entry_key %}">{{ entry.short_id }}</a>, <a href="{% url 'ViewTransaction' entry.transaction.transaction_key %}">{{ entry.transaction }}</a>, <a href="{% url 'ViewTransactionGroup' entry.transaction.transaction_group.group_key %}">{{ entry.transaction.transaction_group }}</a></td>
             {% else %}
-              <td><a href="{% url 'ViewEntry' entry.entry_key %}">root</a>, <a href="{% url 'ViewTransaction' entry.transaction.transaction_key %}">{{ entry.transaction }}</a></td>
+              <td><a href="{% url 'ViewEntry' entry.entry_key %}">{{ entry.short_id }}</a>, <a href="{% url 'ViewTransaction' entry.transaction.transaction_key %}">{{ entry.transaction }}</a></td>
             {% endif %}
           {% else %}
-          <td><a href="{% url 'ViewEntry' entry.entry_key %}">root</a></td>
+          <td><a href="{% url 'ViewEntry' entry.entry_key %}">{{ entry.short_id }}</a></td>
           {% endif %}
         </tr>
       {% endfor %}
