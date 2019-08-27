@@ -137,16 +137,16 @@ class CustomCurrency(models.Model):
     name = models.CharField(max_length=100, blank=False)
     credit = models.DecimalField(max_digits=7, decimal_places=2, blank=False, help_text='The value of this currency in GBP. For a currency that will be a debit (charge), enter a negative number. For a currency that will be a credit, enter a positive number.') # "Rate" of currency; the amount to credit an account by per unit
     pool = models.ForeignKey(Account, blank=False, null=False, on_delete=models.PROTECT) # The pool to be debited when someone is credited with this currency
-
     def __str__(self):
         return self.name
 
-class EventFeeTemplate(models.Model):
+class FeeTemplate(models.Model):
     # A set of currencies to provide the flesh of an Event model
     template_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     name = models.CharField(max_length=100, blank=False)
-    CustomCurrencies = models.ManyToManyField(CustomCurrency, blank=True, null=True) # Custom currencies that can be credited to users
-    pools = models.ManyToManyField(Account, blank=True, null=True) # Pools that can be directly debited
+    custom_currency = models.ManyToManyField(CustomCurrency, blank=True, null=True) # Custom currencies that can be credited to users
+    pools = models.ManyToManyField(Account, blank=True, null=True, related_name='fee_template_pool_set') # Pools that can be directly debited
+    banks = models.ManyToManyField(Account, blank=True, null=True, related_name='fee_template_bank_set') # Bank accounts that can be directly debited
 
     def __str__(self):
         return self.name
@@ -155,10 +155,11 @@ class Event(models.Model):
     # A wrapper for the TransactionGroup that integrates custom currecies \
     # to make doing the accounts for an event (a meet, a dinner, etc.) easier
     event_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    fee_template = models.ForeignKey(EventFeeTemplate, blank=False, null=True, on_delete=models.PROTECT)
+    fee_template = models.ForeignKey(FeeTemplate, blank=False, null=True, on_delete=models.PROTECT)
     name = models.CharField(max_length=100, blank=False)
     date = models.DateTimeField(blank=False, default=datetime.now) # When did the transaction occur?
     users = models.ManyToManyField(Account, blank=True, null=True) # User Accounts that can be credited
+    notes = models.TextField(blank=True)
     transaction_group = models.OneToOneField(TransactionGroup, blank=False, null=False, on_delete=models.PROTECT, related_name='event') # The transaction group tied to the event
     created_by = models.ForeignKey(CustomUser, blank=False, null=True, editable=False, on_delete=models.PROTECT) # Who created the object
     created_on = models.DateTimeField(blank=False, default=datetime.now, editable=False) # When was the object created?
@@ -166,7 +167,6 @@ class Event(models.Model):
     is_editable = models.BooleanField(default=False, editable=False)
     approved_by = models.ForeignKey(CustomUser, blank=True, null=True, editable=False, on_delete = models.PROTECT, related_name='approved_event_set') # Who approved the object
     approved_on = models.DateTimeField(blank=True, default=datetime.now, editable=False) # When was the object approved?
-
 
     def __str__(self):
         return self.name

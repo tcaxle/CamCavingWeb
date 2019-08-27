@@ -1,0 +1,37 @@
+{% extends 'Base.html' %}
+{% load static %}
+{% load humanize %}
+{% load currency %}
+
+{% block title %}
+  <title>CUCC | Bank | List Custom Currencies</title>
+{% endblock %}
+
+{% block main-content %}
+  <h1>Custom Currencies</h1>
+
+  <table class="w3-table w3-table-all w3-striped w3-card">
+    <tr class="w3-theme-d3">
+      <th>Name</th>
+      <th>Custom Currencies</th>
+      <th>Pools</th>
+      <th>Banks</th>
+      <th>Actions</th>
+    </tr>
+    {% for template in template_list %}
+    <tr>
+      <td>{{ template.name }}</td>
+      <td>{% for currency in template.custom_currency.all %}{{ currency }}, {% endfor %}</td>
+      <td>{% for pool in template.pools.all %}{{ pool }}, {% endfor %}</td>
+      <td>{% for bank in template.banks.all %}{{ bank }}, {% endfor %}</td>
+      <td><a class="w3-button w3-theme-d4 w3-hover-black" href="{% url 'EditFeeTemplate' template.template_key %}">Edit</a><a class="w3-button w3-theme-d4 w3-hover-black" href="{% url 'DeleteFeeTemplate' template.template_key %}">Delete</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+{% endblock %}
+
+{% block side-content %}
+  <h2>Fee Template Actions</h2>
+  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'CreateFeeTemplate' %}">Add New Fee Template</a>
+  {% include 'ActionSets/Bank.html' %}
+{% endblock %}

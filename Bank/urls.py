@@ -47,4 +47,20 @@ urlpatterns = [
     path('CustomCurrency/Edit/<slug:slug>', views.EditCustomCurrency.as_view(), name='EditCustomCurrency'),
     path('CustomCurrency/Delete/<slug:slug>', views.DeleteCustomCurrency.as_view(), name='DeleteCustomCurrency'),
 
+    path('FeeTemplate/Create/', views.CreateFeeTemplate.as_view(), name='CreateFeeTemplate'),
+    path('FeeTemplate/List/', views.ListFeeTemplate.as_view(), name='ListFeeTemplate'),
+    path('FeeTemplate/Edit/<slug:slug>', views.EditFeeTemplate.as_view(), name='EditFeeTemplate'),
+    path('FeeTemplate/Delete/<slug:slug>', views.DeleteFeeTemplate.as_view(), name='DeleteFeeTemplate'),
+
+    path('Event/Create/', RedirectView.as_view(url='Setup/'), name='CreateEvent'),
+    path('Event/Create/Setup/', views.CreateEventSetup.as_view(), name='CreateEventSetup'),
+    path('Event/Create/Data/', views.CreateEventData.as_view(), name='CreateEventData'),
+    path('Event/Create/Action/', views.CreateEventAction, name='CreateEventAction'),
+    path('Event/View/<slug:slug>', views.ViewEvent.as_view(), name='ViewEvent'),
+    path('Event/Edit/Setup/<slug:slug>', views.EditEventSetup.as_view(), name='EditEventSetup'),
+    path('Event/Edit/Data/<slug:slug>', views.EditEventData.as_view(), name='EditEventData'),
+    path('Event/Edit/Action/', views.EditEventAction, name='EditEventAction'),
+    path('Event/ToggleApprove/<slug:slug>', views.ToggleApproveEvent, name='ToggleApproveEvent'),
+    path('Event/Delete/<slug:slug>', views.DeleteEvent.as_view(), name='DeleteEvent'),
+
 ]

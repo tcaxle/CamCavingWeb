@@ -4,6 +4,8 @@
   <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'CreateTransaction' %}">Add Many-to-One Transaction</a>
   <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'CreateTransactionGroup' %}">Add Many-to-Many Transaction Group</a>
   <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'ListAccounts' %}">List All Accounts</a>
+  <a class="w3-button w3-block w3-theme-d4 w3-hover-black w3-half" style="text-align: left" href="{% url 'ListCustomCurrency' %}">Custom Currencies</a>
+  <a class="w3-button w3-block w3-theme-d4 w3-hover-black w3-half" style="text-align: left" href="{% url 'ListFeeTemplate' %}">Fee Templates</a>
   {% if user.bank_account %}
     <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'ViewAccount' user.bank_account.account_key %}">View Own Account</a>
   {% endif %}

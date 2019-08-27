@@ -30,3 +30,20 @@ class CustomCurrencyForm(forms.ModelForm):
     class Meta(forms.ModelForm):
         model = CustomCurrency
         fields = '__all__'
+
+class FeeTemplateForm(forms.ModelForm):
+    pools = forms.ModelMultipleChoiceField(queryset=Account.objects.filter(type='Pool'), required=True, widget=forms.CheckboxSelectMultiple)
+    banks = forms.ModelMultipleChoiceField(queryset=Account.objects.filter(type='Bank'), required=True, widget=forms.CheckboxSelectMultiple)
+    custom_currency = forms.ModelMultipleChoiceField(queryset=CustomCurrency.objects.all(), widget=forms.CheckboxSelectMultiple, required=True)
+
+    class Meta(forms.ModelForm):
+        model = FeeTemplate
+        fields = '__all__'
+
+class EventSetupForm(forms.ModelForm):
+    date = forms.DateTimeField(widget=forms.SelectDateWidget, initial=datetime.now, help_text='The date on which the event occurred. If it was a multi-day event, put the start date.')
+    users = forms.ModelMultipleChoiceField(queryset=Account.objects.filter(type='User'), required=True, widget=forms.CheckboxSelectMultiple)
+
+    class Meta(forms.ModelForm):
+        model = Event
+        fields = ['name', 'date', 'fee_template', 'users']
