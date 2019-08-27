@@ -1,0 +1,35 @@
+{% extends 'Base.html' %}
+{% load static %}
+{% load humanize %}
+{% load currency %}
+
+{% block title %}
+  <title>CUCC | Bank | List Custom Currencies</title>
+{% endblock %}
+
+{% block main-content %}
+  <h1>Custom Currencies</h1>
+
+  <table class="w3-table w3-table-all w3-striped w3-card">
+    <tr class="w3-theme-d3">
+      <th>Name</th>
+      <th>Credit</th>
+      <th>Pool</th>
+      <th>Actions</th>
+    </tr>
+    {% for currency in currency_list %}
+    <tr>
+      <td>{{ currency.name }}</td>
+      <td>{{ currency.credit|currency }}</td>
+      <td>{{ currency.pool }}</td>
+      <td><a class="w3-button w3-theme-d4 w3-hover-black" href="{% url 'EditCustomCurrency' currency.currency_key %}">Edit</a><a class="w3-button w3-theme-d4 w3-hover-black" href="{% url 'DeleteCustomCurrency' currency.currency_key %}">Delete</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+{% endblock %}
+
+{% block side-content %}
+  <h2>Custom Currency Actions</h2>
+  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'CreateCustomCurrency' %}">Add New Custom Currency</a>
+  {% include 'ActionSets/Bank.html' %}
+{% endblock %}

@@ -15,7 +15,6 @@ class Account(models.Model):
     owner = models.OneToOneField(CustomUser, blank=True, null=True, on_delete=models.SET_NULL, related_name='bank_account', help_text='If account is to be owned by a person, please select that user here.')
     name = models.CharField(max_length=100, blank=True, help_text='If account is unowned, please give it a sensible name.')
     type = models.CharField(max_length=100, blank=False, choices=ACCOUNT_TYPES)
-    open = models.BooleanField(default=True) # Is the account currently open? Use to keep list of current members to active members only.
 
     def __str__(self):
         if self.name:
@@ -28,10 +27,12 @@ class Account(models.Model):
 class TransactionGroup(models.Model):
     # Holds multiple groups of Transaction objects, allowing single objects containing an entire set off accounts
     group_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    created_by = models.ForeignKey(CustomUser, blank=False, null=True, editable=False, on_delete=models.PROTECT) # Who created the object
+    created_by = models.ForeignKey(CustomUser, blank=False, null=True, editable=False, on_delete=models.PROTECT, related_name='created_transaction_group_set') # Who created the object
     created_on = models.DateTimeField(blank=False, default=datetime.now, editable=False) # When was the object created?
-    is_approved = models.BooleanField(default=False)
-    is_editable = models.BooleanField(default=False)
+    is_approved = models.BooleanField(default=False, editable=False)
+    is_editable = models.BooleanField(default=False, editable=False)
+    approved_by = models.ForeignKey(CustomUser, blank=True, null=True, editable=False, on_delete = models.PROTECT, related_name='approved_transaction_group_set') # Who approved the object
+    approved_on = models.DateTimeField(blank=True, default=datetime.now, editable=False) # When was the object approved?
 
     def __str__(self):
         return 'Transaction Group '+str(self.pk)
@@ -42,8 +43,10 @@ class Transaction(models.Model):
     created_by = models.ForeignKey(CustomUser, blank=False, null=True, editable=False, on_delete=models.PROTECT) # Who created the object
     created_on = models.DateTimeField(blank=False, default=datetime.now, editable=False) # When was the object created?
     transaction_group = models.ForeignKey(TransactionGroup, blank=True, null=True, on_delete=models.PROTECT)
-    is_approved = models.BooleanField(default=False)
-    is_editable = models.BooleanField(default=False)
+    is_approved = models.BooleanField(default=False, editable=False)
+    is_editable = models.BooleanField(default=False, editable=False)
+    approved_by = models.ForeignKey(CustomUser, blank=True, null=True, editable=False, on_delete = models.PROTECT, related_name='approved_transaction_set') # Who approved the object
+    approved_on = models.DateTimeField(blank=True, default=datetime.now, editable=False) # When was the object approved?
 
     def CreateEntry(self, account_a, account_b, credit_a, date, notes):
         # Calls the entry create entry method then adds it to the entry_set
@@ -76,9 +79,11 @@ class Entry(models.Model):
     credit_b = models.DecimalField(max_digits=7, decimal_places=2, blank=False) # Amount that account b has been credited by
     date = models.DateTimeField(blank=False, default=datetime.now) # When did the transaction occur?
     notes = models.TextField(blank=True)
-    is_approved = models.BooleanField(default=False)
+    is_approved = models.BooleanField(default=False, editable=False)
     transaction = models.ForeignKey(Transaction, blank=True, null=True, on_delete=models.PROTECT)
-    is_editable = models.BooleanField(default=False)
+    is_editable = models.BooleanField(default=False, editable=False)
+    approved_by = models.ForeignKey(CustomUser, blank=True, null=True, editable=False, on_delete = models.PROTECT, related_name='approved_entry_set') # Who approved the object
+    approved_on = models.DateTimeField(blank=True, default=datetime.now, editable=False) # When was the object approved?
 
     @classmethod
     def create(cls, account_a, account_b, credit_a, date, notes):
@@ -130,10 +135,10 @@ class CustomCurrency(models.Model):
     # CustomCurrencies can only be credited to users, and always debit a pool (negative credits for a charge)
     currency_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     name = models.CharField(max_length=100, blank=False)
-    credit = models.DecimalField(max_digits=7, decimal_places=2, blank=False) # "Rate" of currency; the amount to credit an account by per unit
+    credit = models.DecimalField(max_digits=7, decimal_places=2, blank=False, help_text='The value of this currency in GBP. For a currency that will be a debit (charge), enter a negative number. For a currency that will be a credit, enter a positive number.') # "Rate" of currency; the amount to credit an account by per unit
     pool = models.ForeignKey(Account, blank=False, null=False, on_delete=models.PROTECT) # The pool to be debited when someone is credited with this currency
 
-    def __srt__(self):
+    def __str__(self):
         return self.name
 
 class EventFeeTemplate(models.Model):
@@ -157,8 +162,11 @@ class Event(models.Model):
     transaction_group = models.OneToOneField(TransactionGroup, blank=False, null=False, on_delete=models.PROTECT, related_name='event') # The transaction group tied to the event
     created_by = models.ForeignKey(CustomUser, blank=False, null=True, editable=False, on_delete=models.PROTECT) # Who created the object
     created_on = models.DateTimeField(blank=False, default=datetime.now, editable=False) # When was the object created?
-    is_approved = models.BooleanField(default=False)
-    is_editable = models.BooleanField(default=False)
+    is_approved = models.BooleanField(default=False, editable=False)
+    is_editable = models.BooleanField(default=False, editable=False)
+    approved_by = models.ForeignKey(CustomUser, blank=True, null=True, editable=False, on_delete = models.PROTECT, related_name='approved_event_set') # Who approved the object
+    approved_on = models.DateTimeField(blank=True, default=datetime.now, editable=False) # When was the object approved?
+
 
     def __str__(self):
         return self.name

@@ -14,7 +14,7 @@
   <p><b>Account A:</b> <a href="{% url 'ViewAccount' entry.account_a.account_key %}">{{ entry.account_a }}</a>, {{ entry.credit_a|currency }}</p>
   <p><b>Account B:</b> <a href="{% url 'ViewAccount' entry.account_b.account_key %}">{{ entry.account_b }}</a>, {{ entry.credit_b|currency }}</p>
   <p><b>Notes:</b> {{ entry.notes }}</p>
-  <p><b>Approved:</b> {{ entry.is_approved }}</p>
+  <p><b>Approved:</b> <i>{% if entry.is_approved %}Approved on {{ entry.approved_on.date.isoformat }} at {{ entry.approved_on.time.isoformat }} by {{ entry.approved_by }}{% else %}Awaiting Approval{% endif %}</i></p>
   {% if entry.transaction is not None %}
     {% if entry.transaction.transaction_group is not None %}
       <p><b>Heritage:</b> <a href="{% url 'ViewEntry' entry.entry_key %}">{{ entry.short_id }}</a>, <a href="{% url 'ViewTransaction' entry.transaction.transaction_key %}">{{ entry.transaction }}</a>, <a href="{% url 'ViewTransactionGroup' entry.transaction.transaction_group.group_key %}">{{ entry.transaction.transaction_group }}</a></p>

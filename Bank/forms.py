@@ -24,14 +24,9 @@ class CreateEntry(forms.Form):
         if (creditor.type == 'Bank' and debtor.type == 'Pool') or (creditor.type == 'Pool' and debtor.type == 'Bank'):
             raise forms.ValidationError('Cannot perform transaction between Bank and Pool account types.')
 
-class CreateTransactionGroup(forms.Form):
-    # A form to create a transaction group in the most generic way
-    pass
+class CustomCurrencyForm(forms.ModelForm):
+    pool = forms.ModelChoiceField(queryset=Account.objects.filter(type='Pool'), required=True)
 
-class EditTransactionGroup(forms.Form):
-    # A form to edit a transaction group in the most generic way
-    pass
-
-class ApproveTransactionGroup(forms.Form):
-    # A form to allow the treasurer to make edits to and approve a transaction group
-    pass
+    class Meta(forms.ModelForm):
+        model = CustomCurrency
+        fields = '__all__'

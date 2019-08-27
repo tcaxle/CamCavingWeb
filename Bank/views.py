@@ -60,15 +60,24 @@ class EditEntry(UpdateView):
 def ToggleApproveEntry(request, slug):
     entry = get_object_or_404(Entry, entry_key=slug, is_editable=True)
     entry.is_approved = not entry.is_approved
+    if entry.is_approved:
+        entry.approved_by = request.user
+        entry.approved_on = datetime.now()
     entry.save()
     return redirect('ViewEntry', entry.entry_key)
 
 def ToggleApproveTransaction(request, slug):
     transaction = get_object_or_404(Transaction, transaction_key=slug, is_editable=True)
     transaction.is_approved = not transaction.is_approved
+    if transaction.is_approved:
+        transaction.approved_by = request.user
+        transaction.approved_on = datetime.now()
     transaction.save()
     for entry in transaction.entry_set.all():
             entry.is_approved = transaction.is_approved
+            if entry.is_approved:
+                entry.approved_by = request.user
+                entry.approved_on = datetime.now()
             entry.save()
     return redirect('ViewTransaction', transaction.transaction_key)
 
@@ -77,12 +86,46 @@ def ToggleApproveTransactionGroup(request, slug):
     transaction_group.is_approved = not transaction_group.is_approved
     for transaction in transaction_group.transaction_set.all():
         transaction.is_approved = transaction_group.is_approved
+        if transaction_group.is_approved:
+            transaction_group.approved_by = request.user
+            transaction_group.approved_on = datetime.now()
+        transaction_group.save()
+        if transaction.is_approved:
+            transaction.approved_by = request.user
+            transaction.approved_on = datetime.now()
         transaction.save()
         for entry in transaction.entry_set.all():
                 entry.is_approved = transaction_group.is_approved
+                if entry.is_approved:
+                    entry.approved_by = request.user
+                    entry.approved_on = datetime.now()
                 entry.save()
-    transaction_group.save()
     return redirect('ViewTransactionGroup', transaction_group.group_key)
+
+
+class ListCustomCurrency(ListView):
+    model = CustomCurrency
+    template_name = 'Bank/ListCustomCurrency.html'
+    context_object_name = 'currency_list'
+
+class CreateCustomCurrency(CreateView):
+    model = CustomCurrency
+    form_class = CustomCurrencyForm
+    template_name = 'Bank/AddCustomCurrency.html'
+    success_url = reverse_lazy('ListCustomCurrency')
+
+class EditCustomCurrency(UpdateView):
+    model = CustomCurrency
+    form_class = CustomCurrencyForm
+    slug_field = 'currency_key'
+    template_name = 'Bank/EditCustomCurrency.html'
+    success_url = reverse_lazy('ListCustomCurrency')
+
+class DeleteCustomCurrency(DeleteView):
+    model = CustomCurrency
+    slug_field = 'currency_key'
+    template_name = 'Bank/DeleteObject.html'
+    success_url = reverse_lazy('ListCustomCurrency')
 
 
 class DeleteEntry(DeleteView):
@@ -122,6 +165,20 @@ class DeleteTransactionGroup(DeleteView):
 class CreateAccount(CreateView):
     model = Account
     template_name = 'Bank/AddAccount.html'
+    fields = '__all__'
+    success_url = reverse_lazy('UserPortalDashboard')
+
+class EditAccount(UpdateView):
+    model = Account
+    template_name = 'Bank/EditAccount.html'
+    slug_field = 'account_key'
+    fields = '__all__'
+    success_url = reverse_lazy('UserPortalDashboard')
+
+class DeleteAccount(DeleteView):
+    model = Account
+    template_name = 'Bank/DeleteObject.html'
+    slug_field = 'account_key'
     fields = '__all__'
     success_url = reverse_lazy('UserPortalDashboard')
 

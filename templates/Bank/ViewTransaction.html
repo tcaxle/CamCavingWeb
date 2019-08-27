@@ -12,7 +12,7 @@
   <p><i>Created on {{ transaction.created_on.date.isoformat }} at {{ transaction.created_on.time.isoformat }} by {{ transaction.created_by }}</i></p>
   <p><b>Date:</b> {{ transaction.entry_set.first.date.date.isoformat }}</p>
   <p><b>Notes:</b> {{ transaction.entry_set.first.notes }}</p>
-  <p><b>Approved:</b> {{ transaction.is_approved }}</p>
+  <p><b>Approved:</b> <i>{% if transaction.is_approved %}Approved on {{ transaction.approved_on.date.isoformat }} at {{ transaction.approved_on.time.isoformat }} by {{ transaction.approved_by }}{% else %}Awaiting Approval{% endif %}</i></p>
   {% if transaction.transaction_group is not None %}
     <p><b>Parent:</b> <a href="{% url 'ViewTransactionGroup' transaction.transaction_group.group_key %}">{{ transaction.transaction_group }}</a></p>
   {% endif %}
