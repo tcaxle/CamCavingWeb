@@ -15,7 +15,7 @@
   <p><b>Notes:</b> {{ event.notes }}</p>
   <p><b>Approved:</b> <i>{% if event.is_approved %}Approved on {{ event.approved_on.date.isoformat }} at {{ event.approved_on.time.isoformat }} by {{ event.approved_by }}{% else %}Awaiting Approval{% endif %}</i></p>
 
-  <table class="w3-table w3-striped">
+  <table class="w3-table w3-striped w3-card">
     <tr>
       <td class="w3-theme-d2"><b>Users:</b></td>
       <td class="w3-theme-d1" colspan="{{ event.fee_template.custom_currency.all|length }}"><b>Charges/Credits:<br> <i>(must be integers)</i></b></td>
@@ -51,7 +51,7 @@
   </table>
 
 <br>
-  <table class="w3-table w3-striped">
+  <table class="w3-table w3-striped w3-card">
     <tr class="w3-theme-d3">
       <th>Account A</th>
       <th>Credit A</th>
