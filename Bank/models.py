@@ -24,6 +24,16 @@ class Account(models.Model):
         else:
             return '('+self.type+') **Nameless Account**'
 
+class CustomCurrency(models.Model):
+    # Allows custom "currencies," which are rates to be charged
+    # CustomCurrencies can only be credited to users, and always debit a pool (negative credits for a charge)
+    currency_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    name = models.CharField(max_length=100, blank=False)
+    credit = models.DecimalField(max_digits=7, decimal_places=2, blank=False, help_text='The value of this currency in GBP. For a currency that will be a debit (charge), enter a negative number. For a currency that will be a credit, enter a positive number.') # "Rate" of currency; the amount to credit an account by per unit
+    pool = models.ForeignKey(Account, blank=False, null=False, on_delete=models.PROTECT) # The pool to be debited when someone is credited with this currency
+    def __str__(self):
+        return self.name
+
 class TransactionGroup(models.Model):
     # Holds multiple groups of Transaction objects, allowing single objects containing an entire set off accounts
     group_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -84,6 +94,7 @@ class Entry(models.Model):
     is_editable = models.BooleanField(default=False, editable=False)
     approved_by = models.ForeignKey(CustomUser, blank=True, null=True, editable=False, on_delete = models.PROTECT, related_name='approved_entry_set') # Who approved the object
     approved_on = models.DateTimeField(blank=True, default=datetime.now, editable=False) # When was the object approved?
+    custom_currency = models.ForeignKey(CustomCurrency, on_delete=models.PROTECT, blank=True, null=True, editable=False)
 
     @classmethod
     def create(cls, account_a, account_b, credit_a, date, notes):
@@ -129,16 +140,6 @@ class Entry(models.Model):
 
     def short_id(self):
         return 'Entry '+str(self.pk)
-
-class CustomCurrency(models.Model):
-    # Allows custom "currencies," which are rates to be charged
-    # CustomCurrencies can only be credited to users, and always debit a pool (negative credits for a charge)
-    currency_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    name = models.CharField(max_length=100, blank=False)
-    credit = models.DecimalField(max_digits=7, decimal_places=2, blank=False, help_text='The value of this currency in GBP. For a currency that will be a debit (charge), enter a negative number. For a currency that will be a credit, enter a positive number.') # "Rate" of currency; the amount to credit an account by per unit
-    pool = models.ForeignKey(Account, blank=False, null=False, on_delete=models.PROTECT) # The pool to be debited when someone is credited with this currency
-    def __str__(self):
-        return self.name
 
 class FeeTemplate(models.Model):
     # A set of currencies to provide the flesh of an Event model

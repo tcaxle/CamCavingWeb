@@ -273,6 +273,7 @@ def CreateEventAction(request):
                     entry = Entry.create(account_a=user, account_b=currency.pool, credit_a=int(data.get(key))*float(currency.credit), date=date, notes=notes)
                     entry.created_by = request.user
                     entry.transaction = transaction
+                    entry.custom_currency = currency # allows us to retrieve the event data
                     entry.save()
             # entries for pools
             for pool in template.pools.all():
