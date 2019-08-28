@@ -60,7 +60,7 @@
       <th>Approved?</th>
       <th>Heritage</th>
     </tr>
-    {% for transaction in transaction_group.transaction_set.all %}
+    {% for transaction in event.transaction_group.transaction_set.all %}
       <tr>
         <td colspan="6"><b><a href="{% url 'ViewTransaction' transaction.transaction_key %}">{{ transaction }}</a></b></td>
       </tr>
