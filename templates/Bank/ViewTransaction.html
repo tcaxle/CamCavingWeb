@@ -35,7 +35,7 @@
       <td>{{ entry.is_approved }}</td>
       {% if entry.transaction is not None %}
         {% if entry.transaction.transaction_group is not None %}
-          {% if entry.transaction.transaction_group.event is not None %}
+          {% if entry.transaction.transaction_group.event %}
             <td><a href="{% url 'ViewEntry' entry.entry_key %}">{{ entry.short_id }}</a>, <a href="{% url 'ViewTransaction' entry.transaction.transaction_key %}">{{ entry.transaction }}</a>, <a href="{% url 'ViewTransactionGroup' entry.transaction.transaction_group.group_key %}">{{ entry.transaction.transaction_group }}</a>, <a href="{% url 'ViewEvent' entry.transaction.transaction_group.event.event_key %}">{{ entry.transaction.transaction_group.event }}</a></td>
           {% else %}
             <td><a href="{% url 'ViewEntry' entry.entry_key %}">{{ entry.short_id }}</a>, <a href="{% url 'ViewTransaction' entry.transaction.transaction_key %}">{{ entry.transaction }}</a>, <a href="{% url 'ViewTransactionGroup' entry.transaction.transaction_group.group_key %}">{{ entry.transaction.transaction_group }}</a></td>

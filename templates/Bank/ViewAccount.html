@@ -38,14 +38,14 @@
     {% for entry in entry_set %}
     <tr>
       <td>{{ entry.date.date.isoformat }}</td>
-      <td><a href="{% url 'ViewAccount' entry.account_a.account_key %}">{{ entry.account_a }}</a></td>
+      <td><a href="{% url 'ViewAccount' entry.account_a.account_key %}">{% if entry.account_a == account %}<b>{{ entry.account_a }}</b>{% else %}{{ entry.account_a }}{% endif %}</a></td>
       <td>{{ entry.credit_a|currency }}</td>
-      <td><a href="{% url 'ViewAccount' entry.account_b.account_key %}">{{ entry.account_b }}</a></td>
+      <td><a href="{% url 'ViewAccount' entry.account_b.account_key %}">{% if entry.account_b == account %}<b>{{ entry.account_b }}</b>{% else %}{{ entry.account_b }}{% endif %}</a></td>
       <td>{{ entry.credit_b|currency }}</td>
       <td>{{ entry.is_approved }}</td>
       {% if entry.transaction is not None %}
         {% if entry.transaction.transaction_group is not None %}
-          {% if entry.transaction.transaction_group.event is not None %}
+          {% if entry.transaction.transaction_group.event %}
             <td><a href="{% url 'ViewEntry' entry.entry_key %}">{{ entry.short_id }}</a>, <a href="{% url 'ViewTransaction' entry.transaction.transaction_key %}">{{ entry.transaction }}</a>, <a href="{% url 'ViewTransactionGroup' entry.transaction.transaction_group.group_key %}">{{ entry.transaction.transaction_group }}</a>, <a href="{% url 'ViewEvent' entry.transaction.transaction_group.event.event_key %}">{{ entry.transaction.transaction_group.event }}</a></td>
           {% else %}
             <td><a href="{% url 'ViewEntry' entry.entry_key %}">{{ entry.short_id }}</a>, <a href="{% url 'ViewTransaction' entry.transaction.transaction_key %}">{{ entry.transaction }}</a>, <a href="{% url 'ViewTransactionGroup' entry.transaction.transaction_group.group_key %}">{{ entry.transaction.transaction_group }}</a></td>

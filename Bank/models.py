@@ -42,7 +42,37 @@ class TransactionGroup(models.Model):
     is_approved = models.BooleanField(default=False, editable=False)
     is_editable = models.BooleanField(default=False, editable=False)
     approved_by = models.ForeignKey(CustomUser, blank=True, null=True, editable=False, on_delete = models.PROTECT, related_name='approved_transaction_group_set') # Who approved the object
-    approved_on = models.DateTimeField(blank=True, default=datetime.now, editable=False) # When was the object approved?
+    approved_on = models.DateTimeField(blank=True, null=True, default=datetime.now, editable=False) # When was the object approved?
+
+    def SetApprove(self, by=None, on=None, status=True):
+        if status:
+            self.is_approved = True
+            self.approved_by = by
+            self.approved_on = on
+        else:
+            self.is_approved = False
+            self.approved_by = None
+            self.approved_on = None
+        for transaction in self.transaction_set.all():
+            transaction.SetApprove(by, on, status)
+        self.save()
+
+    def ToggleApprove(self, by, on):
+        if self.is_approved:
+            self.SetApprove(status=False)
+        else:
+            self.SetApprove(by, on)
+
+    def depopulate(self):
+        # deletes transactions owned by the transaction group
+        for transaction in self.transaction_set.all():
+            transaction.delete()
+
+    def delete(self, orphan=False, *args, **kwargs):
+        # by default, deleting a transaction group deletes its children and grandchildren
+        if not orphan:
+            self.depopulate()
+        super().delete(*args, **kwargs)
 
     def __str__(self):
         return 'Transaction Group '+str(self.pk)
@@ -56,24 +86,37 @@ class Transaction(models.Model):
     is_approved = models.BooleanField(default=False, editable=False)
     is_editable = models.BooleanField(default=False, editable=False)
     approved_by = models.ForeignKey(CustomUser, blank=True, null=True, editable=False, on_delete = models.PROTECT, related_name='approved_transaction_set') # Who approved the object
-    approved_on = models.DateTimeField(blank=True, default=datetime.now, editable=False) # When was the object approved?
+    approved_on = models.DateTimeField(blank=True, null=True, default=datetime.now, editable=False) # When was the object approved?
 
-    def CreateEntry(self, account_a, account_b, credit_a, date, notes):
-        # Calls the entry create entry method then adds it to the entry_set
-        entry = Entry.create(account_a=account_a, account_b=account_b, credit_a=credit_a, date=date, notes=notes) # Create it
-        entry.save() # Save it
-        transacton.entry_set.add(entry) # Add it
-        # Bop it
+    def SetApprove(self, by=None, on=None, status=True):
+        if status:
+            self.is_approved = True
+            self.approved_by = by
+            self.approved_on = on
+        else:
+            self.is_approved = False
+            self.approved_by = None
+            self.approved_on = None
+        for entry in self.entry_set.all():
+            entry.SetApprove(by, on, status)
+        self.save()
 
-    @classmethod
-    def create(cls, creditor, debtor_dict, date, notes):
-        # Takes a single creditor, and a dictionary of {debtor: amount} items \
-        # and produces an entry for each debtor, crediting the creditor and \
-        # of each by the relevant amounts
-        transaction = cls() # Create an empty transaction object
-        for debtor, amount in debtor_dict:
-            transacton.CreateEntry(account_a=creditor, account_b=debtor, credit_a=amount, date=date, notes=notes) # Create and add each entry to the object
-        return transaction
+    def ToggleApprove(self, by, on):
+        if self.is_approved:
+            self.SetApprove(status=False)
+        else:
+            self.SetApprove(by, on)
+
+    def depopulate(self):
+        # deletes entries owned by the transaction group
+        for entry in self.entry_set.all():
+            entry.delete()
+
+    def delete(self, orphan=False, *args, **kwargs):
+        # by default, deleting a transaction deletes its children
+        if not orphan:
+            self.depopulate()
+        super().delete(*args, **kwargs)
 
     def __str__(self):
         return 'Transaction '+str(self.pk)
@@ -93,13 +136,25 @@ class Entry(models.Model):
     transaction = models.ForeignKey(Transaction, blank=True, null=True, on_delete=models.PROTECT)
     is_editable = models.BooleanField(default=False, editable=False)
     approved_by = models.ForeignKey(CustomUser, blank=True, null=True, editable=False, on_delete = models.PROTECT, related_name='approved_entry_set') # Who approved the object
-    approved_on = models.DateTimeField(blank=True, default=datetime.now, editable=False) # When was the object approved?
+    approved_on = models.DateTimeField(blank=True, null=True, default=datetime.now, editable=False) # When was the object approved?
     custom_currency = models.ForeignKey(CustomCurrency, on_delete=models.PROTECT, blank=True, null=True, editable=False)
 
-    @classmethod
-    def create(cls, account_a, account_b, credit_a, date, notes):
-        entry = cls(account_a=account_a, account_b=account_b, credit_a=credit_a, date=date, notes=notes)
-        return entry
+    def SetApprove(self, by=None, on=None, status=True):
+        if status:
+            self.is_approved = True
+            self.approved_by = by
+            self.approved_on = on
+        else:
+            self.is_approved = False
+            self.approved_by = None
+            self.approved_on = None
+        self.save()
+
+    def ToggleApprove(self, by, on):
+        if self.is_approved:
+            self.SetApprove(status=False)
+        else:
+            self.SetApprove(by, on)
 
     def save(self, *args, **kwargs):
         self.date = datetime(self.date.year, self.date.month, self.date.day, 12, 0, 0)
@@ -145,9 +200,9 @@ class FeeTemplate(models.Model):
     # A set of currencies to provide the flesh of an Event model
     template_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     name = models.CharField(max_length=100, blank=False)
-    custom_currency = models.ManyToManyField(CustomCurrency, blank=True, null=True) # Custom currencies that can be credited to users
-    pools = models.ManyToManyField(Account, blank=True, null=True, related_name='fee_template_pool_set') # Pools that can be directly debited
-    banks = models.ManyToManyField(Account, blank=True, null=True, related_name='fee_template_bank_set') # Bank accounts that can be directly debited
+    custom_currency = models.ManyToManyField(CustomCurrency, blank=True) # Custom currencies that can be credited to users
+    pools = models.ManyToManyField(Account, blank=True, related_name='fee_template_pool_set') # Pools that can be directly debited
+    banks = models.ManyToManyField(Account, blank=True, related_name='fee_template_bank_set') # Bank accounts that can be directly debited
 
     def __str__(self):
         return self.name
@@ -159,7 +214,7 @@ class Event(models.Model):
     fee_template = models.ForeignKey(FeeTemplate, blank=False, null=True, on_delete=models.PROTECT)
     name = models.CharField(max_length=100, blank=False)
     date = models.DateTimeField(blank=False, default=datetime.now) # When did the transaction occur?
-    users = models.ManyToManyField(Account, blank=True, null=True) # User Accounts that can be credited
+    users = models.ManyToManyField(Account, blank=True) # User Accounts that can be credited
     notes = models.TextField(blank=True)
     transaction_group = models.OneToOneField(TransactionGroup, blank=False, null=False, on_delete=models.PROTECT, related_name='event') # The transaction group tied to the event
     created_by = models.ForeignKey(CustomUser, blank=False, null=True, editable=False, on_delete=models.PROTECT) # Who created the object
@@ -167,7 +222,31 @@ class Event(models.Model):
     is_approved = models.BooleanField(default=False, editable=False)
     is_editable = models.BooleanField(default=False, editable=False)
     approved_by = models.ForeignKey(CustomUser, blank=True, null=True, editable=False, on_delete = models.PROTECT, related_name='approved_event_set') # Who approved the object
-    approved_on = models.DateTimeField(blank=True, default=datetime.now, editable=False) # When was the object approved?
+    approved_on = models.DateTimeField(blank=True, null=True, default=datetime.now, editable=False) # When was the object approved?
+
+    def SetApprove(self, by=None, on=None, status=True):
+        if status:
+            self.is_approved = True
+            self.approved_by = by
+            self.approved_on = on
+        else:
+            self.is_approved = False
+            self.approved_by = None
+            self.approved_on = None
+        self.transaction_group.SetApprove(by, on, status)
+        self.save()
+
+    def ToggleApprove(self, by, on):
+        if self.is_approved:
+            self.SetApprove(status=False)
+        else:
+            self.SetApprove(by, on)
+
+    def delete(self, orphan=False, *args, **kwargs):
+        # by default, deleting an event deletes its child, grand-children and great-grand-children
+        if not orphan:
+            self.transaction_group.delete()
+        super().delete(*args, **kwargs)
 
     def __str__(self):
         return self.name

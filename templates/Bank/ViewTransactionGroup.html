@@ -13,8 +13,8 @@
   <p><b>Date:</b> {{ transaction_group.transaction_set.first.entry_set.first.date.date.isoformat }}</p>
   <p><b>Notes:</b> {{ transaction_group.transaction_set.first.entry_set.first.notes }}</p>
   <p><b>Approved:</b> <i>{% if transaction_group.is_approved %}Approved on {{ transaction_group.approved_on.date.isoformat }} at {{ transaction_group.approved_on.time.isoformat }} by {{ transaction_group.approved_by }}{% else %}Awaiting Approval{% endif %}</i></p>
-  {% if transaction_group.event is not None %}
-    <p><b>Parent:</b> <a href="{% url 'ViewEntry' transaction_group.event.event_key %}">{{ transaction_group.event }}</a></p>
+  {% if transaction_group.event %}
+    <p><b>Parent:</b> <a href="{% url 'ViewEvent' transaction_group.event.event_key %}">{{ transaction_group.event }}</a></p>
   {% endif %}
 
   <table class="w3-table w3-striped w3-card">
@@ -39,7 +39,7 @@
           <td>{{ entry.is_approved }}</td>
           {% if entry.transaction is not None %}
             {% if entry.transaction.transaction_group is not None %}
-              {% if entry.transaction.transaction_group.event is not None %}
+              {% if entry.transaction.transaction_group.event %}
                 <td><a href="{% url 'ViewEntry' entry.entry_key %}">{{ entry.short_id }}</a>, <a href="{% url 'ViewTransaction' entry.transaction.transaction_key %}">{{ entry.transaction }}</a>, <a href="{% url 'ViewTransactionGroup' entry.transaction.transaction_group.group_key %}">{{ entry.transaction.transaction_group }}</a>, <a href="{% url 'ViewEvent' entry.transaction.transaction_group.event.event_key %}">{{ entry.transaction.transaction_group.event }}</a></td>
               {% else %}
                 <td><a href="{% url 'ViewEntry' entry.entry_key %}">{{ entry.short_id }}</a>, <a href="{% url 'ViewTransaction' entry.transaction.transaction_key %}">{{ entry.transaction }}</a>, <a href="{% url 'ViewTransactionGroup' entry.transaction.transaction_group.group_key %}">{{ entry.transaction.transaction_group }}</a></td>
