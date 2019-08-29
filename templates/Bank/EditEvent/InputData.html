@@ -35,13 +35,13 @@
     <tr>
       <td class="w3-theme-d2"></td>
       {% for currency in template.custom_currency.all %}
-        <td  class="w3-theme-d1">{{ currency }} ({{ currency.credit|currency }})</td>
+        <td class="w3-theme-d1" style="min-width:120px">{{ currency }} ({{ currency.credit|currency }})</td>
       {% endfor %}
       {% for pool in template.pools.all %}
-        <td  class="w3-theme-d2">{{ pool }}</td>
+        <td class="w3-theme-d2" style="min-width:120px">{{ pool }}</td>
       {% endfor %}
       {% for bank in template.banks.all %}
-        <td  class="w3-theme-d1">{{ bank }}</td>
+        <td class="w3-theme-d1" style="min-width:120px">{{ bank }}</td>
       {% endfor %}
     </tr>
     {% for user in user_list %}
