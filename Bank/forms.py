@@ -33,7 +33,7 @@ class CustomCurrencyForm(forms.ModelForm):
 
 class FeeTemplateForm(forms.ModelForm):
     pools = forms.ModelMultipleChoiceField(queryset=Account.objects.filter(type='Pool'), required=True, widget=forms.CheckboxSelectMultiple)
-    banks = forms.ModelMultipleChoiceField(queryset=Account.objects.filter(type='Bank'), required=True, widget=forms.CheckboxSelectMultiple)
+    banks = forms.ModelMultipleChoiceField(queryset=Account.objects.filter(type='Bank'), required=False, widget=forms.CheckboxSelectMultiple)
     custom_currency = forms.ModelMultipleChoiceField(queryset=CustomCurrency.objects.all(), widget=forms.CheckboxSelectMultiple, required=True)
 
     class Meta(forms.ModelForm):
