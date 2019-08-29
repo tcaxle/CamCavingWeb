@@ -753,7 +753,7 @@ class EditTransactionData(DetailView):
             key = account.account_key
             if str(key) in data.keys() and data.get(str(key)) == 'TRUE':
                 account_list.append(account)
-        if not account_list.first(): # Check for no debtors selected
+        if not account_list: # Check for no debtors selected
             raise Http404('You must have debtors in your transaction.') # Complain
         ## DATA PROCESSING
         # pass the data to the template to populate the form
