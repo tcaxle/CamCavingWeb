@@ -98,6 +98,7 @@
     {% endif %}
     {% if perms.Bank.delete__event %}
       <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'DeleteEvent' event.event_key %}">Delete This Event</a>
+    {% endif %}
     {% if perms.Bank.change__event %}
       <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditEventSetup' event.event_key %}">Edit Event Setup</a>
       <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditEventData' event.event_key %}">Edit Event Data</a>
