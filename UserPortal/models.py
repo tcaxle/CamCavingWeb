@@ -1,7 +1,7 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
-from uuid import uuid4 as uuid
 from django.core.validators import RegexValidator
+import uuid
 
 COLOR_CHOICES = (
     ('black','BLACK'),
@@ -34,7 +34,7 @@ class Rank(models.Model):
         return self.name
 
 class CustomUser(AbstractUser):
-    user_key = models.CharField(max_length=32, default=uuid().hex)
+    user_key = models.UUIDField(default=uuid.uuid4, editable=False)
     full_name = models.CharField(max_length=50, blank=False)
     college = models.CharField(max_length=50, blank=True)
     bio = models.TextField(max_length=500, blank=True)
@@ -55,7 +55,7 @@ class CustomUser(AbstractUser):
     rank_display.short_description = 'Rank Display'
 
     def name(self):
-        return self.full_name
+        return self.full_name+' ('+self.username+')'
 
     def __str__(self):
         return self.username

@@ -1,0 +1,35 @@
+{% extends 'Bank/EditTransactionGroup/EditTransactionGroupBase.html' %}
+{% load static %}
+
+{% block form %}
+  <h2>Select Debtors</h2>
+  <form method="post" action="{% url 'EditTransactionGroupData' transaction_group.group_key %}">
+  {% csrf_token %}
+
+  <table class="w3-table w3-striped">
+    <tr>
+      <td>Creditors:</td>
+      <td>{% for creditor in creditor_list %}<input type="hidden" name="CREDITOR:{{ creditor.account_key }}" value="creditor">{{ creditor }}, {% endfor %}</td>
+    </tr>
+    <tr>
+      <td>Date:</td>
+      <td><input class="w3-input" type="date" name="date" value="{{ date.date.isoformat }}"></td>
+    </tr>
+    <tr>
+      <td><b>Debtors</b></td>
+      <td></td>
+    </tr>
+    {% for account in account_list %}
+      <tr>
+        <td>{{ account }}:</td>
+        <td>
+          <input class="w3-input" type="checkbox" name="DEBTOR:{{ account.account_key }}" value="debtor" {% for transaction in transaction_group.transaction_set.all %}{% for entry in transaction.entry_set.all %}{% if account == entry.account_b %}checked {% endif %}{% endfor %}{% endfor %}>
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+  <div class="w3-padding-16">
+    <button class="w3-button w3-theme-d3 w3-hover-black w3-mobile" type="submit">Next</button>
+  </div>
+  </form>
+{% endblock %}

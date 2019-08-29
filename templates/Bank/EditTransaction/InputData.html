@@ -1,0 +1,43 @@
+{% extends 'Bank/EditTransaction/EditTransactionBase.html' %}
+{% load static %}
+
+{% block form %}
+  <h2>Input Data</h2>
+  <form method="post" action="{% url 'EditTransactionAction' %}">
+  {% csrf_token %}
+  <input type="hidden" name="creditor" value="{{ creditor.account_key }}">
+  <input type="hidden" name="transaction" value="{{ transaction.transaction_key }}">
+  <table class="w3-table w3-striped">
+    <tr>
+      <td>Creditor:</td>
+      <td>{{ creditor }}</td>
+    </tr>
+    <tr>
+      <td>Date:</td>
+      <td><input class="w3-input" type="date" name="date" value="{{ date.date.isoformat }}"></td>
+    </tr>
+    <tr>
+      <td><b>Debtor:</b></td>
+      <td>
+        <b>Credit:</b><br>
+        <i>The amount (in GBP) to credit the creditor account by. For a debit, put a negative number.</i>
+      </td>
+    </tr>
+    {% for account in account_list %}
+      <tr>
+        <td>{{ account }}:</td>
+        <td>
+          <input class="w3-input" type="number" step="0.01" name="{{ account.account_key }}" {% for entry in transaction.entry_set.all %}{% if account == entry.account_b %}value="{{ entry.credit_a }}"{% endif %}{% endfor %}>
+          </td>
+      </tr>
+    {% endfor %}
+    <tr>
+      <td>Notes:<br><i>Be consice</i></td>
+      <td><input class="w3-input" type="textarea" name="notes"></td>
+    </tr>
+  </table>
+  <div class="w3-padding-16">
+    <button class="w3-button w3-theme-d3 w3-hover-black w3-mobile" type="submit">Submit</button>
+  </div>
+  </form>
+{% endblock %}

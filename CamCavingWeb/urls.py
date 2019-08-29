@@ -26,6 +26,7 @@ urlpatterns = [
     path('Portal/', include('django.contrib.auth.urls')),
     path('Blog/', include('Blog.urls')),
     path('Gear/', include('Gear.urls')),
+    path('Bank/', include('Bank.urls')),
     path('Admin/', admin.site.urls),
 
     # Redirects

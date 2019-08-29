@@ -1,0 +1,16 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block title %}
+  <title>CUCC | Bank | Delete {{ object }}</title>
+{% endblock %}
+
+{% block main-content %}
+<form method="post">{% csrf_token %}
+  <p>Are you sure you want to delete "{{ object }}"?</p>
+  <input type="submit" value="Confirm">
+</form>
+{% endblock %}
+
+{% block side-content %}
+{% endblock %}
