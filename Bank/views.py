@@ -179,7 +179,7 @@ class CreateEventSetup(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['template_list'] = FeeTemplate.objects.all().order_by('name')
-        context['user_list'] = Account.objects.filter(type='User').order_by('type')
+        context['user_list'] = Account.objects.exclude(type='Pool').order_by('type')
         context['date'] = datetime.now()
         return context
 
