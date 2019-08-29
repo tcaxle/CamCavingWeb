@@ -298,6 +298,17 @@ class ViewEvent(DetailView):
     model = Event
     template_name = 'Bank/ViewEvent.html'
     slug_field = 'event_key'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # get the transaction group object
+        self.object = self.get_object()
+        # extract the entry list for less processing in template
+        entry_list = []
+        for transaction in self.object.transaction_group.transaction_set.all():
+            for entry in transaction.entry_set.all():
+                entry_list.append(entry)
+        context['entry_list'] = entry_list
+        return context
 
 @method_decorator(permission_required('Bank.change__event'), name='dispatch')
 class EditEventSetup(DetailView):
