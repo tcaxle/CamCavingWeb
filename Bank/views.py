@@ -320,7 +320,7 @@ class EditEventData(DetailView):
     def post(self, request, *args, **kwargs):
         ## DATA RETRIEVAL
         # get the transaction group object
-        self.object = self.get_object()
+        self.object = self.get_object_or_404()
         # retrieve all post data (as dictionary of strings)
         data = request.POST
         # extract name
@@ -350,7 +350,7 @@ class EditEventData(DetailView):
     def get(self, request, *args, **kwargs):
         ## DATA RETRIEVAL
         # get the transaction group object
-        self.object = self.get_object()
+        self.object = self.get_object_or_404()
         event = self.object
         # extract name
         name = event.name
@@ -696,7 +696,7 @@ class EditTransactionDebtor(DetailView):
     def post(self, request, *args, **kwargs):
         ## DATA RETRIEVAL
         # get the transaction object
-        self.object = self.get_object()
+        self.object = self.get_object_or_404()
         # extract the POST data
         data = request.POST
         # extract the date
@@ -715,7 +715,7 @@ class EditTransactionDebtor(DetailView):
     def get(self, request, *args, **kwargs):
         ## DATA RETRIEVAL
         # get the transaction object
-        self.object = self.get_object()
+        self.object = self.get_object_or_404()
         # extract the date
         date = self.object.entry_set.first().date
         # extract the creditor
@@ -739,7 +739,7 @@ class EditTransactionData(DetailView):
     def post(self, request, *args, **kwargs):
         ## DATA RETRIEVAL
         # get the transaction object
-        self.object = self.get_object()
+        self.object = self.get_object_or_404()
         # extract the POST data
         data = request.POST
         # extract the date
@@ -765,15 +765,15 @@ class EditTransactionData(DetailView):
     # GET for when we want to directly change the data but not the creditors or the debtors
     def get(self, request, *args, **kwargs):
         # get the transaction object
-        self.object = self.get_object()
+        self.object = self.get_object_or_404()
         # extract the date
-        date = self.object.entry_set.first().date
+        date = self.object.date
         # extract the creditor
         creditor = self.object.entry_set.first().account_a
         # extract the debtor list
         account_list = []
         for entry in self.object.entry_set.all():
-            account_list.append(get_object(Account, account_key=entry.account_b.account_key))
+            account_list.append(get_object_or_404(Account, account_key=entry.account_b.account_key))
         ## DATA PROCESSING
         # pass the data to the template to populate the form
         context = super().get_context_data(**kwargs)
@@ -953,7 +953,7 @@ class EditTransactionGroupDebtor(DetailView):
     def post(self, request, *args, **kwargs):
         ## DATA RETRIEVAL
         # get the transaction group object
-        self.object = self.get_object()
+        self.object = self.get_object_or_404()
         # extract the POST data
         data = request.POST
         # extract the date
@@ -978,7 +978,7 @@ class EditTransactionGroupDebtor(DetailView):
     def get(self, request, *args, **kwargs):
         ## DATA RETRIEVAL
         # get the transaction group object
-        self.object = self.get_object()
+        self.object = self.get_object_or_404()
         # extract the date
         date = self.object.transaction_set.first().entry_set.first().date
         # extract the list of creditors
@@ -986,7 +986,7 @@ class EditTransactionGroupDebtor(DetailView):
         account_list = Account.objects.all().order_by('type')
         for transaction in self.object.transaction_set.all():
             for entry in transaction.entry_set.all():
-                creditor_list.append(get_object(Account, account_key=entry.account_a.account_key))
+                creditor_list.append(get_object_or_404(Account, account_key=entry.account_a.account_key))
         # DATA PROCESSING
         # pass the data to the template
         context = super().get_context_data(**kwargs)
@@ -1005,7 +1005,7 @@ class EditTransactionGroupData(DetailView):
     def post(self, request, *args, **kwargs):
         ## DATA RETRIEVAL
         # get transction group object
-        self.object = self.get_object()
+        self.object = self.get_object_or_404()
         # extract the POST data
         data = request.POST
         # extract the date
@@ -1035,7 +1035,7 @@ class EditTransactionGroupData(DetailView):
     def get(self, request, *args, **kwargs):
         ## DATA RETRIEVAL
         # get transaction group object
-        self.object = self.get_object()
+        self.object = self.get_object_or_404()
         # extract the date
         date = self.object.transaction_set.first().entry_set.first().date
         # extract the lists of creditors and debtors
@@ -1043,8 +1043,8 @@ class EditTransactionGroupData(DetailView):
         debtor_list =  []
         for transaction in self.object.transaction_set.all():
             for entry in transaction.entry_set.all():
-                creditor_list.append(get_object(Account, account_key=entry.account_a.account_key))
-                debtor_list.append(get_object(Account, account_key=entry.account_b.account_key))
+                creditor_list.append(get_object_or_404(Account, account_key=entry.account_a.account_key))
+                debtor_list.append(get_object_or_404(Account, account_key=entry.account_b.account_key))
         ## DATA PROCESSING
         # pass the data to the template
         context = super().get_context_data(**kwargs)
