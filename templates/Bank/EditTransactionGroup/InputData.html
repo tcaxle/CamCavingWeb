@@ -36,13 +36,7 @@
       <tr>
         <td class="w3-theme-d2">{{ creditor }}:</td>
         {% for debtor in debtor_list %}
-          {% if debtor.type == 'Pool' and creditor.type == 'Bank' %}
-          <td class="w3-theme-l3"></td>
-          {% elif debtor.type == 'Bank' and creditor.type == 'Pool' %}
-          <td class="w3-theme-l3"></td>
-          {% else %}
           <td class="w3-theme-l3"><input class="w3-input" type="number" step="0.01" name="AMOUNT:{{ debtor.account_key }}:{{ creditor.account_key }}" value="{% for transaction in transaction_group.transaction_set.all %}{% for entry in transaction.entry_set.all %}{% if entry.account_a == creditor and entry.account_b == debtor %}{{ entry.credit_a }}{% endif %}{% endfor %}{% endfor %}"></td>
-          {% endif %}
         {% endfor %}
       </tr>
     {% endfor %}

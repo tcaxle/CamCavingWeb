@@ -210,7 +210,7 @@ class CreateEventData(TemplateView):
         context = super().get_context_data(**kwargs)
         context['name'] = name
         context['template'] = template
-        context['user_list'] = user_list.order_by('owner')
+        context['user_list'] = user_list
         context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
         return render(request, self.template_name, context)
 
@@ -605,13 +605,7 @@ class CreateTransactionDebtor(TemplateView):
         data = request.POST
         date = datetime.strptime(data.get('date'), '%Y-%m-%d')
         creditor = get_object_or_404(Account, account_key=data.get('creditor'))
-        # Banks and Pools CANNOT transact:
-        if creditor.type == 'Bank':
-            account_list = Account.objects.exclude(type='Pool').order_by('type')
-        elif creditor.type == 'Pool':
-            account_list = Account.objects.exclude(type='Bank').order_by('type')
-        else:
-            account_list = Account.objects.all().order_by('type')
+        account_list = Account.objects.all().order_by('type')
         context = super().get_context_data(**kwargs)
         context['account_list'] = account_list
         context['creditor'] = creditor
@@ -709,13 +703,7 @@ class EditTransactionDebtor(DetailView):
         date = datetime.strptime(data.get('date'), '%Y-%m-%d')
         # extract the creditor
         creditor = get_object_or_404(Account, account_key=data.get('creditor'))
-        # Banks and Pools CANNOT transact:
-        if creditor.type == 'Bank':
-            account_list = Account.objects.exclude(type='Pool').order_by('type')
-        elif creditor.type == 'Pool':
-            account_list = Account.objects.exclude(type='Bank').order_by('type')
-        else:
-            account_list = Account.objects.all().order_by('type')
+        account_list = Account.objects.all().order_by('type')
         ## DATA PROCESSING
         # pass data to template to populate form
         context = super().get_context_data(**kwargs)
@@ -732,13 +720,7 @@ class EditTransactionDebtor(DetailView):
         date = self.object.entry_set.first().date
         # extract the creditor
         creditor = self.object.entry_set.first().account_a
-        # Banks and Pools CANNOT transact:
-        if creditor.type == 'Bank':
-            account_list = Account.objects.exclude(type='Pool').order_by('type')
-        elif creditor.type == 'Pool':
-            account_list = Account.objects.exclude(type='Bank').order_by('type')
-        else:
-            account_list = Account.objects.all().order_by('type')
+        account_list = Account.objects.all().order_by('type')
         ## DATA PROCESSING
         # pass the data to the template to populate form
         context = super().get_context_data(**kwargs)
@@ -1066,8 +1048,8 @@ class EditTransactionGroupData(DetailView):
         ## DATA PROCESSING
         # pass the data to the template
         context = super().get_context_data(**kwargs)
-        context['creditor_list'] = creditor_list.order_by('type')
-        context['debtor_list'] = debtor_list.order_by('type')
+        context['creditor_list'] = creditor_list
+        context['debtor_list'] = debtor_list
         context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
         return render(request, self.template_name, context)
 

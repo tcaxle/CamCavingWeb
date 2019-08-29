@@ -199,8 +199,12 @@ class Entry(models.Model):
         elif self.account_a.type == 'Pool' and self.account_b.type == 'Pool':
             self.credit_a = self.credit_a # Credit From Account
             self.credit_b = -self.credit_a # Debit To Account
-        else:
-            raise Exception("Cannot make transaction between account.type=='Pool' and account.type='Bank'")
+        elif self.account_a.type == 'Pool' and self.account_b.type == 'Bank':
+            self.credit_a = self.credit_a # Credit From Account
+            self.credit_b = self.credit_a # Credit To Account
+        elif self.account_a.type == 'Bank' and self.account_b.type == 'Pool':
+            self.credit_a = self.credit_a # Credit From Account
+            self.credit_b = self.credit_a # Credit To Account
         super().save(*args, **kwargs)
 
     def __str__(self):
