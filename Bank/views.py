@@ -255,10 +255,10 @@ def CreateEventAction(request):
         event.notes = notes
         event.save()
         # add users to event
-        for user in user_list.all():
+        for user in user_list:
             event.users.add(user)
         # create entries and transactions, and tie them to the event
-        for user in user_list.all():
+        for user in user_list:
             # create transaction
             transaction = Transaction()
             transaction.created_by = request.user
@@ -408,11 +408,11 @@ def EditEventAction(request):
         event.SetApprove(status=False)
         # clear and re-add users to event
         event.users.clear()
-        for user in user_list.all():
+        for user in user_list:
             event.users.add(user)
         event.save()
         # create entries and transactions, and tie them to the event
-        for user in user_list.all():
+        for user in user_list:
             # create transaction
             transaction = Transaction()
             transaction.created_by = request.user
@@ -913,14 +913,14 @@ def CreateTransactionGroupAction(request):
         transaction_group.notes = notes
         transaction_group.save()
         # create transaction children and entry grand-children
-        for creditor in creditor_list.all():
+        for creditor in creditor_list:
             transaction = Transaction()
             transaction.created_by = request.user
             transaction.transaction_group = transaction_group
             transaction.date = date
             transaction.notes = notes
             transaction.save()
-            for debtor in debtor_list.all():
+            for debtor in debtor_list:
                 key = 'AMOUNT:'+str(debtor.account_key)+':'+str(creditor.account_key)
                 if key in data.keys() and data.get(key) and float(data.get(key)) != 0.0:
                     entry = Entry(account_a=creditor, account_b=debtor, credit_a=float(data.get(key)), date=date, notes=notes)
@@ -1085,14 +1085,14 @@ def EditTransactionGroupAction(request):
         # unset the approved status
         transaction_group.SetApprove(status=False)
         # create new transaction children and entry grand-children from new data
-        for creditor in creditor_list.all():
+        for creditor in creditor_list:
             transaction = Transaction()
             transaction.created_by = request.user
             transaction.transaction_group = transaction_group
             transaction.date = date
             transaction.notes = notes
             transaction.save()
-            for debtor in debtor_list.all():
+            for debtor in debtor_list:
                 key = 'AMOUNT:'+str(debtor.account_key)+':'+str(creditor.account_key)
                 if key in data.keys() and data.get(key) and float(data.get(key)) != 0.0:
                     entry = Entry(account_a=creditor, account_b=debtor, credit_a=float(data.get(key)), date=date, notes=notes)
