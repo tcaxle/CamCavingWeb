@@ -9,6 +9,13 @@ def ffdividef(value, arg):
         return None
 
 @register.filter
+def ffdividei(value, arg):
+    try:
+        return int(float(value) / float(arg))
+    except (ValueError, ZeroDivisionError):
+        return None
+
+@register.filter
 def iidividei(value, arg):
     try:
         return int(value) / int(arg)

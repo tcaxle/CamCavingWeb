@@ -38,7 +38,7 @@
       <tr>
         <td class="w3-theme-d2">{{ user }}:</td>
           {% for currency in event.fee_template.custom_currency.all %}
-            <td class="w3-theme-l3">{% for transaction in event.transaction_group.transaction_set.all %}{% for entry in transaction.entry_set.all %}{% if entry.account_a == user and entry.account_b == currency.pool and currency == entry.custom_currency %}{{ entry.credit_a|fidividei:currency.credit }} ({{ entry.credit_a|currency }}){% endif %}{% endfor %}{% endfor %}</td>
+            <td class="w3-theme-l3">{% for transaction in event.transaction_group.transaction_set.all %}{% for entry in transaction.entry_set.all %}{% if entry.account_a == user and entry.account_b == currency.pool and currency == entry.custom_currency %}{{ entry.credit_a|ffdividei:currency.credit }} ({{ entry.credit_a|currency }}){% endif %}{% endfor %}{% endfor %}</td>
           {% endfor %}
           {% for pool in event.fee_template.pools.all %}
             <td class="w3-theme-l3">{% for transaction in event.transaction_group.transaction_set.all %}{% for entry in transaction.entry_set.all %}{% if entry.account_a == user and entry.account_b == pool and entry.custom_currency is None %}{{ entry.credit_a|currency }}{% endif %}{% endfor %}{% endfor %}</td>
