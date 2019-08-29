@@ -24,6 +24,12 @@ class Account(models.Model):
         else:
             return '('+self.type+') **Nameless Account**'
 
+    class Meta:
+        permissions = [
+            ("view_own__account", "Can view own account"),
+            ("view_other__account", "Can view others' accounts"),
+        ]
+
 class CustomCurrency(models.Model):
     # Allows custom "currencies," which are rates to be charged
     # CustomCurrencies can only be credited to users, and always debit a pool (negative credits for a charge)
@@ -79,6 +85,11 @@ class TransactionGroup(models.Model):
     def __str__(self):
         return 'Transaction Group '+str(self.pk)
 
+    class Meta:
+        permissions = [
+            ("approve__transactiongroup", "Can approve transaction groups"),
+        ]
+
 class Transaction(models.Model):
     # Parents the Entry model, allowing Many-To-One Transactions across multiple accounts
     transaction_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -124,6 +135,11 @@ class Transaction(models.Model):
 
     def __str__(self):
         return 'Transaction '+str(self.pk)
+
+    class Meta:
+        permissions = [
+            ("approve__transaction", "Can approve transactions"),
+        ]
 
 class Entry(models.Model):
     # The smallest unit of the transation family. Records an individual double-entry transaction
@@ -200,6 +216,11 @@ class Entry(models.Model):
     def short_id(self):
         return 'Entry '+str(self.pk)
 
+    class Meta:
+        permissions = [
+            ("approve__entry", "Can approve entries"),
+        ]
+
 class FeeTemplate(models.Model):
     # A set of currencies to provide the flesh of an Event model
     template_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -257,3 +278,8 @@ class Event(models.Model):
 
     def __str__(self):
         return self.name
+
+    class Meta:
+        permissions = [
+            ("approve__event", "Can approve events"),
+        ]

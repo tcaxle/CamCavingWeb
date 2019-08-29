@@ -63,7 +63,11 @@
 
 {% block side-content %}
   <h2>Account Actions</h2>
-  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditAccount' account.account_key %}">Edit This Account</a>
-  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'DeleteAccount' account.account_key %}">Delete This Account</a>
+  {% if perms.Bank.change__account %}
+    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditAccount' account.account_key %}">Edit This Account</a>
+  {% endif %}
+  {% if perms.Bank.delete__account %}
+    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'DeleteAccount' account.account_key %}">Delete This Account</a>
+  {% endif %}
   {% include 'ActionSets/Bank.html' %}
 {% endblock %}

@@ -93,10 +93,15 @@
 {% block side-content %}
   <h2>Transaction Group Actions</h2>
   {% if event.is_editable %}
-    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'ToggleApproveEvent' event.event_key %}">Toggle Approved Status</a>
-    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'DeleteEvent' event.event_key %}">Delete This Event</a>
-    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditEventSetup' event.event_key %}">Edit Event Setup</a>
-    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditEventData' event.event_key %}">Edit Event Data</a>
+    {% if perms.Bank.approve__event %}
+      <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'ToggleApproveEvent' event.event_key %}">Toggle Approved Status</a>
+    {% endif %}
+    {% if perms.Bank.delete__event %}
+      <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'DeleteEvent' event.event_key %}">Delete This Event</a>
+    {% if perms.Bank.change__event %}
+      <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditEventSetup' event.event_key %}">Edit Event Setup</a>
+      <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditEventData' event.event_key %}">Edit Event Data</a>
+    {% endif %}
   {% else %}
   <p><i>This transaction is owned by an event. You can only edit the highest level of a financial object. See the "heritage" section for the highest level of this object.</i></p>
   {% endif %}

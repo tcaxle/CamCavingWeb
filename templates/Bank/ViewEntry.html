@@ -33,9 +33,15 @@
 {% block side-content %}
   <h2>Entry Actions</h2>
   {% if entry.is_editable %}
-    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'ToggleApproveEntry' entry.entry_key %}">Toggle Approved Status</a>
-    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'DeleteEntry' entry.entry_key %}">Delete This Entry</a>
-    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditEntry' entry.entry_key %}">Edit This Entry</a>
+    {% if perms.Bank.approve__entry %}
+      <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'ToggleApproveEntry' entry.entry_key %}">Toggle Approved Status</a>
+    {% endif %}
+    {% if perms.Bank.delete__entry %}
+      <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'DeleteEntry' entry.entry_key %}">Delete This Entry</a>
+    {% endif %}
+    {% if perms.Bank.change__entry %}
+      <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditEntry' entry.entry_key %}">Edit This Entry</a>
+    {% endif %}
   {% else %}
     <p><i>This entry is part of a transaction. You can only edit the highest level of a financial object. See the "heritage" section for the highest level of this object.</i></p>
   {% endif %}

@@ -13,6 +13,8 @@ from UserPortal.models import CustomUser
 from django.shortcuts import get_object_or_404
 from django.http import Http404
 from django.http import HttpResponseRedirect
+from django.utils.decorators import method_decorator
+from django.contrib.auth.decorators import permission_required
 
 def BalanceAtDate(account, date=timezone.now(), all=False):
     # Returns the balance of an account at a date as a float
@@ -34,6 +36,7 @@ def BalanceAtDate(account, date=timezone.now(), all=False):
     else:
         return float(balance)
 
+@method_decorator(permission_required('Bank.add__entry'), name='dispatch')
 class CreateEntry(FormView):
     form_class = CreateEntry
     template_name = 'Bank/AddEntry.html'
@@ -51,6 +54,7 @@ class CreateEntry(FormView):
     def get_success_url(self, **kwargs):
         return reverse_lazy('UserPortalDashboard')
 
+@method_decorator(permission_required('Bank.change__entry'), name='dispatch')
 class EditEntry(UpdateView):
     model = Entry
     template_name = 'Bank/EditEntry.html'
@@ -61,6 +65,7 @@ class EditEntry(UpdateView):
         self.object.SetApprove(status=False)
         return reverse_lazy('ViewEntry', args=(self.object.entry_key,))
 
+@permission_required('Bank.approve__entry')
 def ToggleApproveEntry(request, slug):
     # retrieve entry object
     entry = get_object_or_404(Entry, entry_key=slug, is_editable=True)
@@ -68,6 +73,7 @@ def ToggleApproveEntry(request, slug):
     entry.ToggleApprove(request.user, datetime.now())
     return redirect('ViewEntry', entry.entry_key)
 
+@permission_required('Bank.approve__transaction')
 def ToggleApproveTransaction(request, slug):
     # retrieve the transaction object
     transaction = get_object_or_404(Transaction, transaction_key=slug, is_editable=True)
@@ -75,6 +81,7 @@ def ToggleApproveTransaction(request, slug):
     transaction.ToggleApprove(request.user, datetime.now())
     return redirect('ViewTransaction', transaction.transaction_key)
 
+@permission_required('Bank.approve__transactiongroup')
 def ToggleApproveTransactionGroup(request, slug):
     # retrieve the transaction group object
     transaction_group = get_object_or_404(TransactionGroup, group_key=slug, is_editable=True)
@@ -82,6 +89,7 @@ def ToggleApproveTransactionGroup(request, slug):
     transaction_group.ToggleApprove(request.user, datetime.now())
     return redirect('ViewTransactionGroup', transaction_group.group_key)
 
+@permission_required('Bank.approve__event')
 def ToggleApproveEvent(request, slug):
     # retrieve the event object
     event = get_object_or_404(Event, event_key=slug, is_editable=True)
@@ -109,18 +117,20 @@ def ToggleApproveEvent(request, slug):
                 entry.save()
     return redirect('ViewEvent', event.event_key)
 
-
+@method_decorator(permission_required('Bank.view__customcurrency'), name='dispatch')
 class ListCustomCurrency(ListView):
     model = CustomCurrency
     template_name = 'Bank/ListCustomCurrency.html'
     context_object_name = 'currency_list'
 
+@method_decorator(permission_required('Bank.add__customcurrency'), name='dispatch')
 class CreateCustomCurrency(CreateView):
     model = CustomCurrency
     form_class = CustomCurrencyForm
     template_name = 'Bank/AddCustomCurrency.html'
     success_url = reverse_lazy('ListCustomCurrency')
 
+@method_decorator(permission_required('Bank.change__customcurrency'), name='dispatch')
 class EditCustomCurrency(UpdateView):
     model = CustomCurrency
     form_class = CustomCurrencyForm
@@ -128,24 +138,27 @@ class EditCustomCurrency(UpdateView):
     template_name = 'Bank/EditCustomCurrency.html'
     success_url = reverse_lazy('ListCustomCurrency')
 
+@method_decorator(permission_required('Bank.delete_customcurrency'), name='dispatch')
 class DeleteCustomCurrency(DeleteView):
     model = CustomCurrency
     slug_field = 'currency_key'
     template_name = 'Bank/DeleteObject.html'
     success_url = reverse_lazy('ListCustomCurrency')
 
-
+@method_decorator(permission_required('Bank.view__feetemplate'), name='dispatch')
 class ListFeeTemplate(ListView):
     model = FeeTemplate
     template_name = 'Bank/ListFeeTemplate.html'
     context_object_name = 'template_list'
 
+@method_decorator(permission_required('Bank.add__feetemplate'), name='dispatch')
 class CreateFeeTemplate(CreateView):
     model = FeeTemplate
     form_class = FeeTemplateForm
     template_name = 'Bank/AddFeeTemplate.html'
     success_url = reverse_lazy('ListFeeTemplate')
 
+@method_decorator(permission_required('Bank.change__feetemplate'), name='dispatch')
 class EditFeeTemplate(UpdateView):
     model = FeeTemplate
     form_class = FeeTemplateForm
@@ -153,13 +166,14 @@ class EditFeeTemplate(UpdateView):
     template_name = 'Bank/EditFeeTemplate.html'
     success_url = reverse_lazy('ListFeeTemplate')
 
+@method_decorator(permission_required('Bank.delete__feetemplate'), name='dispatch')
 class DeleteFeeTemplate(DeleteView):
     model = FeeTemplate
     slug_field = 'template_key'
     template_name = 'Bank/DeleteObject.html'
     success_url = reverse_lazy('ListFeeTemplate')
 
-
+@method_decorator(permission_required('Bank.add__event'), name='dispatch')
 class CreateEventSetup(TemplateView):
     template_name = 'Bank/AddEvent/Setup.html'
     def get_context_data(self, **kwargs):
@@ -169,6 +183,7 @@ class CreateEventSetup(TemplateView):
         context['date'] = datetime.now()
         return context
 
+@method_decorator(permission_required('Bank.add__event'), name='dispatch')
 class CreateEventData(TemplateView):
     template_name = 'Bank/AddEvent/InputData.html'
     def post(self, request, *args, **kwargs):
@@ -199,6 +214,7 @@ class CreateEventData(TemplateView):
         context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
         return render(request, self.template_name, context)
 
+@permission_required('Bank.add__event')
 def CreateEventAction(request):
     if request.method == 'POST':
         ## DATA RETRIEVAL
@@ -277,11 +293,13 @@ def CreateEventAction(request):
                     entry.save()
     return redirect('UserPortalDashboard')
 
+@method_decorator(permission_required('Bank.view__event'), name='dispatch')
 class ViewEvent(DetailView):
     model = Event
     template_name = 'Bank/ViewEvent.html'
     slug_field = 'event_key'
 
+@method_decorator(permission_required('Bank.change__event'), name='dispatch')
 class EditEventSetup(DetailView):
     model = Event
     slug_field = 'event_key'
@@ -293,6 +311,7 @@ class EditEventSetup(DetailView):
         context['user_list'] = Account.objects.filter(type='User').order_by('type')
         return context
 
+@method_decorator(permission_required('Bank.change__event'), name='dispatch')
 class EditEventData(DetailView):
     model = Event
     slug_field = 'event_key'
@@ -350,6 +369,7 @@ class EditEventData(DetailView):
         context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
         return render(request, self.template_name, context)
 
+@permission_required('Bank.change__event')
 def EditEventAction(request):
     if request.method == 'POST':
         ## DATA RETRIEVAL
@@ -427,36 +447,42 @@ def EditEventAction(request):
                     entry.save()
     return redirect('ViewEvent', event.event_key)
 
+@method_decorator(permission_required('Bank.delete__event'), name='dispatch')
 class DeleteEvent(DeleteView):
     model = Event
     slug_field = 'event_key'
     success_url = reverse_lazy('UserPortalDashboard')
     template_name = 'Bank/DeleteObject.html'
 
+@method_decorator(permission_required('Bank.delete__entry'), name='dispatch')
 class DeleteEntry(DeleteView):
     model = Entry
     slug_field = 'entry_key'
     success_url = reverse_lazy('UserPortalDashboard')
     template_name = 'Bank/DeleteObject.html'
 
+@method_decorator(permission_required('Bank.delete__transaction'), name='dispatch')
 class DeleteTransaction(DeleteView):
     model = Transaction
     slug_field = 'transaction_key'
     success_url = reverse_lazy('UserPortalDashboard')
     template_name = 'Bank/DeleteObject.html'
 
+@method_decorator(permission_required('Bank.delete__transactiongroup'), name='dispatch')
 class DeleteTransactionGroup(DeleteView):
     model = TransactionGroup
     slug_field = 'group_key'
     success_url = reverse_lazy('UserPortalDashboard')
     template_name = 'Bank/DeleteObject.html'
 
+@method_decorator(permission_required('Bank.add__account'), name='dispatch')
 class CreateAccount(CreateView):
     model = Account
     template_name = 'Bank/AddAccount.html'
     fields = '__all__'
     success_url = reverse_lazy('UserPortalDashboard')
 
+@method_decorator(permission_required('Bank.change__account'), name='dispatch')
 class EditAccount(UpdateView):
     model = Account
     template_name = 'Bank/EditAccount.html'
@@ -464,6 +490,7 @@ class EditAccount(UpdateView):
     fields = '__all__'
     success_url = reverse_lazy('UserPortalDashboard')
 
+@method_decorator(permission_required('Bank.delete__account'), name='dispatch')
 class DeleteAccount(DeleteView):
     model = Account
     template_name = 'Bank/DeleteObject.html'
@@ -471,6 +498,7 @@ class DeleteAccount(DeleteView):
     fields = '__all__'
     success_url = reverse_lazy('UserPortalDashboard')
 
+@method_decorator(permission_required('Bank.view_own__account'), name='dispatch')
 class ViewAccount(DetailView):
     # Returns a entry list with date filtering options for an account
     model = Account
@@ -521,6 +549,7 @@ class ViewAccount(DetailView):
             context['entry_set'] = account.transaction_set_a.filter(date__range=(start_date, end_date)).union(account.transaction_set_b.filter(date__range=(start_date, end_date))).order_by('-date')
         return context
 
+@method_decorator(permission_required('Bank.view_other__account'), name='dispatch')
 class ListAccounts(ListView):
     model = Account
     template_name = 'Bank/ListAccounts.html'
@@ -537,24 +566,28 @@ class ListAccounts(ListView):
         context['account_dict'] = dict(zip(accounts_list, balance_list))
         return context
 
+@method_decorator(permission_required('Bank.view__transaction'), name='dispatch')
 class ViewTransaction(DetailView):
     model = Transaction
     slug_field = 'transaction_key'
     context_object_name = 'transaction'
     template_name = 'Bank/ViewTransaction.html'
 
+@method_decorator(permission_required('Bank.view__transactiongroup'), name='dispatch')
 class ViewTransactionGroup(DetailView):
     model = TransactionGroup
     slug_field = 'group_key'
     context_object_name = 'transaction_group'
     template_name = 'Bank/ViewTransactionGroup.html'
 
+@method_decorator(permission_required('Bank.view__entry'), name='dispatch')
 class ViewEntry(DetailView):
     model = Entry
     slug_field = 'entry_key'
     context_object_name = 'entry'
     template_name = 'Bank/ViewEntry.html'
 
+@method_decorator(permission_required('Bank.add__transaction'), name='dispatch')
 class CreateTransactionCreditor(TemplateView):
     # Allows the treasurer to create transactions
     template_name = 'Bank/AddTransaction/SelectCreditor.html'
@@ -564,6 +597,7 @@ class CreateTransactionCreditor(TemplateView):
         context['date'] = datetime.now()
         return context
 
+@method_decorator(permission_required('Bank.add__transaction'), name='dispatch')
 class CreateTransactionDebtor(TemplateView):
     # Allows the treasurer to create transactions
     template_name = 'Bank/AddTransaction/SelectDebtor.html'
@@ -584,6 +618,7 @@ class CreateTransactionDebtor(TemplateView):
         context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
         return render(request, self.template_name, context)
 
+@method_decorator(permission_required('Bank.add__transaction'), name='dispatch')
 class CreateTransactionData(TemplateView):
     template_name = 'Bank/AddTransaction/InputData.html'
     def post(self, request, *args, **kwargs):
@@ -611,6 +646,7 @@ class CreateTransactionData(TemplateView):
         context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
         return render(request, self.template_name, context)
 
+@permission_required('Bank.add__transaction')
 def CreateTransactionAction(request):
     if request.method == 'POST':
         ## DATA RETRIEVAL
@@ -643,6 +679,7 @@ def CreateTransactionAction(request):
                 entry.save()
     return redirect('ViewTransaction', transaction.transaction_key)
 
+@method_decorator(permission_required('Bank.change__transaction'), name='dispatch')
 class EditTransactionCreditor(DetailView):
     model = Transaction
     slug_field = 'transaction_key'
@@ -655,6 +692,7 @@ class EditTransactionCreditor(DetailView):
         context['date'] = datetime.now()
         return context
 
+@method_decorator(permission_required('Bank.change__transaction'), name='dispatch')
 class EditTransactionDebtor(DetailView):
     model = Transaction
     slug_field = 'transaction_key'
@@ -709,6 +747,7 @@ class EditTransactionDebtor(DetailView):
         context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
         return render(request, self.template_name, context)
 
+@method_decorator(permission_required('Bank.change__transaction'), name='dispatch')
 class EditTransactionData(DetailView):
     model = Transaction
     slug_field = 'transaction_key'
@@ -761,6 +800,7 @@ class EditTransactionData(DetailView):
         context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
         return render(request, self.template_name, context)
 
+@permission_required('Bank.change__transaction')
 def EditTransactionAction(request):
     if request.method == 'POST':
         ## DATA RETRIEVAL
@@ -796,7 +836,7 @@ def EditTransactionAction(request):
                 entry.save()
     return redirect('ViewTransaction', transaction.transaction_key)
 
-
+@method_decorator(permission_required('Bank.add__transactiongroup'), name='dispatch')
 class CreateTransactionGroupCreditor(TemplateView):
     template_name = 'Bank/AddTransactionGroup/SelectCreditor.html'
     def get_context_data(self, **kwargs):
@@ -805,6 +845,7 @@ class CreateTransactionGroupCreditor(TemplateView):
         context['date'] = datetime.now()
         return context
 
+@method_decorator(permission_required('Bank.add__transactiongroup'), name='dispatch')
 class CreateTransactionGroupDebtor(TemplateView):
     template_name = 'Bank/AddTransactionGroup/SelectDebtor.html'
     def post(self, request, *args, **kwargs):
@@ -830,6 +871,7 @@ class CreateTransactionGroupDebtor(TemplateView):
         context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
         return render(request, self.template_name, context)
 
+@method_decorator(permission_required('Bank.add__transactiongroup'), name='dispatch')
 class CreateTransactionGroupData(TemplateView):
     template_name = 'Bank/AddTransactionGroup/InputData.html'
     def post(self, request, *args, **kwargs):
@@ -860,6 +902,7 @@ class CreateTransactionGroupData(TemplateView):
         context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
         return render(request, self.template_name, context)
 
+@permission_required('Bank.add__transactiongroup')
 def CreateTransactionGroupAction(request):
     if request.method == 'POST':
         ## DATA RETRIEVAL
@@ -904,6 +947,7 @@ def CreateTransactionGroupAction(request):
                     entry.save()
     return redirect('ViewTransactionGroup', transaction_group.group_key)
 
+@method_decorator(permission_required('Bank.change__transactiongroup'), name='dispatch')
 class EditTransactionGroupCreditor(DetailView):
     # Allows the treasurer to create transactions
     model = TransactionGroup
@@ -916,6 +960,7 @@ class EditTransactionGroupCreditor(DetailView):
         context['date'] = datetime.now()
         return context
 
+@method_decorator(permission_required('Bank.change__transactiongroup'), name='dispatch')
 class EditTransactionGroupDebtor(DetailView):
     # Allows the treasurer to create transactions
     model = TransactionGroup
@@ -968,6 +1013,7 @@ class EditTransactionGroupDebtor(DetailView):
         context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
         return render(request, self.template_name, context)
 
+@method_decorator(permission_required('Bank.change__transactiongroup'), name='dispatch')
 class EditTransactionGroupData(DetailView):
     model = TransactionGroup
     slug_field = 'group_key'
@@ -1025,6 +1071,7 @@ class EditTransactionGroupData(DetailView):
         context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
         return render(request, self.template_name, context)
 
+@permission_required('Bank.change__transactiongroup')
 def EditTransactionGroupAction(request):
     if request.method == 'POST':
         ## DATA RETRIEVAL

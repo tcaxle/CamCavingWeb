@@ -54,11 +54,17 @@
 {% block side-content %}
   <h2>Transaction Actions</h2>
   {% if transaction.is_editable %}
-    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'ToggleApproveTransaction' transaction.transaction_key %}">Toggle Approved Status</a>
-    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'DeleteTransaction' transaction.transaction_key %}">Delete This Transaction</a>
-    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditTransactionCreditor' transaction.transaction_key %}">Edit Transaction Creditor</a>
-    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditTransactionDebtor' transaction.transaction_key %}">Edit Transaction Debtors</a>
-    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditTransactionData' transaction.transaction_key %}">Edit Transaction Data</a>
+    {% if perms.Bank.approve__transaction %}
+      <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'ToggleApproveTransaction' transaction.transaction_key %}">Toggle Approved Status</a>
+    {% endif %}
+    {% if perms.Bank.delete__transaction %}
+      <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'DeleteTransaction' transaction.transaction_key %}">Delete This Transaction</a>
+    {% endif %}
+    {% if perms.Bank.change__transaction %}
+      <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditTransactionCreditor' transaction.transaction_key %}">Edit Transaction Creditor</a>
+      <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditTransactionDebtor' transaction.transaction_key %}">Edit Transaction Debtors</a>
+      <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditTransactionData' transaction.transaction_key %}">Edit Transaction Data</a>
+    {% endif %}
   {% else %}
     <p><i>This transaction is part of a transaction group. You can only edit the highest level of a financial object. See the "heritage" section for the highest level of this object.</i></p>
   {% endif %}

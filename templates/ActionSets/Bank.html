@@ -1,14 +1,30 @@
 {% if user.is_authenticated %}
   <h2>Bank Actions</h2>
-  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'CreateEntry' %}">Add One-to-One Transaction</a>
-  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'CreateTransaction' %}">Add Many-to-One Transaction</a>
-  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'CreateTransactionGroup' %}">Add Many-to-Many Transaction Group</a>
-  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'CreateEvent' %}">Add Event</a>
-  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'ListAccounts' %}">List All Accounts</a>
-  <a class="w3-button w3-block w3-theme-d4 w3-hover-black w3-half" style="text-align: left" href="{% url 'ListCustomCurrency' %}">Custom Currencies</a>
-  <a class="w3-button w3-block w3-theme-d4 w3-hover-black w3-half" style="text-align: left" href="{% url 'ListFeeTemplate' %}">Fee Templates</a>
+  {% if perms.Bank.add__entry %}
+    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'CreateEntry' %}">Add One-to-One Transaction (Entry)</a>
+  {% endif %}
+  {% if perms.Bank.add__transaction %}
+    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'CreateTransaction' %}">Add Many-to-One Transaction (Transaction)</a>
+  {% endif %}
+  {% if perms.Bank.add__transactiongroup %}
+    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'CreateTransactionGroup' %}">Add Many-to-Many Transaction Group (Transaction Group)</a>
+  {% endif %}
+  {% if perms.Bank.add__event %}
+    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'CreateEvent' %}">Add Event (Event)</a>
+  {% endif %}
+  {% if perms.Bank.view_other__account %}
+    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'ListAccounts' %}">List All Accounts</a>
+  {% endif %}
+  {% if perms.Bank.view__customcurrency %}
+    <a class="w3-button w3-block w3-theme-d4 w3-hover-black w3-half" style="text-align: left" href="{% url 'ListCustomCurrency' %}">Custom Currencies</a>
+  {% endif %}
+  {% if perms.Bank.view__feetemplate %}
+    <a class="w3-button w3-block w3-theme-d4 w3-hover-black w3-half" style="text-align: left" href="{% url 'ListFeeTemplate' %}">Fee Templates</a>
+  {% endif %}
   {% if user.bank_account %}
     <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'ViewAccount' user.bank_account.account_key %}">View Own Account</a>
   {% endif %}
-  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'CreateAccount' %}">Add Account</a>
+  {% if perms.Bank.add__account %}
+    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'CreateAccount' %}">Add Account</a>
+  {% endif %}
 {% endif %}
