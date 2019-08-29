@@ -197,13 +197,13 @@ class CreateEventData(TemplateView):
         # extract fee template
         template = get_object_or_404(FeeTemplate, template_key=data.get('fee_template'))
         # extract user list
-        account_list = Account.objects.all()
-        user_list = Account.objects.none()
+        account_list = Account.objects.all().order_by('type')
+        user_list = []
         for account in account_list:
             key = account.account_key
             if 'USER:'+str(key) in data.keys() and data.get('USER:'+str(key)) == 'user':
-                user_list = user_list.union(account_list.filter(account_key=key))
-        if not user_list.first(): # Check for no users selected
+                user_list.append(account)
+        if not user_list: # Check for no users selected
             raise Http404('You must have user in your event.') # Complain
         ## DATA PROCESSING
         # pass extracted data back to view
@@ -230,12 +230,12 @@ def CreateEventAction(request):
         # extract fee template
         template = get_object_or_404(FeeTemplate, template_key=data.get('fee_template'))
         # extract user list
-        account_list = Account.objects.all()
-        user_list = Account.objects.none()
+        account_list = Account.objects.all().order_by('type')
+        user_list = []
         for account in account_list:
             key = account.account_key
             if 'USER:'+str(key) in data.keys() and data.get('USER:'+str(key)) == 'user':
-                user_list = user_list.union(account_list.filter(account_key=key))
+                user_list.append(account)
         ## DATA PROCESSING
         # create a transction group object
         transaction_group = TransactionGroup()
@@ -330,13 +330,13 @@ class EditEventData(DetailView):
         # extract fee template
         template = get_object_or_404(FeeTemplate, template_key=data.get('fee_template'))
         # extract user list
-        account_list = Account.objects.all()
-        user_list = Account.objects.none()
+        account_list = Account.objects.all().order_by('type')
+        user_list = []
         for account in account_list:
             key = account.account_key
             if 'USER:'+str(key) in data.keys() and data.get('USER:'+str(key)) == 'user':
-                user_list = user_list.union(account_list.filter(account_key=key))
-        if not user_list.first(): # Check for no users selected
+                user_list.append(account)
+        if not user_list: # Check for no users selected
             raise Http404('You must have user in your event.') # Complain
         ## DATA PROCESSING
         # pass extracted data back to view
@@ -365,7 +365,7 @@ class EditEventData(DetailView):
         context = super().get_context_data(**kwargs)
         context['name'] = name
         context['template'] = template
-        context['user_list'] = user_list.order_by('owner')
+        context['user_list'] = user_list
         context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
         return render(request, self.template_name, context)
 
@@ -386,11 +386,11 @@ def EditEventAction(request):
         template = get_object_or_404(FeeTemplate, template_key=data.get('fee_template'))
         # extract user list
         account_list = Account.objects.all()
-        user_list = Account.objects.none()
+        user_list = []
         for account in account_list:
             key = account.account_key
             if 'USER:'+str(key) in data.keys() and data.get('USER:'+str(key)) == 'user':
-                user_list = user_list.union(account_list.filter(account_key=key))
+                user_list.append(account)
         # retrieve event object
         event = get_object_or_404(Event, event_key=data.get('event'))
         transaction_group = event.transaction_group
@@ -630,18 +630,18 @@ class CreateTransactionData(TemplateView):
         # extract creditor
         creditor = get_object_or_404(Account, account_key=data.get('creditor'))
         # extract list of debtors
-        all_accounts = Account.objects.all()
-        account_list = Account.objects.none()
+        all_accounts = Account.objects.all().order_by('type')
+        account_list = []
         for account in all_accounts:
             key = account.account_key
             if str(key) in data.keys() and data.get(str(key)) == 'TRUE':
-                account_list = account_list.union(all_accounts.filter(account_key=key))
-        if not account_list.first(): # Check for no debtors selected
+                account_list.append(account)
+        if not account_list: # Check for no debtors selected
             raise Http404('You must have debtors in your transaction.') # Complain
         ## DATA PROCESSING
         # pass retrived data into next page of form
         context = super().get_context_data(**kwargs)
-        context['account_list'] = account_list.order_by('type')
+        context['account_list'] = account_list
         context['creditor'] = creditor
         context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
         return render(request, self.template_name, context)
@@ -765,18 +765,18 @@ class EditTransactionData(DetailView):
         # extract the creditor
         creditor = get_object_or_404(Account, account_key=data.get('creditor'))
         # extract the debtor list
-        all_accounts = Account.objects.all()
-        account_list = Account.objects.none()
+        all_accounts = Account.objects.all().order_by('type')
+        account_list = []
         for account in all_accounts:
             key = account.account_key
             if str(key) in data.keys() and data.get(str(key)) == 'TRUE':
-                account_list = account_list.union(all_accounts.filter(account_key=key))
+                account_list.append(account)
         if not account_list.first(): # Check for no debtors selected
             raise Http404('You must have debtors in your transaction.') # Complain
         ## DATA PROCESSING
         # pass the data to the template to populate the form
         context = super().get_context_data(**kwargs)
-        context['account_list'] = account_list.order_by('type')
+        context['account_list'] = account_list
         context['creditor'] = creditor
         context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
         return render(request, self.template_name, context)
@@ -789,13 +789,13 @@ class EditTransactionData(DetailView):
         # extract the creditor
         creditor = self.object.entry_set.first().account_a
         # extract the debtor list
-        account_list = Account.objects.none()
+        account_list = []
         for entry in self.object.entry_set.all():
-            account_list = account_list.union(Account.objects.filter(account_key=entry.account_b.account_key))
+            account_list.append(get_object(Account, account_key=entry.account_b.account_key))
         ## DATA PROCESSING
         # pass the data to the template to populate the form
         context = super().get_context_data(**kwargs)
-        context['account_list'] = account_list.order_by('type')
+        context['account_list'] = account_list
         context['creditor'] = creditor
         context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
         return render(request, self.template_name, context)
@@ -855,19 +855,19 @@ class CreateTransactionGroupDebtor(TemplateView):
         # extract the date
         date = datetime.strptime(data.get('date'), '%Y-%m-%d')
         # extract the list of creditors
-        account_list = Account.objects.all()
-        creditor_list = Account.objects.none()
+        account_list = Account.objects.all().order_by('type')
+        creditor_list = []
         for account in account_list:
             key = account.account_key
             if str(key) in data.keys() and data.get(str(key)) == 'creditor':
-                creditor_list = creditor_list.union(account_list.filter(account_key=key))
-        if not creditor_list.first(): # Check for no debtors selected
+                creditor_list.append(account)
+        if not creditor_list: # Check for no debtors selected
             raise Http404('You must have creditors in your transaction.') # Complain
         # DATA PROCESSING
         # pass the data to the template
         context = super().get_context_data(**kwargs)
-        context['account_list'] = account_list.order_by('type')
-        context['creditor_list'] = creditor_list.order_by('type')
+        context['account_list'] = account_list
+        context['creditor_list'] = creditor_list
         context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
         return render(request, self.template_name, context)
 
@@ -881,24 +881,24 @@ class CreateTransactionGroupData(TemplateView):
         # extract the date
         date = datetime.strptime(data.get('date'), '%Y-%m-%d')
         # extract the lists of debtors and creditors
-        account_list = Account.objects.all()
-        creditor_list = Account.objects.none()
-        debtor_list = Account.objects.none()
+        account_list = Account.objects.all().order_by('type')
+        creditor_list = []
+        debtor_list = []
         for account in account_list:
             key = account.account_key
             if 'CREDITOR:'+str(key) in data.keys() and data.get('CREDITOR:'+str(key)) == 'creditor':
-                creditor_list = creditor_list.union(account_list.filter(account_key=key))
+                creditor_list.append(account)
             if 'DEBTOR:'+str(key) in data.keys() and data.get('DEBTOR:'+str(key)) == 'debtor':
-                debtor_list = debtor_list.union(account_list.filter(account_key=key))
-        if not debtor_list.first(): # Check for no debtors selected
+                debtor_list.append(account)
+        if not debtor_list: # Check for no debtors selected
             raise Http404('You must have debtors in your transaction.') # Complain
-        if not creditor_list.first(): # Check for no creditors selected
+        if not creditor_list: # Check for no creditors selected
             raise Http404('You must have creditors in your transaction.') # Complain
         ## DATA PROCESSING
         # pass the data to the template
         context = super().get_context_data(**kwargs)
-        context['creditor_list'] = creditor_list.order_by('type')
-        context['debtor_list'] = debtor_list.order_by('type')
+        context['creditor_list'] = creditor_list
+        context['debtor_list'] = debtor_list
         context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
         return render(request, self.template_name, context)
 
@@ -915,14 +915,14 @@ def CreateTransactionGroupAction(request):
         notes = data.get('notes')
         # extract the lists of creditors and debtors
         account_list = Account.objects.all()
-        creditor_list = Account.objects.none()
-        debtor_list = Account.objects.none()
+        creditor_list = []
+        debtor_list = []
         for account in account_list:
             key = account.account_key
             if 'CREDITOR:'+str(key) in data.keys() and data.get('CREDITOR:'+str(key)) == 'creditor':
-                creditor_list = creditor_list.union(account_list.filter(account_key=key))
+                creditor_list.append(account)
             if 'DEBTOR:'+str(key) in data.keys() and data.get('DEBTOR:'+str(key)) == 'debtor':
-                debtor_list = debtor_list.union(account_list.filter(account_key=key))
+                debtor_list.append(account)
         ## DATA PROCESSING
         # create a transaction group object
         transaction_group = TransactionGroup(is_editable=True)
@@ -977,19 +977,19 @@ class EditTransactionGroupDebtor(DetailView):
         # extract the date
         date = datetime.strptime(data.get('date'), '%Y-%m-%d')
         # extract the list of creditors
-        account_list = Account.objects.all()
-        creditor_list = Account.objects.none()
+        account_list = Account.objects.all().order_by('type')
+        creditor_list = []
         for account in account_list:
             key = account.account_key
             if str(key) in data.keys() and data.get(str(key)) == 'creditor':
-                creditor_list = creditor_list.union(account_list.filter(account_key=key))
-        if not creditor_list.first(): # Check for no debtors selected
+                creditor_list.append(account)
+        if not creditor_list: # Check for no debtors selected
             raise Http404('You must have creditors in your transaction.') # Complain
         ## DATA PROCESSING
         # pass the data to the template
         context = super().get_context_data(**kwargs)
-        context['account_list'] = account_list.order_by('type')
-        context['creditor_list'] = creditor_list.order_by('type')
+        context['account_list'] = account_list
+        context['creditor_list'] = creditor_list
         context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
         return render(request, self.template_name, context)
     # GET for when we skipped editing creditors
@@ -1000,16 +1000,16 @@ class EditTransactionGroupDebtor(DetailView):
         # extract the date
         date = self.object.transaction_set.first().entry_set.first().date
         # extract the list of creditors
-        creditor_list = Account.objects.none()
-        account_list = Account.objects.all()
+        creditor_list = []
+        account_list = Account.objects.all().order_by('type')
         for transaction in self.object.transaction_set.all():
             for entry in transaction.entry_set.all():
-                creditor_list = creditor_list.union(Account.objects.filter(account_key=entry.account_a.account_key))
+                creditor_list.append(get_object(Account, account_key=entry.account_a.account_key))
         # DATA PROCESSING
         # pass the data to the template
         context = super().get_context_data(**kwargs)
-        context['account_list'] = account_list.order_by('type')
-        context['creditor_list'] = creditor_list.order_by('type')
+        context['account_list'] = account_list
+        context['creditor_list'] = creditor_list
         context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
         return render(request, self.template_name, context)
 
@@ -1029,24 +1029,24 @@ class EditTransactionGroupData(DetailView):
         # extract the date
         date = datetime.strptime(data.get('date'), '%Y-%m-%d')
         # extract the lists of creditors and debtors
-        account_list = Account.objects.all()
-        creditor_list = Account.objects.none()
-        debtor_list = Account.objects.none()
+        account_list = Account.objects.all().order_by('type')
+        creditor_list = []
+        debtor_list = []
         for account in account_list:
             key = account.account_key
             if 'CREDITOR:'+str(key) in data.keys() and data.get('CREDITOR:'+str(key)) == 'creditor':
-                creditor_list = creditor_list.union(account_list.filter(account_key=key))
+                creditor_list.append(account)
             if 'DEBTOR:'+str(key) in data.keys() and data.get('DEBTOR:'+str(key)) == 'debtor':
-                debtor_list = debtor_list.union(account_list.filter(account_key=key))
-        if not debtor_list.first(): # Check for no debtors selected
+                debtor_list.append(account)
+        if not debtor_list: # Check for no debtors selected
             raise Http404('You must have debtors in your transaction.') # Complain
-        if not creditor_list.first(): # Check for no creditors selected
+        if not creditor_list: # Check for no creditors selected
             raise Http404('You must have creditors in your transaction.') # Complain
         ## DATA PROCESSING
         # pass the data to the template
         context = super().get_context_data(**kwargs)
-        context['creditor_list'] = creditor_list.order_by('type')
-        context['debtor_list'] = debtor_list.order_by('type')
+        context['creditor_list'] = creditor_list
+        context['debtor_list'] = debtor_list
         context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
         return render(request, self.template_name, context)
     # GET for when we skipped editing debtors and creditors
@@ -1057,12 +1057,12 @@ class EditTransactionGroupData(DetailView):
         # extract the date
         date = self.object.transaction_set.first().entry_set.first().date
         # extract the lists of creditors and debtors
-        creditor_list = Account.objects.none()
-        debtor_list = Account.objects.none()
+        creditor_list = []
+        debtor_list =  []
         for transaction in self.object.transaction_set.all():
             for entry in transaction.entry_set.all():
-                creditor_list = creditor_list.union(Account.objects.filter(account_key=entry.account_a.account_key))
-                debtor_list = debtor_list.union(Account.objects.filter(account_key=entry.account_b.account_key))
+                creditor_list.append(get_object(Account, account_key=entry.account_a.account_key))
+                debtor_list.append(get_object(Account, account_key=entry.account_b.account_key))
         ## DATA PROCESSING
         # pass the data to the template
         context = super().get_context_data(**kwargs)
@@ -1081,14 +1081,14 @@ def EditTransactionGroupAction(request):
         transaction_group = get_object_or_404(TransactionGroup, group_key=data.get('transaction_group'))
         # extract the lists of creditors and debtors
         account_list = Account.objects.all()
-        creditor_list = Account.objects.none()
-        debtor_list = Account.objects.none()
+        creditor_list = []
+        debtor_list = []
         for account in account_list:
             key = account.account_key
             if 'CREDITOR:'+str(key) in data.keys() and data.get('CREDITOR:'+str(key)) == 'creditor':
-                creditor_list = creditor_list.union(account_list.filter(account_key=key))
+                creditor_list.append(account)
             if 'DEBTOR:'+str(key) in data.keys() and data.get('DEBTOR:'+str(key)) == 'debtor':
-                debtor_list = debtor_list.union(account_list.filter(account_key=key))
+                debtor_list.append(account)
         # extract the date
         date = datetime.strptime(data.get('date'), '%Y-%m-%d')
         date = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
