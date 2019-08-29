@@ -43,6 +43,8 @@ class TransactionGroup(models.Model):
     is_editable = models.BooleanField(default=False, editable=False)
     approved_by = models.ForeignKey(CustomUser, blank=True, null=True, editable=False, on_delete = models.PROTECT, related_name='approved_transaction_group_set') # Who approved the object
     approved_on = models.DateTimeField(blank=True, null=True, default=datetime.now, editable=False) # When was the object approved?
+    date = models.DateTimeField(blank=False, default=datetime.now) # When did the transaction occur?
+    notes = models.TextField(blank=True)
 
     def SetApprove(self, by=None, on=None, status=True):
         if status:
@@ -87,6 +89,8 @@ class Transaction(models.Model):
     is_editable = models.BooleanField(default=False, editable=False)
     approved_by = models.ForeignKey(CustomUser, blank=True, null=True, editable=False, on_delete = models.PROTECT, related_name='approved_transaction_set') # Who approved the object
     approved_on = models.DateTimeField(blank=True, null=True, default=datetime.now, editable=False) # When was the object approved?
+    date = models.DateTimeField(blank=False, default=datetime.now) # When did the transaction occur?
+    notes = models.TextField(blank=True)
 
     def SetApprove(self, by=None, on=None, status=True):
         if status:
@@ -214,9 +218,9 @@ class Event(models.Model):
     fee_template = models.ForeignKey(FeeTemplate, blank=False, null=True, on_delete=models.PROTECT)
     name = models.CharField(max_length=100, blank=False)
     date = models.DateTimeField(blank=False, default=datetime.now) # When did the transaction occur?
-    users = models.ManyToManyField(Account, blank=True) # User Accounts that can be credited
     notes = models.TextField(blank=True)
-    transaction_group = models.OneToOneField(TransactionGroup, blank=False, null=False, on_delete=models.PROTECT, related_name='event') # The transaction group tied to the event
+    users = models.ManyToManyField(Account, blank=True) # User Accounts that can be credited
+    transaction_group = models.OneToOneField(TransactionGroup, blank=False, null=True, on_delete=models.PROTECT, related_name='event') # The transaction group tied to the event
     created_by = models.ForeignKey(CustomUser, blank=False, null=True, editable=False, on_delete=models.PROTECT) # Who created the object
     created_on = models.DateTimeField(blank=False, default=datetime.now, editable=False) # When was the object created?
     is_approved = models.BooleanField(default=False, editable=False)
@@ -245,7 +249,10 @@ class Event(models.Model):
     def delete(self, orphan=False, *args, **kwargs):
         # by default, deleting an event deletes its child, grand-children and great-grand-children
         if not orphan:
-            self.transaction_group.delete()
+            transaction_group = self.transaction_group
+            self.transaction_group = None
+            self.save()
+            transaction_group.delete()
         super().delete(*args, **kwargs)
 
     def __str__(self):

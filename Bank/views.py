@@ -57,6 +57,8 @@ class EditEntry(UpdateView):
     slug_field = 'entry_key'
     fields = ['account_a', 'account_b', 'credit_a', 'date', 'notes']
     def get_success_url(self, **kwargs):
+        # unset approved status
+        self.object.SetApprove(status=False)
         return reverse_lazy('ViewEntry', args=(self.object.entry_key,))
 
 def ToggleApproveEntry(request, slug):
@@ -222,6 +224,8 @@ def CreateEventAction(request):
         # create a transction group object
         transaction_group = TransactionGroup()
         transaction_group.created_by = request.user
+        transaction_group.date = date
+        transaction_group.notes = notes
         transaction_group.save()
         # create an event object, attach the transaction group
         event = Event()
@@ -243,6 +247,8 @@ def CreateEventAction(request):
             transaction = Transaction()
             transaction.created_by = request.user
             transaction.transaction_group = transaction_group
+            transaction.date = date
+            transaction.notes = notes
             transaction.save()
             # entries for custom currencies
             for currency in template.custom_currency.all():
@@ -371,11 +377,15 @@ def EditEventAction(request):
         ## DATA PROCESSING
         # depopulate the transaction group
         transaction_group.depopulate()
+        transaction_group.date = date
+        transaction_group.notes = notes
+        transaction_group.save()
         # create an event object, attach the transaction group
         event.fee_template = template
         event.name = name
         event.date = date
         event.notes = notes
+        event.SetApprove(status=False)
         # clear and re-add users to event
         event.users.clear()
         for user in user_list.all():
@@ -387,6 +397,8 @@ def EditEventAction(request):
             transaction = Transaction()
             transaction.created_by = request.user
             transaction.transaction_group = transaction_group
+            transaction.date = date
+            transaction.notes = notes
             transaction.save()
             # entries for custom currencies
             for currency in template.custom_currency.all():
@@ -416,7 +428,10 @@ def EditEventAction(request):
     return redirect('ViewEvent', event.event_key)
 
 class DeleteEvent(DeleteView):
-    pass
+    model = Event
+    slug_field = 'event_key'
+    success_url = reverse_lazy('UserPortalDashboard')
+    template_name = 'Bank/DeleteObject.html'
 
 class DeleteEntry(DeleteView):
     model = Entry
@@ -612,6 +627,8 @@ def CreateTransactionAction(request):
         # create a transaction object
         transaction = Transaction(is_editable=True)
         transaction.created_by = request.user
+        transaction.date = date
+        transaction.notes = notes
         transaction.save()
         # create entries for all debtors
         account_list = Account.objects.all()
@@ -761,6 +778,11 @@ def EditTransactionAction(request):
         ## DATA PROCESSING
         # delete all its entry children
         transaction.depopulate()
+        transaction.notes = notes
+        transaction.date = date
+        transaction.save()
+        # set approved status to false
+        transaction.SetApprove(status=False)
         # recreate new entries from the data
         account_list = Account.objects.all()
         for account in account_list:
@@ -862,12 +884,16 @@ def CreateTransactionGroupAction(request):
         # create a transaction group object
         transaction_group = TransactionGroup(is_editable=True)
         transaction_group.created_by = request.user
+        transaction_group.date = date
+        transaction_group.notes = notes
         transaction_group.save()
         # create transaction children and entry grand-children
         for creditor in creditor_list.all():
             transaction = Transaction()
             transaction.created_by = request.user
             transaction.transaction_group = transaction_group
+            transaction.date = date
+            transaction.notes = notes
             transaction.save()
             for debtor in debtor_list.all():
                 key = 'AMOUNT:'+str(debtor.account_key)+':'+str(creditor.account_key)
@@ -1024,11 +1050,18 @@ def EditTransactionGroupAction(request):
         ## DATA PROCESSING
         # delete all children and grand-children
         transaction_group.depopulate()
+        transaction_group.notes = notes
+        transaction_group.date = date
+        transaction_group.save()
+        # unset the approved status
+        transaction_group.SetApprove(status=False)
         # create new transaction children and entry grand-children from new data
         for creditor in creditor_list.all():
             transaction = Transaction()
             transaction.created_by = request.user
             transaction.transaction_group = transaction_group
+            transaction.date = date
+            transaction.notes = notes
             transaction.save()
             for debtor in debtor_list.all():
                 key = 'AMOUNT:'+str(debtor.account_key)+':'+str(creditor.account_key)
