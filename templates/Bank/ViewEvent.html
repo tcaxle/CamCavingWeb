@@ -19,8 +19,12 @@
     <tr>
       <td class="w3-theme-d2"><b>Users:</b><br><i>(creditors)</i></td>
       <td class="w3-theme-d1" colspan="{{ event.fee_template.custom_currency.all|length }}"><b>Charges/Credits:</b></td>
-      <td class="w3-theme-d2" colspan="{{ event.fee_template.pools.all|length }}"><b>Pools:</b></td>
-      <td class="w3-theme-d1" colspan="{{ event.fee_template.banks.all|length }}"><b>Bank Accounts:</b></td>
+      {% if event.fee_template.pools.exists %}
+        <td class="w3-theme-d2" colspan="{{ event.fee_template.pools.all|length }}"><b>Pools:</b></td>
+      {% endif %}
+      {% if event.fee_template.banks.exists %}
+        <td class="w3-theme-d1" colspan="{{ event.fee_template.banks.all|length }}"><b>Bank Accounts:</b></td>
+      {% endif %}
     </tr>
     <tr>
       <td class="w3-theme-d2"></td>
@@ -38,13 +42,13 @@
       <tr>
         <td class="w3-theme-d2">{{ user }}:</td>
           {% for currency in event.fee_template.custom_currency.all %}
-            <td class="w3-theme-l3">{% for entry in entry_list %}{% if entry.account_a == user and entry.account_b == currency.pool and currency == entry.custom_currency %}{{ entry.credit_a|ffdividei:currency.credit }} ({{ entry.credit_a|currency }}){% endif %}{% endfor %}</td>
+            <td style="border-left:1px solid;">{% for entry in entry_list %}{% if entry.account_a == user and entry.account_b == currency.pool and currency == entry.custom_currency %}{{ entry.credit_a|ffdividei:currency.credit }} ({{ entry.credit_a|currency }}){% endif %}{% endfor %}</td>
           {% endfor %}
           {% for pool in event.fee_template.pools.all %}
-            <td class="w3-theme-l3">{% for entry in entry_list %}{% if entry.account_a == user and entry.account_b == pool and entry.custom_currency is None %}{{ entry.credit_a|currency }}{% endif %}{% endfor %}</td>
+            <td style="border-left:1px solid;">{% for entry in entry_list %}{% if entry.account_a == user and entry.account_b == pool and entry.custom_currency is None %}{{ entry.credit_a|currency }}{% endif %}{% endfor %}</td>
           {% endfor %}
           {% for bank in event.fee_template.banks.all %}
-            <td class="w3-theme-l3">{% for entry in entry_list %}{% if entry.account_a == user and entry.account_b == bank and entry.custom_currency is None %}{{ entry.credit_a|currency }}{% endif %}{% endfor %}</td>
+            <td style="border-left:1px solid;">{% for entry in entry_list %}{% if entry.account_a == user and entry.account_b == bank and entry.custom_currency is None %}{{ entry.credit_a|currency }}{% endif %}{% endfor %}</td>
           {% endfor %}
       </tr>
     {% endfor %}
