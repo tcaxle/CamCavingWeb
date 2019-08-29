@@ -320,7 +320,7 @@ class EditEventData(DetailView):
     def post(self, request, *args, **kwargs):
         ## DATA RETRIEVAL
         # get the transaction group object
-        self.object = self.get_object_or_404()
+        self.object = self.get_object()
         # retrieve all post data (as dictionary of strings)
         data = request.POST
         # extract name
@@ -350,7 +350,7 @@ class EditEventData(DetailView):
     def get(self, request, *args, **kwargs):
         ## DATA RETRIEVAL
         # get the transaction group object
-        self.object = self.get_object_or_404()
+        self.object = self.get_object()
         event = self.object
         # extract name
         name = event.name
@@ -696,7 +696,7 @@ class EditTransactionDebtor(DetailView):
     def post(self, request, *args, **kwargs):
         ## DATA RETRIEVAL
         # get the transaction object
-        self.object = self.get_object_or_404()
+        self.object = self.get_object()
         # extract the POST data
         data = request.POST
         # extract the date
@@ -715,7 +715,7 @@ class EditTransactionDebtor(DetailView):
     def get(self, request, *args, **kwargs):
         ## DATA RETRIEVAL
         # get the transaction object
-        self.object = self.get_object_or_404()
+        self.object = self.get_object()
         # extract the date
         date = self.object.entry_set.first().date
         # extract the creditor
@@ -739,7 +739,7 @@ class EditTransactionData(DetailView):
     def post(self, request, *args, **kwargs):
         ## DATA RETRIEVAL
         # get the transaction object
-        self.object = self.get_object_or_404()
+        self.object = self.get_object()
         # extract the POST data
         data = request.POST
         # extract the date
@@ -765,7 +765,7 @@ class EditTransactionData(DetailView):
     # GET for when we want to directly change the data but not the creditors or the debtors
     def get(self, request, *args, **kwargs):
         # get the transaction object
-        self.object = self.get_object_or_404()
+        self.object = self.get_object()
         # extract the date
         date = self.object.date
         # extract the creditor
@@ -953,7 +953,7 @@ class EditTransactionGroupDebtor(DetailView):
     def post(self, request, *args, **kwargs):
         ## DATA RETRIEVAL
         # get the transaction group object
-        self.object = self.get_object_or_404()
+        self.object = self.get_object()
         # extract the POST data
         data = request.POST
         # extract the date
@@ -978,7 +978,7 @@ class EditTransactionGroupDebtor(DetailView):
     def get(self, request, *args, **kwargs):
         ## DATA RETRIEVAL
         # get the transaction group object
-        self.object = self.get_object_or_404()
+        self.object = self.get_object()
         # extract the date
         date = self.object.transaction_set.first().entry_set.first().date
         # extract the list of creditors
@@ -1005,7 +1005,7 @@ class EditTransactionGroupData(DetailView):
     def post(self, request, *args, **kwargs):
         ## DATA RETRIEVAL
         # get transction group object
-        self.object = self.get_object_or_404()
+        self.object = self.get_object()
         # extract the POST data
         data = request.POST
         # extract the date
@@ -1035,7 +1035,7 @@ class EditTransactionGroupData(DetailView):
     def get(self, request, *args, **kwargs):
         ## DATA RETRIEVAL
         # get transaction group object
-        self.object = self.get_object_or_404()
+        self.object = self.get_object()
         # extract the date
         date = self.object.transaction_set.first().entry_set.first().date
         # extract the lists of creditors and debtors
