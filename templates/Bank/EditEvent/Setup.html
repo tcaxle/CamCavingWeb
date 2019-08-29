@@ -2,28 +2,37 @@
 {% load static %}
 
 {% block form %}
-  <h2>Select Debtors</h2>
-  <form method="post" action="{% url 'EditTransactionGroupData' transaction_group.group_key %}">
+  <h2>Event Setup</h2>
+  <form method="post" action="{% url 'EditEventData' event.event_key %}">
   {% csrf_token %}
 
   <table class="w3-table w3-striped">
     <tr>
-      <td>Creditors:</td>
-      <td>{% for creditor in creditor_list %}<input type="hidden" name="CREDITOR:{{ creditor.account_key }}" value="creditor">{{ creditor }}, {% endfor %}</td>
+      <td>Name:</td>
+      <td><input class="w3-input" type="text" name="name" value="{{ event.name }}"></td>
     </tr>
     <tr>
       <td>Date:</td>
-      <td><input class="w3-input" type="date" name="date" value="{{ date.date.isoformat }}"></td>
+      <td><input class="w3-input" type="date" name="date" value="{{ event.date.date.isoformat }}"></td>
     </tr>
     <tr>
-      <td><b>Debtors</b></td>
-      <td></td>
+      <td>Fee Template:</td>
+      <td>
+        <select class="w3-input" name="fee_template">
+          {% for template in template_list %}
+            <option value="{{ template.template_key }}" {% if template == event.fee_template %}selected{% endif %}>{{ template }}</option>
+          {% endfor %}
+        </select>
+      </td>
     </tr>
-    {% for account in account_list %}
+    <tr>
+      <td colspan='2'><b>Users:</b></td>
+    </tr>
+    {% for user_account in user_list %}
       <tr>
-        <td>{{ account }}:</td>
+        <td>{{ user_account }}:</td>
         <td>
-          <input class="w3-input" type="checkbox" name="DEBTOR:{{ account.account_key }}" value="debtor" {% for transaction in transaction_group.transaction_set.all %}{% for entry in transaction.entry_set.all %}{% if account == entry.account_b %}checked {% endif %}{% endfor %}{% endfor %}>
+          <input class="w3-input" type="checkbox" name="USER:{{ user_account.account_key }}" value="user" {% for transaction in event.transaction_group.transaction_set.all %}{% for entry in transaction.entry_set.all %}{% if entry.account_a == user_account %}checked {% endif %}{% endfor %}{% endfor %}>
         </td>
       </tr>
     {% endfor %}

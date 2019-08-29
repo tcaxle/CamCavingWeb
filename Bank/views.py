@@ -277,13 +277,143 @@ class ViewEvent(DetailView):
     slug_field = 'event_key'
 
 class EditEventSetup(DetailView):
-    pass
+    model = Event
+    slug_field = 'event_key'
+    template_name = 'Bank/EditEvent/Setup.html'
+    context_object_name = 'event'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['template_list'] = FeeTemplate.objects.all().order_by('name')
+        context['user_list'] = Account.objects.filter(type='User').order_by('type')
+        return context
 
 class EditEventData(DetailView):
-    pass
+    model = Event
+    slug_field = 'event_key'
+    template_name = 'Bank/EditEvent/InputData.html'
+    context_object_name = 'event'
+    def post(self, request, *args, **kwargs):
+        ## DATA RETRIEVAL
+        # get the transaction group object
+        self.object = self.get_object()
+        # retrieve all post data (as dictionary of strings)
+        data = request.POST
+        # extract name
+        name = data.get('name')
+        # extract date
+        date = datetime.strptime(data.get('date'), '%Y-%m-%d')
+        # extract fee template
+        template = get_object_or_404(FeeTemplate, template_key=data.get('fee_template'))
+        # extract user list
+        account_list = Account.objects.all()
+        user_list = Account.objects.none()
+        for account in account_list:
+            key = account.account_key
+            if 'USER:'+str(key) in data.keys() and data.get('USER:'+str(key)) == 'user':
+                user_list = user_list.union(account_list.filter(account_key=key))
+        if not user_list.first(): # Check for no users selected
+            raise Http404('You must have user in your event.') # Complain
+        ## DATA PROCESSING
+        # pass extracted data back to view
+        context = super().get_context_data(**kwargs)
+        context['name'] = name
+        context['template'] = template
+        context['user_list'] = user_list.order_by('owner')
+        context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
+        return render(request, self.template_name, context)
+
+    def get(self, request, *args, **kwargs):
+        ## DATA RETRIEVAL
+        # get the transaction group object
+        self.object = self.get_object()
+        event = self.object
+        # extract name
+        name = event.name
+        # extract date
+        date = event.date
+        # extract fee template
+        template = event.fee_template
+        # extract user list
+        user_list = event.users.all()
+        ## DATA PROCESSING
+        # pass extracted data back to view
+        context = super().get_context_data(**kwargs)
+        context['name'] = name
+        context['template'] = template
+        context['user_list'] = user_list.order_by('owner')
+        context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
+        return render(request, self.template_name, context)
 
 def EditEventAction(request):
-    pass
+    if request.method == 'POST':
+        ## DATA RETRIEVAL
+        # retrieve all POST data
+        data = request.POST
+        # extract name
+        name = data.get('name')
+        # extract date
+        date = datetime.strptime(data.get('date'), '%Y-%m-%d')
+        date = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
+        # extract notes
+        notes = data.get('notes')
+        # extract fee template
+        template = get_object_or_404(FeeTemplate, template_key=data.get('fee_template'))
+        # extract user list
+        account_list = Account.objects.all()
+        user_list = Account.objects.none()
+        for account in account_list:
+            key = account.account_key
+            if 'USER:'+str(key) in data.keys() and data.get('USER:'+str(key)) == 'user':
+                user_list = user_list.union(account_list.filter(account_key=key))
+        # retrieve event object
+        event = get_object_or_404(Event, event_key=data.get('event'))
+        transaction_group = event.transaction_group
+        ## DATA PROCESSING
+        # depopulate the transaction group
+        transaction_group.depopulate()
+        # create an event object, attach the transaction group
+        event.fee_template = template
+        event.name = name
+        event.date = date
+        event.notes = notes
+        # clear and re-add users to event
+        event.users.clear()
+        for user in user_list.all():
+            event.users.add(user)
+        event.save()
+        # create entries and transactions, and tie them to the event
+        for user in user_list.all():
+            # create transaction
+            transaction = Transaction()
+            transaction.created_by = request.user
+            transaction.transaction_group = transaction_group
+            transaction.save()
+            # entries for custom currencies
+            for currency in template.custom_currency.all():
+                key = 'AMOUNT:'+str(currency.currency_key)+':'+str(user.account_key)
+                if key in data.keys() and data.get(key) and int(data.get(key)) != 0:
+                    entry = Entry(account_a=user, account_b=currency.pool, credit_a=int(data.get(key))*float(currency.credit), date=date, notes=notes)
+                    entry.created_by = request.user
+                    entry.transaction = transaction
+                    entry.custom_currency = currency # allows us to retrieve the event data
+                    entry.save()
+            # entries for pools
+            for pool in template.pools.all():
+                key = 'AMOUNT:'+str(pool.account_key)+':'+str(user.account_key)
+                if key in data.keys() and data.get(key) and float(data.get(key)) != 0.0:
+                    entry = Entry(account_a=user, account_b=pool, credit_a=float(data.get(key)), date=date, notes=notes)
+                    entry.created_by = request.user
+                    entry.transaction = transaction
+                    entry.save()
+            # entries for banks
+            for bank in template.banks.all():
+                key = 'AMOUNT:'+str(bank.account_key)+':'+str(user.account_key)
+                if key in data.keys() and data.get(key) and float(data.get(key)) != 0.0:
+                    entry = Entry(account_a=user, account_b=bank, credit_a=float(data.get(key)), date=date, notes=notes)
+                    entry.created_by = request.user
+                    entry.transaction = transaction
+                    entry.save()
+    return redirect('ViewEvent', event.event_key)
 
 class DeleteEvent(DeleteView):
     pass

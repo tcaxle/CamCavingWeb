@@ -2,26 +2,15 @@
 {% load static %}
 
 {% block title %}
-  <title>CUCC | Bank | Edit Transaction Group</title>
+  <title>CUCC | Bank | Edit Event</title>
 {% endblock %}
 
 {% block main-content %}
-  <h1>Edit Many-To-Many Transaction Group</h1>
+  <h1>Add Event</h1>
   {% block form %}
   {% endblock %}
 {% endblock %}
 
 {% block side-content %}
-  <div class="w3-panel w3-yellow w3-card-4">
-    <p><b>Tip</b> - To register the accounts for a meet, you should:</p>
-    <ol>
-      <li>Select all club members as creditors</li>
-      <li>Select all relevant pools as debtors</li>
-      <li>Users will now appear as rows, and Pools as columns. Each cell represents the credit on the User from the Pool. A negative value signifies a debit</li>
-    </ol>
-    <p>For instance, if Joe Bloggs were to have been on a meet costing £35.00, he would be credited -35.00 from the Meets Pool, signifying a debit on his account of £35.00 and a credit to the Meets Pool of £35.00.</p>
-    <p>Similarly, if John Smith were to have been on a meet and spent £40.00 on petrol, he would be credited 40.00 from the Meets Pool, signifying a credit on his account of £40.00 and a debit to the Meets Pool of £40.00.</p>
-    <p>(This is the basic format of double-entry account keeping)</p>
-  </div>
   {% include 'ActionSets/Bank.html' %}
 {% endblock %}

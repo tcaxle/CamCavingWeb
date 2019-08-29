@@ -1,49 +1,61 @@
 {% extends 'Bank/EditEvent/EditEventBase.html' %}
 {% load static %}
+{% load currency %}
+{% load divide %}
 
 {% block form %}
   <h2>Input Data</h2>
-  <form method="post" action="{% url 'EditTransactionGroupAction' %}">
+  <form method="post" action="{% url 'EditEventAction' %}">
   {% csrf_token %}
-  <input type="hidden" name="transaction_group" value="{{ transaction_group.group_key }}">
-  {% for creditor in creditor_list %}
-    <input type="hidden" name="CREDITOR:{{ creditor.account_key }}" value="creditor">
+  {% for user in user_list %}
+    <input type="hidden" name="USER:{{ user.account_key }}" value="user">
   {% endfor %}
-  {% for debtor in debtor_list %}
-    <input type="hidden" name="DEBTOR:{{ debtor.account_key }}" value="debtor">
-  {% endfor %}
+  <input type="hidden" name="fee_template" value="{{ template.template_key }}">
+  <input type="hidden" name="event" value="{{ event.event_key }}">
   <table class="w3-table w3-striped">
+    <tr>
+      <td>Name:</td>
+      <td><input class="w3-input" type="text" name="name" value="{{ name }}"></td>
+    </tr>
     <tr>
       <td>Date:</td>
       <td><input class="w3-input" type="date" name="date" value="{{ date.date.isoformat }}"></td>
     </tr>
   </table>
   <div class="w3-panel w3-yellow w3-card-4">
-    <p><b>Tip</b> - The amount entered into each cell of the table is the amount that the creditor account should be credited by. The corresponding credit/debit to the debtors will be calculated automatically. Each row represents a many-to-one transaction.</p>
+    <p><b>Tip</b> - The amount entered into each cell of the table is the amount that the user account should be credited by. The corresponding credit/debit to the debtors will be calculated automatically. Each row represents a many-to-one transaction.</p>
   </div>
   <table class="w3-table w3-striped">
     <tr>
-      <td class="w3-theme-d2"><b>Creditors:</b></td>
-      <td class="w3-theme-d1" colspan="{{ debtor_list|length }}"><b>Debtors:</b></td>
+      <td class="w3-theme-d2"><b>Users:</b></td>
+      <td class="w3-theme-d1" colspan="{{ template.custom_currency.all|length }}"><b>Charges/Credits:</b><br><i>(must be integers)</i></td>
+      <td class="w3-theme-d2" colspan="{{ template.pools.all|length }}"><b>Pools:</b></td>
+      <td class="w3-theme-d1" colspan="{{ template.banks.all|length }}"><b>Bank Accounts:</b></td>
     </tr>
     <tr>
       <td class="w3-theme-d2"></td>
-      {% for debtor in debtor_list %}
-        <td  class="w3-theme-d1">{{ debtor }}</td>
+      {% for currency in template.custom_currency.all %}
+        <td  class="w3-theme-d1">{{ currency }} ({{ currency.credit|currency }})</td>
+      {% endfor %}
+      {% for pool in template.pools.all %}
+        <td  class="w3-theme-d2">{{ pool }}</td>
+      {% endfor %}
+      {% for bank in template.banks.all %}
+        <td  class="w3-theme-d1">{{ bank }}</td>
       {% endfor %}
     </tr>
-    {% for creditor in creditor_list %}
+    {% for user in user_list %}
       <tr>
-        <td class="w3-theme-d2">{{ creditor }}:</td>
-        {% for debtor in debtor_list %}
-          {% if debtor.type == 'Pool' and creditor.type == 'Bank' %}
-          <td class="w3-theme-l3"></td>
-          {% elif debtor.type == 'Bank' and creditor.type == 'Pool' %}
-          <td class="w3-theme-l3"></td>
-          {% else %}
-          <td class="w3-theme-l3"><input class="w3-input" type="number" step="0.01" name="AMOUNT:{{ debtor.account_key }}:{{ creditor.account_key }}" value="{% for transaction in transaction_group.transaction_set.all %}{% for entry in transaction.entry_set.all %}{% if entry.account_a == creditor and entry.account_b == debtor %}{{ entry.credit_a }}{% endif %}{% endfor %}{% endfor %}"></td>
-          {% endif %}
-        {% endfor %}
+        <td class="w3-theme-d2">{{ user }}:</td>
+          {% for currency in template.custom_currency.all %}
+            <td class="w3-theme-l3"><input class="w3-input" type="number" step="1" name="AMOUNT:{{ currency.currency_key }}:{{ user.account_key }}" {% for transaction in event.transaction_group.transaction_set.all %}{% for entry in transaction.entry_set.all %}{% if entry.account_a == user and entry.account_b == currency.pool and currency == entry.custom_currency %}value="{{ entry.credit_a|fidividei:currency.credit }}"{% endif %}{% endfor %}{% endfor %}></td>
+          {% endfor %}
+          {% for pool in template.pools.all %}
+            <td class="w3-theme-l3"><input class="w3-input" type="number" step="0.01" name="AMOUNT:{{ pool.account_key }}:{{ user.account_key }}" {% for transaction in event.transaction_group.transaction_set.all %}{% for entry in transaction.entry_set.all %}{% if entry.account_a == user and entry.account_b == pool and not entry.custom_currency %}value="{{ entry.credit_a }}"{% endif %}{% endfor %}{% endfor %}></td>
+          {% endfor %}
+          {% for bank in template.banks.all %}
+            <td class="w3-theme-l3"><input class="w3-input" type="number" step="0.01" name="AMOUNT:{{ bank.account_key }}:{{ user.account_key }}" {% for transaction in event.transaction_group.transaction_set.all %}{% for entry in transaction.entry_set.all %}{% if entry.account_a == user and entry.account_b == bank and not entry.custom_currency %}value="{{ entry.credit_a }}"{% endif %}{% endfor %}{% endfor %}></td>
+          {% endfor %}
       </tr>
     {% endfor %}
   </table>
@@ -51,7 +63,7 @@
   <table class="w3-table w3-striped">
     <tr>
       <td>Notes:<br><i>Be consice</i></td>
-      <td><input class="w3-input" type="textarea" name="notes"></td>
+      <td><input class="w3-input" type="textarea" name="notes" value="{{ event.notes }}"></td>
     </tr>
   </table>
   <div class="w3-padding-16">
