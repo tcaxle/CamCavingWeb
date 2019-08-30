@@ -77,6 +77,18 @@ class TransactionGroup(models.Model):
         else:
             self.SetApprove(by, on)
 
+    def populate(self, t_g_list):
+        # takes a list of tuples: [(creditor, dict{debtor: credit}), ...] \
+        # and generates a transaction for each dict
+
+        for creditor, dict in t_g_list:
+            # create a transaction and make it inherit all the group data
+            transaction = Transaction(date=self.date, notes=self.notes, created_by=self.created_by, created_on=self.created_on, transaction_group=self)
+            # save it
+            transaction.save()
+            # populate the transaction
+            transaction.populate(creditor, dict)
+
     def depopulate(self):
         # deletes transactions owned by the transaction group
         for transaction in self.transaction_set.all():
@@ -127,6 +139,15 @@ class Transaction(models.Model):
             self.SetApprove(status=False)
         else:
             self.SetApprove(by, on)
+
+    def populate(self, creditor, dict):
+        # takes a creditor and a dict{debtor: credit} \
+        # and generates an entry for each item in the dictionary
+        # entries inherit the date, notes, and created data from the transaction
+        for debtor, credit in dict.items():
+            # create an entry, and make it inherit the transaction shared data as well as entry specific data
+            entry = Entry(account_a=creditor, account_b=debtor, credit_a=credit, date=self.date, notes=self.notes, created_by=self.created_by, created_on=self.created_on, transaction=self)
+            entry.save()
 
     def depopulate(self):
         # deletes entries owned by the transaction group

@@ -673,15 +673,14 @@ def CreateTransactionAction(request):
         transaction.save()
         # create entries for all debtors
         account_list = Account.objects.all()
+        debtor_dict = {}
         for account in account_list:
             key = str(account.account_key)
             if key in data.keys() and data.get(key) and float(data.get(key)) != 0.0:
-                debtor = account
-                amount = data.get(key)
-                entry = Entry(account_a=creditor, account_b=debtor, credit_a=float(amount), date=date, notes=notes)
-                entry.created_by = request.user
-                entry.transaction = transaction
-                entry.save()
+                # add the debtor and the credit to the debtor_dict ready to populate the transaction
+                debtor_dict[account] = float(data.get(key))
+        # populate the transaction
+        transaction.populate(creditor, debtor_dict)
     return redirect('ViewTransaction', transaction.transaction_key)
 
 @method_decorator(permission_required('Bank.change__transaction'), name='dispatch')
@@ -816,17 +815,16 @@ def EditTransactionAction(request):
         transaction.save()
         # set approved status to false
         transaction.SetApprove(status=False)
-        # recreate new entries from the data
+        # create entries for all debtors
         account_list = Account.objects.all()
+        debtor_dict = {}
         for account in account_list:
             key = str(account.account_key)
             if key in data.keys() and data.get(key) and float(data.get(key)) != 0.0:
-                debtor = account
-                amount = data.get(key)
-                entry = Entry(account_a=creditor, account_b=debtor, credit_a=float(amount), date=date, notes=notes)
-                entry.created_by = request.user
-                entry.transaction = transaction
-                entry.save()
+                # add the debtor and the credit to the debtor_dict ready to populate the transaction
+                debtor_dict[account] = float(data.get(key))
+        # populate the transaction
+        transaction.populate(creditor, debtor_dict)
     return redirect('ViewTransaction', transaction.transaction_key)
 
 @method_decorator(permission_required('Bank.add__transactiongroup'), name='dispatch')
@@ -924,20 +922,15 @@ def CreateTransactionGroupAction(request):
         transaction_group.notes = notes
         transaction_group.save()
         # create transaction children and entry grand-children
+        transaction_list = []
         for creditor in creditor_list:
-            transaction = Transaction()
-            transaction.created_by = request.user
-            transaction.transaction_group = transaction_group
-            transaction.date = date
-            transaction.notes = notes
-            transaction.save()
+            debtor_dict = {}
             for debtor in debtor_list:
                 key = 'AMOUNT:'+str(debtor.account_key)+':'+str(creditor.account_key)
                 if key in data.keys() and data.get(key) and float(data.get(key)) != 0.0:
-                    entry = Entry(account_a=creditor, account_b=debtor, credit_a=float(data.get(key)), date=date, notes=notes)
-                    entry.created_by = request.user
-                    entry.transaction = transaction
-                    entry.save()
+                    debtor_dict[debtor] = float(data.get(key))
+            transaction_list.append((creditor, debtor_dict))
+        transaction_group.populate(transaction_list)
     return redirect('ViewTransactionGroup', transaction_group.group_key)
 
 @method_decorator(permission_required('Bank.change__transactiongroup'), name='dispatch')
@@ -1050,12 +1043,12 @@ class EditTransactionGroupData(DetailView):
         # extract the date
         date = self.object.transaction_set.first().entry_set.first().date
         # extract the lists of creditors and debtors
-        creditor_list = []
-        debtor_list =  []
+        creditor_list = set()
+        debtor_list = set()
         for transaction in self.object.transaction_set.all():
             for entry in transaction.entry_set.all():
-                creditor_list.append(get_object_or_404(Account, account_key=entry.account_a.account_key))
-                debtor_list.append(get_object_or_404(Account, account_key=entry.account_b.account_key))
+                creditor_list.add(get_object_or_404(Account, account_key=entry.account_a.account_key))
+                debtor_list.add(get_object_or_404(Account, account_key=entry.account_b.account_key))
         ## DATA PROCESSING
         # pass the data to the template
         context = super().get_context_data(**kwargs)
@@ -1090,24 +1083,20 @@ def EditTransactionGroupAction(request):
         ## DATA PROCESSING
         # delete all children and grand-children
         transaction_group.depopulate()
+        # update the notes and date
         transaction_group.notes = notes
         transaction_group.date = date
         transaction_group.save()
         # unset the approved status
         transaction_group.SetApprove(status=False)
-        # create new transaction children and entry grand-children from new data
+        # create transaction children and entry grand-children
+        transaction_list = []
         for creditor in creditor_list:
-            transaction = Transaction()
-            transaction.created_by = request.user
-            transaction.transaction_group = transaction_group
-            transaction.date = date
-            transaction.notes = notes
-            transaction.save()
+            debtor_dict = {}
             for debtor in debtor_list:
                 key = 'AMOUNT:'+str(debtor.account_key)+':'+str(creditor.account_key)
                 if key in data.keys() and data.get(key) and float(data.get(key)) != 0.0:
-                    entry = Entry(account_a=creditor, account_b=debtor, credit_a=float(data.get(key)), date=date, notes=notes)
-                    entry.created_by = request.user
-                    entry.transaction = transaction
-                    entry.save()
+                    debtor_dict[debtor] = float(data.get(key))
+            transaction_list.append((creditor, debtor_dict))
+        transaction_group.populate(transaction_list)
     return redirect('ViewTransactionGroup', transaction_group.group_key)
