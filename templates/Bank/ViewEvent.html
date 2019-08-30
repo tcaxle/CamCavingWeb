@@ -19,7 +19,7 @@
     <tr>
       <td class="w3-theme-d2"><b>Users:</b><br><i>(creditors)</i></td>
       <td class="w3-theme-d1" colspan="{{ event.fee_template.custom_currency.all|length }}"><b>Charges/Credits:</b></td>
-      <td class="w3-theme-d1" colspan="{{ event.fee_template.custom_expense.all|length }}"><b>Expenses:</b></td>
+      <td class="w3-theme-d2" colspan="{{ event.fee_template.custom_expense.all|length }}"><b>Expenses:</b></td>
 
     </tr>
     <tr>
@@ -28,18 +28,18 @@
         <td class="w3-theme-d1" style="min-width:120px">{{ currency }} ({{ currency.credit|currency }})</td>
       {% endfor %}
       {% for expense in event.fee_template.custom_expense.all %}
-        <td class="w3-theme-d1" style="min-width:120px">{{ expense }}</td>
+        <td class="w3-theme-d2" style="min-width:120px">{{ expense }}</td>
       {% endfor %}
     </tr>
     {% for user in event.users.all %}
       <tr>
         <td class="w3-theme-d2">{{ user }}:</td>
-          {% for currency in event.fee_template.custom_currency.all %}
-            <td style="border-left:1px solid;">{% for entry in entry_list %}{% if entry.account_a == user and entry.account_b == currency.pool and currency == entry.custom_currency %}{{ entry.credit_a|ffdividei:currency.credit }} ({{ entry.credit_a|currency }}){% endif %}{% endfor %}</td>
-          {% endfor %}
-          {% for expense in event.fee_template.custom_expense.all %}
-            <td style="border-left:1px solid;">{% for entry in entry_list %}{% if entry.account_a == user and entry.account_b == expense.pool and expense == entry.custom_expense %}{{ entry.credit_a|currency }}{% endif %}{% endfor %}</td>
-          {% endfor %}
+        {% for currency in event.fee_template.custom_currency.all %}
+          <td style="border-left:1px solid;">{% for entry in entry_list %}{% if entry.account_a == user and entry.account_b == currency.pool and currency == entry.custom_currency %}{{ entry.credit_a|ffdividei:currency.credit }} ({{ entry.credit_a|currency }}){% endif %}{% endfor %}</td>
+        {% endfor %}
+        {% for expense in event.fee_template.custom_expense.all %}
+          <td style="border-left:1px solid;">{% for entry in entry_list %}{% if entry.account_a == user and entry.account_b == expense.pool and expense == entry.custom_expense %}{{ entry.credit_a|currency }}{% endif %}{% endfor %}</td>
+        {% endfor %}
       </tr>
     {% endfor %}
   </table>
