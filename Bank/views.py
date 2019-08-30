@@ -15,6 +15,7 @@ from django.http import Http404
 from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
 from django.contrib.auth.decorators import permission_required
+from collections import OrderedDict
 
 def BalanceAtDate(account, date=timezone.now(), all=False):
     # Returns the balance of an account at a date as a float
@@ -179,7 +180,7 @@ class CreateEventSetup(TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['template_list'] = FeeTemplate.objects.all().order_by('name')
-        context['user_list'] = Account.objects.exclude(type='Pool').order_by('sort_name')
+        context['user_list'] = Account.objects.exclude(type='Pool')
         context['date'] = datetime.now()
         return context
 
@@ -197,7 +198,7 @@ class CreateEventData(TemplateView):
         # extract fee template
         template = get_object_or_404(FeeTemplate, template_key=data.get('fee_template'))
         # extract user list
-        account_list = Account.objects.all().order_by('sort_name')
+        account_list = Account.objects.all()
         user_list = []
         for account in account_list:
             key = account.account_key
@@ -230,7 +231,7 @@ def CreateEventAction(request):
         # extract fee template
         template = get_object_or_404(FeeTemplate, template_key=data.get('fee_template'))
         # extract user list
-        account_list = Account.objects.all().order_by('sort_name')
+        account_list = Account.objects.all()
         user_list = []
         for account in account_list:
             key = account.account_key
@@ -319,7 +320,7 @@ class EditEventSetup(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['template_list'] = FeeTemplate.objects.all().order_by('name')
-        context['user_list'] = Account.objects.filter(type='User').order_by('sort_name')
+        context['user_list'] = Account.objects.filter(type='User')
         return context
 
 @method_decorator(permission_required('Bank.change__event'), name='dispatch')
@@ -341,7 +342,7 @@ class EditEventData(DetailView):
         # extract fee template
         template = get_object_or_404(FeeTemplate, template_key=data.get('fee_template'))
         # extract user list
-        account_list = Account.objects.all().order_by('sort_name')
+        account_list = Account.objects.all()
         user_list = []
         for account in account_list:
             key = account.account_key
@@ -574,7 +575,7 @@ class ListAccounts(ListView):
         for account in account_list:
             balance_list.append(BalanceAtDate(account, all=True))
         # combine account and balance lists into dict for easier parsing in template
-        context['account_dict'] = dict(zip(account_list, balance_list))
+        context['account_dict'] = OrderedDict(zip(account_list, balance_list))
         return context
 
 @method_decorator(permission_required('Bank.view__transaction'), name='dispatch')
@@ -604,7 +605,7 @@ class CreateTransactionCreditor(TemplateView):
     template_name = 'Bank/AddTransaction/SelectCreditor.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['account_list'] = Account.objects.all().order_by('sort_name')
+        context['account_list'] = Account.objects.all()
         context['date'] = datetime.now()
         return context
 
@@ -616,7 +617,7 @@ class CreateTransactionDebtor(TemplateView):
         data = request.POST
         date = datetime.strptime(data.get('date'), '%Y-%m-%d')
         creditor = get_object_or_404(Account, account_key=data.get('creditor'))
-        account_list = Account.objects.all().order_by('sort_name')
+        account_list = Account.objects.all()
         context = super().get_context_data(**kwargs)
         context['account_list'] = account_list
         context['creditor'] = creditor
@@ -635,7 +636,7 @@ class CreateTransactionData(TemplateView):
         # extract creditor
         creditor = get_object_or_404(Account, account_key=data.get('creditor'))
         # extract list of debtors
-        all_accounts = Account.objects.all().order_by('sort_name')
+        all_accounts = Account.objects.all()
         account_list = []
         for account in all_accounts:
             key = account.account_key
@@ -692,7 +693,7 @@ class EditTransactionCreditor(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # pass data to template to pre-populate form
-        context['account_list'] = Account.objects.all().order_by('sort_name')
+        context['account_list'] = Account.objects.all()
         context['date'] = datetime.now()
         return context
 
@@ -713,7 +714,7 @@ class EditTransactionDebtor(DetailView):
         date = datetime.strptime(data.get('date'), '%Y-%m-%d')
         # extract the creditor
         creditor = get_object_or_404(Account, account_key=data.get('creditor'))
-        account_list = Account.objects.all().order_by('sort_name')
+        account_list = Account.objects.all()
         ## DATA PROCESSING
         # pass data to template to populate form
         context = super().get_context_data(**kwargs)
@@ -730,7 +731,7 @@ class EditTransactionDebtor(DetailView):
         date = self.object.entry_set.first().date
         # extract the creditor
         creditor = self.object.entry_set.first().account_a
-        account_list = Account.objects.all().order_by('sort_name')
+        account_list = Account.objects.all()
         ## DATA PROCESSING
         # pass the data to the template to populate form
         context = super().get_context_data(**kwargs)
@@ -757,7 +758,7 @@ class EditTransactionData(DetailView):
         # extract the creditor
         creditor = get_object_or_404(Account, account_key=data.get('creditor'))
         # extract the debtor list
-        all_accounts = Account.objects.all().order_by('sort_name')
+        all_accounts = Account.objects.all()
         account_list = []
         for account in all_accounts:
             key = account.account_key
@@ -832,7 +833,7 @@ class CreateTransactionGroupCreditor(TemplateView):
     template_name = 'Bank/AddTransactionGroup/SelectCreditor.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['account_list'] = Account.objects.all().order_by('sort_name')
+        context['account_list'] = Account.objects.all()
         context['date'] = datetime.now()
         return context
 
@@ -846,7 +847,7 @@ class CreateTransactionGroupDebtor(TemplateView):
         # extract the date
         date = datetime.strptime(data.get('date'), '%Y-%m-%d')
         # extract the list of creditors
-        account_list = Account.objects.all().order_by('sort_name')
+        account_list = Account.objects.all()
         creditor_list = []
         for account in account_list:
             key = account.account_key
@@ -872,7 +873,7 @@ class CreateTransactionGroupData(TemplateView):
         # extract the date
         date = datetime.strptime(data.get('date'), '%Y-%m-%d')
         # extract the lists of debtors and creditors
-        account_list = Account.objects.all().order_by('sort_name')
+        account_list = Account.objects.all()
         creditor_list = []
         debtor_list = []
         for account in account_list:
@@ -942,7 +943,7 @@ class EditTransactionGroupCreditor(DetailView):
     template_name = 'Bank/EditTransactionGroup/SelectCreditor.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['account_list'] = Account.objects.all().order_by('sort_name')
+        context['account_list'] = Account.objects.all()
         context['date'] = datetime.now()
         return context
 
@@ -963,7 +964,7 @@ class EditTransactionGroupDebtor(DetailView):
         # extract the date
         date = datetime.strptime(data.get('date'), '%Y-%m-%d')
         # extract the list of creditors
-        account_list = Account.objects.all().order_by('sort_name')
+        account_list = Account.objects.all()
         creditor_list = []
         for account in account_list:
             key = account.account_key
@@ -987,7 +988,7 @@ class EditTransactionGroupDebtor(DetailView):
         date = self.object.transaction_set.first().entry_set.first().date
         # extract the list of creditors
         creditor_list = []
-        account_list = Account.objects.all().order_by('sort_name')
+        account_list = Account.objects.all()
         for transaction in self.object.transaction_set.all():
             for entry in transaction.entry_set.all():
                 creditor_list.append(get_object_or_404(Account, account_key=entry.account_a.account_key))
@@ -1015,7 +1016,7 @@ class EditTransactionGroupData(DetailView):
         # extract the date
         date = datetime.strptime(data.get('date'), '%Y-%m-%d')
         # extract the lists of creditors and debtors
-        account_list = Account.objects.all().order_by('sort_name')
+        account_list = Account.objects.all()
         creditor_list = []
         debtor_list = []
         for account in account_list:
