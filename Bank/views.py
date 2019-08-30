@@ -565,19 +565,16 @@ class ListAccounts(ListView):
     model = Account
     template_name = 'Bank/ListAccounts.html'
     context_object_name = 'account_list'
-    def get_queryset(self):
-        return Account.objects.all().order_by('sort_name')
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # recover account list
         account_list = context['account_list']
-	account_qs = account_list.order_by('sort_name')
         # generate balance for each account
         balance_list = []
-        for account in account_qs:
+        for account in account_list.all():
             balance_list.append(BalanceAtDate(account, all=True))
         # combine account and balance lists into dict for easier parsing in template
-        context['account_dict'] = dict(zip(account_qs, balance_list))
+        context['account_dict'] = dict(zip(account_list.all(), balance_list))
         return context
 
 @method_decorator(permission_required('Bank.view__transaction'), name='dispatch')
