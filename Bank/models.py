@@ -34,7 +34,7 @@ class Account(models.Model):
             ("view_own__account", "Can view own account"),
             ("view_other__account", "Can view others' accounts"),
         ]
-        ordering = ['sort_name']
+        ordering = ['type', 'sort_name']
 
 class CustomCurrency(models.Model):
     # Allows custom "currencies," which are rates to be charged
