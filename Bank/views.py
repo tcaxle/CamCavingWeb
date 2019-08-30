@@ -575,6 +575,7 @@ class ListAccounts(ListView):
             balance_list.append(BalanceAtDate(account, all=True))
         # combine account and balance lists into dict for easier parsing in template
         context['account_dict'] = dict(zip(account_list, balance_list))
+        print(context['account_dict'])
         return context
 
 @method_decorator(permission_required('Bank.view__transaction'), name='dispatch')
