@@ -15,6 +15,7 @@ class Account(models.Model):
     owner = models.OneToOneField(CustomUser, blank=True, null=True, on_delete=models.SET_NULL, related_name='bank_account', help_text='If account is to be owned by a person, please select that user here.')
     name = models.CharField(max_length=100, blank=True, help_text='If account is unowned, please give it a sensible name.')
     type = models.CharField(max_length=100, blank=False, choices=ACCOUNT_TYPES)
+    sort_name = models.CharField(max_length=100, blank=False, editable=False, default='-')
 
     def __str__(self):
         if self.name:
@@ -23,6 +24,10 @@ class Account(models.Model):
             return '('+self.type+') '+self.owner.name()
         else:
             return '('+self.type+') **Nameless Account**'
+
+    def save(self, *args, **kwargs):
+        self.sort_name = str(self)
+        super().save(*args, **kwargs)
 
     class Meta:
         permissions = [
