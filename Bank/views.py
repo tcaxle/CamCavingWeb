@@ -308,7 +308,7 @@ def CreateEventAction(request):
             for expense in template.custom_expense.all():
                 key = 'AMOUNT:'+str(expense.expense_key)+':'+str(user.account_key)
                 if key in data.keys() and data.get(key) and float(data.get(key)) != 0:
-                    entry = Entry(account_a=user, account_b=currency.pool, credit_a=float(data.get(key)), date=date, notes=notes)
+                    entry = Entry(account_a=user, account_b=expense.pool, credit_a=float(data.get(key)), date=date, notes=notes)
                     entry.created_by = request.user
                     entry.transaction = transaction
                     entry.custom_expense = expense # allows us to retrieve the event data
@@ -466,7 +466,7 @@ def EditEventAction(request):
             for expense in template.custom_expense.all():
                 key = 'AMOUNT:'+str(expense.expense_key)+':'+str(user.account_key)
                 if key in data.keys() and data.get(key) and float(data.get(key)) != 0:
-                    entry = Entry(account_a=user, account_b=currency.pool, credit_a=float(data.get(key)), date=date, notes=notes)
+                    entry = Entry(account_a=user, account_b=expense.pool, credit_a=float(data.get(key)), date=date, notes=notes)
                     entry.created_by = request.user
                     entry.transaction = transaction
                     entry.custom_expense = expense # allows us to retrieve the event data
