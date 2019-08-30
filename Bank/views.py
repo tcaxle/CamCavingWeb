@@ -569,15 +569,15 @@ class ListAccounts(ListView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # recover account list
-        accounts_qs = context['account_qs']
+        account_qs = context['account_qs']
         # generate balance for each account
         balance_list = []
-        account_lilst = []
-        for account in accounts_qs:
+        account_list = []
+        for account in account_qs:
             account_list.append(account)
             balance_list.append(BalanceAtDate(account, all=True))
         # combine account and balance lists into dict for easier parsing in template
-        context['account_dict'] = dict(zip(accounts_list, balance_list))
+        context['account_dict'] = dict(zip(account_list, balance_list))
         return context
 
 @method_decorator(permission_required('Bank.view__transaction'), name='dispatch')
