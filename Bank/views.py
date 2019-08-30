@@ -565,6 +565,8 @@ class ListAccounts(ListView):
     model = Account
     template_name = 'Bank/ListAccounts.html'
     context_object_name = 'account_list'
+    def get_queryset(self):
+        return Account.objects.all().order_by('sort_name')
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         # recover account list
