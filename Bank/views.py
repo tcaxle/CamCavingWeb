@@ -569,7 +569,6 @@ class ListAccounts(ListView):
         context = super().get_context_data(**kwargs)
         # recover account list
         account_list = list(context['account_list'])
-        print(account_list)
         # generate balance for each account
         balance_list = []
         for account in account_list:
