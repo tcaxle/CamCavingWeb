@@ -27,9 +27,9 @@
       <td class="w3-theme-d1" colspan="{{ debtor_list|length }}"><b>Debtors:</b></td>
     </tr>
     <tr>
-      <td class="w3-theme-d2"></td>
+      <td class="w3-theme-d2" style="min-width:120px"></td>
       {% for debtor in debtor_list %}
-        <td  class="w3-theme-d1">{{ debtor }}</td>
+        <td class="w3-theme-d1" style="min-width:120px">{{ debtor }}</td>
       {% endfor %}
     </tr>
     {% for creditor in creditor_list %}
