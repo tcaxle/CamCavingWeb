@@ -27,19 +27,15 @@
     <tr>
       <td class="w3-theme-d2"><b>Users:</b></td>
       <td class="w3-theme-d1" colspan="{{ template.custom_currency.all|length }}"><b>Charges/Credits:</b><br><i>(must be integers)</i></td>
-      <td class="w3-theme-d2" colspan="{{ template.pools.all|length }}"><b>Pools:</b></td>
-      <td class="w3-theme-d1" colspan="{{ template.banks.all|length }}"><b>Bank Accounts:</b></td>
+      <td class="w3-theme-d2" colspan="{{ template.custom_expense.all|length }}"><b>Expenses:</b></td>
     </tr>
     <tr>
       <td class="w3-theme-d2"></td>
       {% for currency in template.custom_currency.all %}
         <td  class="w3-theme-d1" style="min-width:120px">{{ currency }} ({{ currency.credit|currency }})</td>
       {% endfor %}
-      {% for pool in template.pools.all %}
-        <td  class="w3-theme-d2" style="min-width:120px">{{ pool }}</td>
-      {% endfor %}
-      {% for bank in template.banks.all %}
-        <td  class="w3-theme-d1" style="min-width:120px">{{ bank }}</td>
+      {% for expense in template.custom_expense.all %}
+        <td  class="w3-theme-d2" style="min-width:120px">{{ expense }}</td>
       {% endfor %}
     </tr>
     {% for user in user_list %}
@@ -48,11 +44,8 @@
           {% for currency in template.custom_currency.all %}
             <td class="w3-theme-l3"><input class="w3-input" type="number" step="1" name="AMOUNT:{{ currency.currency_key }}:{{ user.account_key }}"></td>
           {% endfor %}
-          {% for pool in template.pools.all %}
-            <td class="w3-theme-l3"><input class="w3-input" type="number" step="0.01" name="AMOUNT:{{ pool.account_key }}:{{ user.account_key }}"></td>
-          {% endfor %}
-          {% for bank in template.banks.all %}
-            <td class="w3-theme-l3"><input class="w3-input" type="number" step="0.01" name="AMOUNT:{{ bank.account_key }}:{{ user.account_key }}"></td>
+          {% for expense in template.custom_expense.all %}
+            <td class="w3-theme-l3"><input class="w3-input" type="number" step="0.01" name="AMOUNT:{{ expense.expense_key }}:{{ user.account_key }}"></td>
           {% endfor %}
       </tr>
     {% endfor %}

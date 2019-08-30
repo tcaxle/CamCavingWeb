@@ -47,6 +47,11 @@ urlpatterns = [
     path('CustomCurrency/Edit/<slug:slug>', views.EditCustomCurrency.as_view(), name='EditCustomCurrency'),
     path('CustomCurrency/Delete/<slug:slug>', views.DeleteCustomCurrency.as_view(), name='DeleteCustomCurrency'),
 
+    path('CustomExpense/Create/', views.CreateCustomExpense.as_view(), name='CreateCustomExpense'),
+    path('CustomExpense/List/', views.ListCustomExpense.as_view(), name='ListCustomExpense'),
+    path('CustomExpense/Edit/<slug:slug>', views.EditCustomExpense.as_view(), name='EditCustomExpense'),
+    path('CustomExpense/Delete/<slug:slug>', views.DeleteCustomExpense.as_view(), name='DeleteCustomExpense'),
+
     path('FeeTemplate/Create/', views.CreateFeeTemplate.as_view(), name='CreateFeeTemplate'),
     path('FeeTemplate/List/', views.ListFeeTemplate.as_view(), name='ListFeeTemplate'),
     path('FeeTemplate/Edit/<slug:slug>', views.EditFeeTemplate.as_view(), name='EditFeeTemplate'),

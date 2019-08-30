@@ -31,10 +31,16 @@ class CustomCurrencyForm(forms.ModelForm):
         model = CustomCurrency
         fields = '__all__'
 
+class CustomExpenseForm(forms.ModelForm):
+    pool = forms.ModelChoiceField(queryset=Account.objects.filter(type='Pool'), required=True)
+
+    class Meta(forms.ModelForm):
+        model = CustomExpense
+        fields = '__all__'
+
 class FeeTemplateForm(forms.ModelForm):
-    pools = forms.ModelMultipleChoiceField(queryset=Account.objects.filter(type='Pool'), required=True, widget=forms.CheckboxSelectMultiple)
-    banks = forms.ModelMultipleChoiceField(queryset=Account.objects.filter(type='Bank'), required=False, widget=forms.CheckboxSelectMultiple)
     custom_currency = forms.ModelMultipleChoiceField(queryset=CustomCurrency.objects.all(), widget=forms.CheckboxSelectMultiple, required=True)
+    custom_expense = forms.ModelMultipleChoiceField(queryset=CustomExpense.objects.all(), widget=forms.CheckboxSelectMultiple, required=True)
 
     class Meta(forms.ModelForm):
         model = FeeTemplate

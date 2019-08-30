@@ -18,8 +18,11 @@
   {% if perms.Bank.view__customcurrency %}
     <a class="w3-button w3-block w3-theme-d4 w3-hover-black w3-half" style="text-align: left" href="{% url 'ListCustomCurrency' %}">Custom Currencies</a>
   {% endif %}
+  {% if perms.Bank.view__customexpense %}
+    <a class="w3-button w3-block w3-theme-d4 w3-hover-black w3-half" style="text-align: left" href="{% url 'ListCustomExpense' %}">Custom Expenses</a>
+  {% endif %}
   {% if perms.Bank.view__feetemplate %}
-    <a class="w3-button w3-block w3-theme-d4 w3-hover-black w3-half" style="text-align: left" href="{% url 'ListFeeTemplate' %}">Fee Templates</a>
+    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'ListFeeTemplate' %}">Fee Templates</a>
   {% endif %}
   {% if user.bank_account %}
     <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'ViewAccount' user.bank_account.account_key %}">View Own Account</a>

@@ -46,6 +46,15 @@ class CustomCurrency(models.Model):
     def __str__(self):
         return self.name
 
+class CustomExpense(models.Model):
+    # Allows custom "expenses," which are descriptive psuedonyms forr pools
+    # CustomExpenses can only be credited to users, and always debit a pool (negative credits for a charge)
+    expense_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    name = models.CharField(max_length=100, blank=False)
+    pool = models.ForeignKey(Account, blank=False, null=False, on_delete=models.PROTECT) # The pool to be debited when someone is credited with this expense
+    def __str__(self):
+        return self.name
+
 class TransactionGroup(models.Model):
     # Holds multiple groups of Transaction objects, allowing single objects containing an entire set off accounts
     group_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
@@ -185,6 +194,7 @@ class Entry(models.Model):
     approved_by = models.ForeignKey(CustomUser, blank=True, null=True, editable=False, on_delete = models.PROTECT, related_name='approved_entry_set') # Who approved the object
     approved_on = models.DateTimeField(blank=True, null=True, default=datetime.now, editable=False) # When was the object approved?
     custom_currency = models.ForeignKey(CustomCurrency, on_delete=models.PROTECT, blank=True, null=True, editable=False)
+    custom_expense = models.ForeignKey(CustomExpense, on_delete=models.PROTECT, blank=True, null=True, editable=False)
 
     def SetApprove(self, by=None, on=None, status=True):
         if status:
@@ -257,8 +267,7 @@ class FeeTemplate(models.Model):
     template_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     name = models.CharField(max_length=100, blank=False)
     custom_currency = models.ManyToManyField(CustomCurrency, blank=True) # Custom currencies that can be credited to users
-    pools = models.ManyToManyField(Account, blank=True, related_name='fee_template_pool_set') # Pools that can be directly debited
-    banks = models.ManyToManyField(Account, blank=True, related_name='fee_template_bank_set') # Bank accounts that can be directly debited
+    custom_expense = models.ManyToManyField(CustomExpense, blank=True) # Pools that can be directly debited
 
     def __str__(self):
         return self.name

@@ -146,6 +146,34 @@ class DeleteCustomCurrency(DeleteView):
     template_name = 'Bank/DeleteObject.html'
     success_url = reverse_lazy('ListCustomCurrency')
 
+@method_decorator(permission_required('Bank.view__customexpense'), name='dispatch')
+class ListCustomExpense(ListView):
+    model = CustomExpense
+    template_name = 'Bank/ListCustomExpense.html'
+    context_object_name = 'expense_list'
+
+@method_decorator(permission_required('Bank.add__customexpense'), name='dispatch')
+class CreateCustomExpense(CreateView):
+    model = CustomExpense
+    form_class = CustomExpenseForm
+    template_name = 'Bank/AddCustomExpense.html'
+    success_url = reverse_lazy('ListCustomExpense')
+
+@method_decorator(permission_required('Bank.change__customexpense'), name='dispatch')
+class EditCustomExpense(UpdateView):
+    model = CustomExpense
+    form_class = CustomExpenseForm
+    slug_field = 'expense_key'
+    template_name = 'Bank/EditCustomExpense.html'
+    success_url = reverse_lazy('ListCustomExpense')
+
+@method_decorator(permission_required('Bank.delete_customexpense'), name='dispatch')
+class DeleteCustomExpense(DeleteView):
+    model = CustomExpense
+    slug_field = 'expense_key'
+    template_name = 'Bank/DeleteObject.html'
+    success_url = reverse_lazy('ListCustomExpense')
+
 @method_decorator(permission_required('Bank.view__feetemplate'), name='dispatch')
 class ListFeeTemplate(ListView):
     model = FeeTemplate
@@ -276,23 +304,16 @@ def CreateEventAction(request):
                     entry.transaction = transaction
                     entry.custom_currency = currency # allows us to retrieve the event data
                     entry.save()
-            # entries for pools
-            for pool in template.pools.all():
-                key = 'AMOUNT:'+str(pool.account_key)+':'+str(user.account_key)
-                if key in data.keys() and data.get(key) and float(data.get(key)) != 0.0:
-                    entry = Entry(account_a=user, account_b=pool, credit_a=float(data.get(key)), date=date, notes=notes)
+            # entries for custom expenses
+            for expense in template.custom_expense.all():
+                key = 'AMOUNT:'+str(expense.expense_key)+':'+str(user.account_key)
+                if key in data.keys() and data.get(key) and float(data.get(key)) != 0:
+                    entry = Entry(account_a=user, account_b=currency.pool, credit_a=float(data.get(key)), date=date, notes=notes)
                     entry.created_by = request.user
                     entry.transaction = transaction
+                    entry.custom_expense = expense # allows us to retrieve the event data
                     entry.save()
-            # entries for banks
-            for bank in template.banks.all():
-                key = 'AMOUNT:'+str(bank.account_key)+':'+str(user.account_key)
-                if key in data.keys() and data.get(key) and float(data.get(key)) != 0.0:
-                    entry = Entry(account_a=user, account_b=bank, credit_a=float(data.get(key)), date=date, notes=notes)
-                    entry.created_by = request.user
-                    entry.transaction = transaction
-                    entry.save()
-    return redirect('UserPortalDashboard')
+    return redirect('ViewEvent', event.event_key)
 
 @method_decorator(permission_required('Bank.view__event'), name='dispatch')
 class ViewEvent(DetailView):
@@ -355,7 +376,7 @@ class EditEventData(DetailView):
         context = super().get_context_data(**kwargs)
         context['name'] = name
         context['template'] = template
-        context['user_list'] = user_list.order_by('owner')
+        context['user_list'] = user_list
         context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
         return render(request, self.template_name, context)
 
@@ -441,21 +462,14 @@ def EditEventAction(request):
                     entry.transaction = transaction
                     entry.custom_currency = currency # allows us to retrieve the event data
                     entry.save()
-            # entries for pools
-            for pool in template.pools.all():
-                key = 'AMOUNT:'+str(pool.account_key)+':'+str(user.account_key)
-                if key in data.keys() and data.get(key) and float(data.get(key)) != 0.0:
-                    entry = Entry(account_a=user, account_b=pool, credit_a=float(data.get(key)), date=date, notes=notes)
+            # entries for custom expenses
+            for expense in template.custom_expense.all():
+                key = 'AMOUNT:'+str(expense.expense_key)+':'+str(user.account_key)
+                if key in data.keys() and data.get(key) and float(data.get(key)) != 0:
+                    entry = Entry(account_a=user, account_b=currency.pool, credit_a=float(data.get(key)), date=date, notes=notes)
                     entry.created_by = request.user
                     entry.transaction = transaction
-                    entry.save()
-            # entries for banks
-            for bank in template.banks.all():
-                key = 'AMOUNT:'+str(bank.account_key)+':'+str(user.account_key)
-                if key in data.keys() and data.get(key) and float(data.get(key)) != 0.0:
-                    entry = Entry(account_a=user, account_b=bank, credit_a=float(data.get(key)), date=date, notes=notes)
-                    entry.created_by = request.user
-                    entry.transaction = transaction
+                    entry.custom_expense = expense # allows us to retrieve the event data
                     entry.save()
     return redirect('ViewEvent', event.event_key)
 
