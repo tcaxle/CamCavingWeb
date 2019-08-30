@@ -341,7 +341,7 @@ class EditEventSetup(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['template_list'] = FeeTemplate.objects.all().order_by('name')
-        context['user_list'] = Account.objects.filter(type='User')
+        context['user_list'] = Account.objects.exclude(type='Pool')
         return context
 
 @method_decorator(permission_required('Bank.change__event'), name='dispatch')
