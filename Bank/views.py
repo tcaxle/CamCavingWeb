@@ -586,10 +586,21 @@ class ListAccounts(ListView):
         account_list = list(context['account_list'])
         # generate balance for each account
         balance_list = []
+        total_user = 0.0
+        total_pool = 0.0
+        total_bank = 0.0
         for account in account_list:
-            balance_list.append(BalanceAtDate(account, all=True))
+            balance = BalanceAtDate(account, all=True)
+            balance_list.append(balance)
+            if account.type == 'User':
+                total_user += balance
+            elif account.type == 'Pool':
+                total_pool += balance
+            elif account.type == 'Bank':
+                total_bank += balance
         # combine account and balance lists into dict for easier parsing in template
         context['account_dict'] = OrderedDict(zip(account_list, balance_list))
+        context['total_dict'] = {'User': total_user, 'Pool': total_pool, 'Bank': total_bank}
         return context
 
 @method_decorator(permission_required('Bank.view__transaction'), name='dispatch')

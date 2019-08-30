@@ -10,7 +10,7 @@
   <h1>Select an Account to View</h1>
   <table class="w3-table-all w3-striped w3-card">
     <tr>
-      <td colspan="2" class="w3-theme-d3"><b>User Accounts</b></td>
+      <td colspan="2" class="w3-theme-d3"><b>User Accounts</b><span class="w3-right">Total: {{ total_dict.User|currency }}</span></td>
     </tr>
     {% for account, balance in account_dict.items %}
       {% if account.type == 'User' %}
@@ -21,7 +21,7 @@
       {% endif %}
     {% endfor %}
     <tr>
-      <td colspan="2" class="w3-theme-d3"><b>Pool Accounts</b></td>
+      <td colspan="2" class="w3-theme-d3"><b>Pool Accounts</b><span class="w3-right">Total: {{ total_dict.Pool|currency }}</span</td>
     </tr>
     {% for account, balance in account_dict.items %}
       {% if account.type == 'Pool' %}
@@ -32,7 +32,7 @@
       {% endif %}
     {% endfor %}
     <tr>
-      <td colspan="2" class="w3-theme-d3"><b>Bank Accounts</b></td>
+      <td colspan="2" class="w3-theme-d3"><b>Bank Accounts</b><span class="w3-right">Total: {{ total_dict.Bank|currency }}</span</td>
     </tr>
     {% for account, balance in account_dict.items %}
       {% if account.type == 'Bank' %}
