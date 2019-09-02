@@ -47,7 +47,7 @@
             <td class="w3-theme-l3"><input class="w3-input" type="number" step="1" name="AMOUNT:{{ currency.currency_key }}:{{ user.account_key }}" {% for transaction in event.transaction_group.transaction_set.all %}{% for entry in transaction.entry_set.all %}{% if entry.account_a == user and entry.account_b == currency.pool and currency == entry.custom_currency %}value="{{ entry.credit_a|fidividei:currency.credit }}"{% endif %}{% endfor %}{% endfor %}></td>
           {% endfor %}
           {% for expense in template.custom_expense.all %}
-            <td class="w3-theme-l3"><input class="w3-input" type="number" step="0.01" name="AMOUNT:{{ expense.expense_key }}:{{ user.account_key }}" {% for transaction in event.transaction_group.transaction_set.all %}{% for entry in transaction.entry_set.all %}{% if entry.account_a == user and entry.account_b == expense.pool and expense == entry.custom_expense %}value="{{ entry.credit_a|currency }}"{% endif %}{% endfor %}{% endfor %}></td>
+            <td class="w3-theme-l3"><input class="w3-input" type="number" step="0.01" name="AMOUNT:{{ expense.expense_key }}:{{ user.account_key }}" {% for transaction in event.transaction_group.transaction_set.all %}{% for entry in transaction.entry_set.all %}{% if entry.account_a == user and entry.account_b == expense.pool and expense == entry.custom_expense %}value="{{ entry.credit_a }}"{% endif %}{% endfor %}{% endfor %}></td>
           {% endfor %}
       </tr>
     {% endfor %}

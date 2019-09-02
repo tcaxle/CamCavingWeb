@@ -350,6 +350,7 @@ class EditEventData(DetailView):
     slug_field = 'event_key'
     template_name = 'Bank/EditEvent/InputData.html'
     context_object_name = 'event'
+    # POST for when we come from Setup Edit
     def post(self, request, *args, **kwargs):
         ## DATA RETRIEVAL
         # get the transaction group object
@@ -379,7 +380,7 @@ class EditEventData(DetailView):
         context['user_list'] = user_list
         context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
         return render(request, self.template_name, context)
-
+    # GET for when we go direct to Data Edit
     def get(self, request, *args, **kwargs):
         ## DATA RETRIEVAL
         # get the transaction group object
