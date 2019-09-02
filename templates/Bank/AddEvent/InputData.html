@@ -42,10 +42,10 @@
       <tr>
         <td class="w3-theme-d2">{{ user }}:</td>
           {% for currency in template.custom_currency.all %}
-            <td class="w3-theme-l3"><input class="w3-input" type="number" step="1" name="AMOUNT:{{ currency.currency_key }}:{{ user.account_key }}"></td>
+            <td><input class="w3-input" type="number" step="1" name="AMOUNT:{{ currency.currency_key }}:{{ user.account_key }}"></td>
           {% endfor %}
           {% for expense in template.custom_expense.all %}
-            <td class="w3-theme-l3"><input class="w3-input" type="number" step="0.01" name="AMOUNT:{{ expense.expense_key }}:{{ user.account_key }}"></td>
+            <td><input class="w3-input" type="number" step="0.01" name="AMOUNT:{{ expense.expense_key }}:{{ user.account_key }}"></td>
           {% endfor %}
       </tr>
     {% endfor %}
