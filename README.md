@@ -10,13 +10,13 @@ Cambridge University Caving Club (CUCC) website repository
 - [x] Migrate all pages or archive them into the legacy folders
 - [x] Provide links on relevant pages to relevant documents and archive/legacy
 - [x] Migrate master to Caving SRCF socuser. All further changes to be done on sepeate dev branches.
-- [ ] Layout database: list of tables, fields, mappings
-- [ ] Organise SSL and new domain
-- [ ] Authentication and Accounts App (one-to-one user model for extra details)
-- [ ] Gear tape page to be Guinea Pig
-- [ ] Gear Hire App "Gear"
-- [ ] Blog app "Blog"
-- [ ] ? Treasury app "BankOfCaving"
+- [x] Layout database: list of tables, fields, mappings
+- [x] Organise SSL and new domain
+- [x] Authentication and Accounts App (one-to-one user model for extra details)
+- [x] Gear tape page to be Guinea Pig
+- [x] Gear Hire App "Gear"
+- [x] Blog app "Blog"
+- [x] ? Treasury app "BankOfCaving"
 
 # Site Layout
 In the root of the site ("CamCavingWeb") is the urls.py and views.py for all the static pages on the site.
