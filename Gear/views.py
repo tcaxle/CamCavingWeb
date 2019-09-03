@@ -261,7 +261,7 @@ def RopeSignOut(request, pk):
         rope.available = False
         HireInstance.save()
         rope.save()
-    return redirect('GearHire')
+    return redirect(reverse('GearHire') + '#rope:' + str(rope.pk))
 
 def RopeSignIn(request, pk):
     rope = get_object_or_404(Rope, pk=pk, available=False)
@@ -272,7 +272,7 @@ def RopeSignIn(request, pk):
     HireInstance.open = False
     HireInstance.save()
     rope.save()
-    return redirect('GearHire')
+    return redirect(reverse('GearHire') + '#rope:' + str(rope.pk))
 
 # Helmets
 def HelmetSignOut(request, pk):
@@ -283,7 +283,7 @@ def HelmetSignOut(request, pk):
         helmet.available = False
         HireInstance.save()
         helmet.save()
-    return redirect('GearHire')
+    return redirect(reverse('GearHire') + '#helmet:' + str(helmet.pk))
 
 def HelmetSignIn(request, pk):
     helmet = get_object_or_404(Helmet, pk=pk, available=False)
@@ -294,7 +294,7 @@ def HelmetSignIn(request, pk):
     HireInstance.open = False
     HireInstance.save()
     helmet.save()
-    return redirect('GearHire')
+    return redirect(reverse('GearHire') + '#helmet:' + str(helmet.pk))
 
 # SRT Kits
 def SRTKitSignOut(request, pk):
@@ -305,7 +305,7 @@ def SRTKitSignOut(request, pk):
         kit.available = False
         HireInstance.save()
         kit.save()
-    return redirect('GearHire')
+    return redirect(reverse('GearHire') + '#srt:' + str(srt.pk))
 
 def SRTKitSignIn(request, pk):
     kit = get_object_or_404(SRTKit, pk=pk, available=False)
@@ -316,7 +316,7 @@ def SRTKitSignIn(request, pk):
     HireInstance.open = False
     HireInstance.save()
     kit.save()
-    return redirect('GearHire')
+    return redirect(reverse('GearHire') + '#srt:' + str(srt.pk))
 
 # Harnesses
 def HarnessSignOut(request, pk):
@@ -327,7 +327,7 @@ def HarnessSignOut(request, pk):
         harness.available = False
         HireInstance.save()
         harness.save()
-    return redirect('GearHire')
+    return redirect(reverse('GearHire') + '#harness:' + str(harness.pk))
 
 def HarnessSignIn(request, pk):
     harness = get_object_or_404(Harness, pk=pk, available=False)
@@ -338,7 +338,7 @@ def HarnessSignIn(request, pk):
     HireInstance.open = False
     HireInstance.save()
     harness.save()
-    return redirect('GearHire')
+    return redirect(reverse('GearHire') + '#harness:' + str(harness.pk))
 
 # Undersuits
 def UndersuitSignOut(request, pk):
@@ -349,7 +349,7 @@ def UndersuitSignOut(request, pk):
         undersuit.available = False
         HireInstance.save()
         undersuit.save()
-    return redirect('GearHire')
+    return redirect(reverse('GearHire') + '#undersuit:' + str(undersuit.pk))
 
 def UndersuitSignIn(request, pk):
     undersuit = get_object_or_404(Undersuit, pk=pk, available=False)
@@ -360,7 +360,7 @@ def UndersuitSignIn(request, pk):
     HireInstance.open = False
     HireInstance.save()
     undersuit.save()
-    return redirect('GearHire')
+    return redirect(reverse('GearHire') + '#undersuit:' + str(undersuit.pk))
 
 # Oversuits
 def OversuitSignOut(request, pk):
@@ -371,7 +371,7 @@ def OversuitSignOut(request, pk):
         oversuit.available = False
         HireInstance.save()
         oversuit.save()
-    return redirect('GearHire')
+    return redirect(reverse('GearHire') + '#oversuit:' + str(oversuit.pk))
 
 def OversuitSignIn(request, pk):
     oversuit = get_object_or_404(Oversuit, pk=pk, available=False)
@@ -382,7 +382,7 @@ def OversuitSignIn(request, pk):
     HireInstance.open = False
     HireInstance.save()
     oversuit.save()
-    return redirect('GearHire')
+    return redirect(reverse('GearHire') + '#oversuit:' + str(oversuit.pk))
 
 # Other Gear
 def OtherGearSignOut(request, pk):
@@ -395,7 +395,7 @@ def OtherGearSignOut(request, pk):
         gear.available -= quantity
         SignOutInstance.save()
         gear.save()
-    return redirect('GearHire')
+    return redirect(reverse('GearHire') + '#other:' + str(other.pk))
 
 def OtherGearSignIn(request, pk):
     if request.method == 'POST':
@@ -406,4 +406,4 @@ def OtherGearSignIn(request, pk):
         gear.available += quantity
         SignInInstance.save()
         gear.save()
-    return redirect('GearHire')
+    return redirect(reverse('GearHire') + '#other:' + str(other.pk))

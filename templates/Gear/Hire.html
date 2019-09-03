@@ -21,7 +21,7 @@
     </tr>
     {% for item in rope_list %}
       {% if item.available %}
-        <tr class="w3-green">
+        <tr id="rope:{{ item.pk }}" class="w3-green">
           <td>{{ item.length }}</td>
           <td>{{ item.diameter }}</td>
           <td>{{ item.purchased_year }}</td>
@@ -49,7 +49,7 @@
           </td>
         </tr>
       {% else %}
-        <tr class="w3-red">
+        <tr id="rope:{{ item.pk }}" class="w3-red">
           <td>{{ item.length }}</td>
           <td>{{ item.diameter }}</td>
           <td>{{ item.purchased_year }}</td>
@@ -84,7 +84,7 @@
     </tr>
     {% for item in helmet_list %}
       {% if item.available %}
-        <tr class="w3-green">
+        <tr id="helmet:{{ item.pk }}" class="w3-green">
           <td>{{ item.uid }}</td>
           <td>{{ item.purchased_year }}</td>
           <td>{{ item.notes }}</td>
@@ -111,7 +111,7 @@
           </td>
         </tr>
       {% else %}
-        <tr class="w3-red">
+        <tr id="helmet:{{ item.pk }}" class="w3-red">
           <td>{{ item.uid }}</td>
           <td>{{ item.purchased_year }}</td>
           <td>{{ item.notes }}</td>
@@ -144,7 +144,7 @@
     </tr>
     {% for item in srtkit_list %}
       {% if item.available %}
-        <tr class="w3-green">
+        <tr id="srt:{{ item.pk }}" class="w3-green">
           <td>{{ item.colour_code }}</td>
           <td>{{ item.notes }}</td>
           <td>Available</td>
@@ -170,7 +170,7 @@
           </td>
         </tr>
       {% else %}
-        <tr class="w3-red">
+        <tr id="srt:{{ item.pk }}" class="w3-red">
           <td>{{ item.colour_code }}</td>
           <td>{{ item.notes }}</td>
           <td>{% for hire in hiresrtkit_list %}{% if hire.kit == item and hire.signed_in == None %}{{ hire.signed_out_by.full_name }}{% endif %}{% endfor %}</td>
@@ -203,7 +203,7 @@
     </tr>
     {% for item in harness_list %}
       {% if item.available %}
-        <tr class="w3-green">
+        <tr id="harness:{{ item.pk }}" class="w3-green">
           <td>{{ item.uid }}</td>
           <td>{{ item.purchased_year }}</td>
           <td>{{ item.notes }}</td>
@@ -230,7 +230,7 @@
           </td>
         </tr>
       {% else %}
-        <tr class="w3-red">
+        <tr id="harness:{{ item.pk }}" class="w3-red">
           <td>{{ item.uid }}</td>
           <td>{{ item.purchased_year }}</td>
           <td>{{ item.notes }}</td>
@@ -264,7 +264,7 @@
     </tr>
     {% for item in undersuit_list %}
       {% if item.available %}
-        <tr class="w3-green">
+        <tr id="undersuit:{{ item.pk }}" class="w3-green">
           <td>{{ item.uid }}</td>
           <td>{{ item.size }}</td>
           <td>{{ item.notes }}</td>
@@ -291,7 +291,7 @@
           </td>
         </tr>
       {% else %}
-        <tr class="w3-red">
+        <tr id="undersuit:{{ item.pk }}" class="w3-red">
           <td>{{ item.uid }}</td>
           <td>{{ item.size }}</td>
           <td>{{ item.notes }}</td>
@@ -325,7 +325,7 @@
     </tr>
     {% for item in oversuit_list %}
       {% if item.available %}
-        <tr class="w3-green">
+        <tr id="oversuit:{{ item.pk }}" class="w3-green">
           <td>{{ item.uid }}</td>
           <td>{{ item.size }}</td>
           <td>{{ item.notes }}</td>
@@ -352,7 +352,7 @@
           </td>
         </tr>
       {% else %}
-        <tr class="w3-red">
+        <tr id="oversuit:{{ item.pk }}" class="w3-red">
           <td>{{ item.uid }}</td>
           <td>{{ item.size }}</td>
           <td>{{ item.notes }}</td>
@@ -385,7 +385,7 @@
       <th></th>
     </tr>
     {% for item in othergear_list %}
-      <tr class="w3-green">
+      <tr id="other:{{ item.pk }}" class="w3-green">
         <td>{{ item.name }}</td>
         <td>{{ item.notes }}</td>
         <td>{{ item.on_loan }}/{{ item.quantity }}</td>
