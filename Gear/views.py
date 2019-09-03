@@ -395,7 +395,7 @@ def OtherGearSignOut(request, pk):
         gear.available -= quantity
         SignOutInstance.save()
         gear.save()
-    return redirect(reverse('GearHire') + '#other:' + str(other.pk))
+    return redirect(reverse('GearHire') + '#other:' + str(gear.pk))
 
 def OtherGearSignIn(request, pk):
     if request.method == 'POST':
@@ -406,4 +406,4 @@ def OtherGearSignIn(request, pk):
         gear.available += quantity
         SignInInstance.save()
         gear.save()
-    return redirect(reverse('GearHire') + '#other:' + str(other.pk))
+    return redirect(reverse('GearHire') + '#other:' + str(gear.pk))
