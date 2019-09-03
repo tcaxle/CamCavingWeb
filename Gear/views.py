@@ -76,7 +76,7 @@ class ViewHiresOtherGear(ListView):
 class EditRope(UpdateView):
     model = Rope
     template_name = 'Gear/EditForm.html'
-    template_name_suffix = '_update_form'
+
     success_url = reverse_lazy('GearHire')
     fields = '__all__'
 
@@ -97,7 +97,6 @@ class AddRope(CreateView):
 class EditHelmet(UpdateView):
     model = Helmet
     template_name = 'Gear/EditForm.html'
-    template_name_suffix = '_update_form'
     success_url = reverse_lazy('GearHire')
     fields = '__all__'
 
@@ -118,7 +117,6 @@ class AddHelmet(CreateView):
 class EditSRTKit(UpdateView):
     model = SRTKit
     template_name = 'Gear/EditForm.html'
-    template_name_suffix = '_update_form'
     success_url = reverse_lazy('GearHire')
     fields = '__all__'
 
@@ -139,7 +137,6 @@ class AddSRTKit(CreateView):
 class EditHarness(UpdateView):
     model = Harness
     template_name = 'Gear/EditForm.html'
-    template_name_suffix = '_update_form'
     success_url = reverse_lazy('GearHire')
     fields = '__all__'
 
@@ -160,7 +157,6 @@ class AddHarness(CreateView):
 class EditUndersuit(UpdateView):
     model = Undersuit
     template_name = 'Gear/EditForm.html'
-    template_name_suffix = '_update_form'
     success_url = reverse_lazy('GearHire')
     fields = '__all__'
 
@@ -181,7 +177,6 @@ class AddUndersuit(CreateView):
 class EditOversuit(UpdateView):
     model = Oversuit
     template_name = 'Gear/EditForm.html'
-    template_name_suffix = '_update_form'
     success_url = reverse_lazy('GearHire')
     fields = '__all__'
 
@@ -202,7 +197,6 @@ class AddOversuit(CreateView):
 class EditOtherGear(UpdateView):
     model = OtherGear
     template_name = 'Gear/EditForm.html'
-    template_name_suffix = '_update_form'
     success_url = reverse_lazy('GearHire')
     fields = '__all__'
 
@@ -230,22 +224,16 @@ class GearHire(TemplateView):
         context['user_list'] = CustomUser.objects.filter(is_human=True)
 
         context['rope_list'] = Rope.objects.all().order_by('length')
-        context['hirerope_list'] = HireRope.objects.filter(open=True)
 
         context['helmet_list'] = Helmet.objects.all().order_by('uid')
-        context['hirehelmet_list'] = HireHelmet.objects.filter(open=True)
 
         context['srtkit_list'] = SRTKit.objects.all().order_by('colour_code')
-        context['hiresrtkit_list'] = HireSRTKit.objects.filter(open=True)
 
         context['harness_list'] = Harness.objects.all().order_by('uid')
-        context['hireharness_list'] = HireHarness.objects.filter(open=True)
 
         context['undersuit_list'] = Undersuit.objects.all().order_by('uid')
-        context['hireundersuit_list'] = HireUndersuit.objects.filter(open=True)
 
         context['oversuit_list'] = Oversuit.objects.all().order_by('uid')
-        context['hireoversuit_list'] = HireOversuit.objects.filter(open=True)
 
         context['othergear_list'] = OtherGear.objects.all().order_by('name')
         return context
@@ -256,7 +244,7 @@ class GearHire(TemplateView):
 def RopeSignOut(request, pk):
     if request.method == 'POST':
         rope = get_object_or_404(Rope, pk=pk, available=True)
-        user = get_object_or_404(CustomUser, username=request.POST['user'])
+        user = get_object_or_404(CustomUser, user_key=request.POST['user'])
         HireInstance = HireRope(rope=rope, signed_out_by=user)
         rope.available = False
         HireInstance.save()
@@ -278,7 +266,7 @@ def RopeSignIn(request, pk):
 def HelmetSignOut(request, pk):
     if request.method == 'POST':
         helmet = get_object_or_404(Helmet, pk=pk, available=True)
-        user = get_object_or_404(CustomUser, username=request.POST['user'])
+        user = get_object_or_404(CustomUser, user_key=request.POST['user'])
         HireInstance = HireHelmet(helmet=helmet, signed_out_by=user)
         helmet.available = False
         HireInstance.save()
@@ -300,12 +288,12 @@ def HelmetSignIn(request, pk):
 def SRTKitSignOut(request, pk):
     if request.method == 'POST':
         kit = get_object_or_404(SRTKit, pk=pk, available=True)
-        user = get_object_or_404(CustomUser, username=request.POST['user'])
+        user = get_object_or_404(CustomUser, user_key=request.POST['user'])
         HireInstance = HireSRTKit(kit=kit, signed_out_by=user)
         kit.available = False
         HireInstance.save()
         kit.save()
-    return redirect(reverse('GearHire') + '#srt:' + str(srt.pk))
+    return redirect(reverse('GearHire') + '#srt:' + str(kit.pk))
 
 def SRTKitSignIn(request, pk):
     kit = get_object_or_404(SRTKit, pk=pk, available=False)
@@ -316,13 +304,13 @@ def SRTKitSignIn(request, pk):
     HireInstance.open = False
     HireInstance.save()
     kit.save()
-    return redirect(reverse('GearHire') + '#srt:' + str(srt.pk))
+    return redirect(reverse('GearHire') + '#srt:' + str(kit.pk))
 
 # Harnesses
 def HarnessSignOut(request, pk):
     if request.method == 'POST':
         harness = get_object_or_404(Harness, pk=pk, available=True)
-        user = get_object_or_404(CustomUser, username=request.POST['user'])
+        user = get_object_or_404(CustomUser, user_key=request.POST['user'])
         HireInstance = HireHarness(harness=harness, signed_out_by=user)
         harness.available = False
         HireInstance.save()
@@ -344,7 +332,7 @@ def HarnessSignIn(request, pk):
 def UndersuitSignOut(request, pk):
     if request.method == 'POST':
         undersuit = get_object_or_404(Undersuit, pk=pk, available=True)
-        user = get_object_or_404(CustomUser, username=request.POST['user'])
+        user = get_object_or_404(CustomUser, user_key=request.POST['user'])
         HireInstance = HireUndersuit(undersuit=undersuit, signed_out_by=user)
         undersuit.available = False
         HireInstance.save()
@@ -366,7 +354,7 @@ def UndersuitSignIn(request, pk):
 def OversuitSignOut(request, pk):
     if request.method == 'POST':
         oversuit = get_object_or_404(Oversuit, pk=pk, available=True)
-        user = get_object_or_404(CustomUser, username=request.POST['user'])
+        user = get_object_or_404(CustomUser, user_key=request.POST['user'])
         HireInstance = HireOversuit(oversuit=oversuit, signed_out_by=user)
         oversuit.available = False
         HireInstance.save()
@@ -387,9 +375,12 @@ def OversuitSignIn(request, pk):
 # Other Gear
 def OtherGearSignOut(request, pk):
     if request.method == 'POST':
-        quantity = int(request.POST['amount'])
+        quantity = int(request.POST['amount_out'])
+        print('*****')
+        print(quantity)
+        print('*****')
         gear = get_object_or_404(OtherGear, pk=pk)
-        user = get_object_or_404(CustomUser, username=request.POST['user'])
+        user = get_object_or_404(CustomUser, user_key=request.POST['user'])
         SignOutInstance = SignOutOtherGear(gear=gear, signed_out_by=user, quantity=quantity)
         gear.on_loan += quantity
         gear.available -= quantity
@@ -399,7 +390,7 @@ def OtherGearSignOut(request, pk):
 
 def OtherGearSignIn(request, pk):
     if request.method == 'POST':
-        quantity = int(request.POST['amount'])
+        quantity = int(request.POST['amount_in'])
         gear = get_object_or_404(OtherGear, pk=pk)
         SignInInstance = SignInOtherGear(gear=gear, signed_in_by=request.user, quantity=quantity)
         gear.on_loan -= quantity
