@@ -375,12 +375,9 @@ def OversuitSignIn(request, pk):
 # Other Gear
 def OtherGearSignOut(request, pk):
     if request.method == 'POST':
-        quantity = int(request.POST['amount_out'])
-        print('*****')
-        print(quantity)
-        print('*****')
         gear = get_object_or_404(OtherGear, pk=pk)
         user = get_object_or_404(CustomUser, user_key=request.POST['user'])
+        quantity = int(request.POST.get('amount_out_'+str(pk)))
         SignOutInstance = SignOutOtherGear(gear=gear, signed_out_by=user, quantity=quantity)
         gear.on_loan += quantity
         gear.available -= quantity
@@ -390,8 +387,8 @@ def OtherGearSignOut(request, pk):
 
 def OtherGearSignIn(request, pk):
     if request.method == 'POST':
-        quantity = int(request.POST['amount_in'])
         gear = get_object_or_404(OtherGear, pk=pk)
+        quantity = int(request.POST.get('amount_in_'+str(pk)))
         SignInInstance = SignInOtherGear(gear=gear, signed_in_by=request.user, quantity=quantity)
         gear.on_loan -= quantity
         gear.available += quantity

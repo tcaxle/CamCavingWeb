@@ -400,11 +400,11 @@
                  <span class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:200px">Sign Out / In</span>
                  <div class="w3-dropdown-content w3-card-4" style="width:200px; min-width:200px">
                    {% if item.available != 0 %}
-                     <input class="w3-bar-item" style="width:100px" type="number" name="amount_out" min="0" max="{{ item.available }}" value=0>
+                     <input class="w3-bar-item" style="width:100px" type="number" name="amount_out_{{ item.pk }}" min="0" max="{{ item.available }}" value=0>
                      <input class="w3-bar-item w3-button w3-theme-d4 w3-hover-black" style="width:100px" type="submit" value="Sign Out" formaction="{% url 'OtherGearSignOut' pk=item.pk %}">
                    {% endif %}
                    {% if item.on_loan != 0 %}
-                     <input class="w3-bar-item" style="width:100px" type="number" name="amount_in" min="0" max="{{ item.on_loan }}" value=0>
+                     <input class="w3-bar-item" style="width:100px" type="number" name="amount_in_{{ item.pk }}" min="0" max="{{ item.on_loan }}" value=0>
                      <input style="width:100px" class="w3-bar-item w3-button w3-theme-d4 w3-hover-black" type="submit" value="Sign In" formaction="{% url 'OtherGearSignIn' pk=item.pk %}">
                    {% endif %}
                    {% if perms.Gear.register_gear %}
