@@ -51,8 +51,9 @@
           <td class="w3-right">
             {% if perms.Gear.hire_self %}
             <div class="w3-dropdown-hover w3-mobile" style="width:100px; min-width:100px">
-             <input type="submit" class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px" value="Sign Out" formaction="{% url 'RopeSignOut' pk=item.pk %}">
+              <span class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px">Sign Out <i class="fas fa-caret-down"></i></span>
              <div class="w3-dropdown-content w3-card-4" style="width:100px; min-width:100px">
+               <input type="submit" class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px" value="Sign Out" formaction="{% url 'RopeSignOut' pk=item.pk %}">
                {% if perms.Gear.register_gear %}
                <a class="w3-button w3-theme-d4 w3-hover-black" href="{% url 'EditRope' pk=item.pk %}" style="width:100px">Edit</a>
                <a class="w3-button w3-theme-d4 w3-hover-black" href="{% url 'DeleteRope' pk=item.pk %}" style="width:100px">Delete</a>
@@ -72,8 +73,9 @@
           <td class="w3-right">
             {% if perms.Gear.hire_self %}
             <div class="w3-dropdown-hover w3-mobile" style="width:100px; min-width:100px">
-             <input type="submit" class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px" value="Sign In" formaction="{% url 'RopeSignIn' pk=item.pk %}">
+              <span class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px">Sign In <i class="fas fa-caret-down"></i></span>
              <div class="w3-dropdown-content w3-card-4" style="width:100px; min-width:100px">
+               <input type="submit" class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px" value="Sign In" formaction="{% url 'RopeSignIn' pk=item.pk %}">
                {% if perms.Gear.register_gear %}
                <a class="w3-button w3-theme-d4 w3-hover-black" style="width:100px"  href="{% url 'EditRope' pk=item.pk %}">Edit</a>
                <a class="w3-button w3-theme-d4 w3-hover-black" style="width:100px"  href="{% url 'DeleteRope' pk=item.pk %}">Delete</a>
@@ -110,8 +112,9 @@
           <td class="w3-right">
             {% if perms.Gear.hire_self %}
             <div class="w3-dropdown-hover w3-mobile" style="width:100px; min-width:100px">
-             <input type="submit" class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px" value="Sign Out" formaction="{% url 'HelmetSignOut' pk=item.pk %}">
+              <span class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px">Sign Out <i class="fas fa-caret-down"></i></span>
              <div class="w3-dropdown-content w3-card-4" style="width:100px; min-width:100px">
+               <input type="submit" class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px" value="Sign Out" formaction="{% url 'HelmetSignOut' pk=item.pk %}">
                {% if perms.Gear.register_gear %}
                <a class="w3-button w3-theme-d4 w3-hover-black" style="width:100px"  href="{% url 'EditHelmet' pk=item.pk %}">Edit</a>
                <a class="w3-button w3-theme-d4 w3-hover-black" style="width:100px"  href="{% url 'DeleteHelmet' pk=item.pk %}">Delete</a>
@@ -130,8 +133,9 @@
           <td class="w3-right">
             {% if perms.Gear.hire_self %}
             <div class="w3-dropdown-hover w3-mobile" style="width:100px; min-width:100px">
-             <input type="submit" class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px" value="Sign In" formaction="{% url 'HelmetSignIn' pk=item.pk %}">
+              <span class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px">Sign In <i class="fas fa-caret-down"></i></span>
              <div class="w3-dropdown-content w3-card-4" style="width:100px; min-width:100px">
+               <input type="submit" class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px" value="Sign In" formaction="{% url 'HelmetSignIn' pk=item.pk %}">
                {% if perms.Gear.register_gear %}
                <a class="w3-button w3-theme-d4 w3-hover-black" style="width:100px"  href="{% url 'EditHelmet' pk=item.pk %}">Edit</a>
                <a class="w3-button w3-theme-d4 w3-hover-black" style="width:100px"  href="{% url 'DeleteHelmet' pk=item.pk %}">Delete</a>
@@ -166,8 +170,9 @@
           <td class="w3-right">
             {% if perms.Gear.hire_self %}
             <div class="w3-dropdown-hover w3-mobile" style="width:100px; min-width:100px">
-             <input type="submit" class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px" value="Sign Out" formaction="{% url 'SRTKitSignOut' pk=item.pk %}">
+              <span class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px">Sign Out <i class="fas fa-caret-down"></i></span>
              <div class="w3-dropdown-content w3-card-4" style="width:100px; min-width:100px">
+               <input type="submit" class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px" value="Sign Out" formaction="{% url 'SRTKitSignOut' pk=item.pk %}">
                {% if perms.Gear.register_gear %}
                <a class="w3-button w3-theme-d4 w3-hover-black" style="width:100px"  href="{% url 'EditSRTKit' pk=item.pk %}">Edit</a>
                <a class="w3-button w3-theme-d4 w3-hover-black" style="width:100px"  href="{% url 'DeleteSRTKit' pk=item.pk %}">Delete</a>
@@ -185,8 +190,9 @@
           <td class="w3-right">
             {% if perms.Gear.hire_self %}
             <div class="w3-dropdown-hover w3-mobile" style="width:100px; min-width:100px">
-             <input type="submit" class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px" value="Sign In" formaction="{% url 'SRTKitSignIn' pk=item.pk %}">
+              <span class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px">Sign In <i class="fas fa-caret-down"></i></span>
              <div class="w3-dropdown-content w3-card-4" style="width:100px; min-width:100px">
+               <input type="submit" class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px" value="Sign In" formaction="{% url 'SRTKitSignIn' pk=item.pk %}">
                {% if perms.Gear.register_gear %}
                <a class="w3-button w3-theme-d4 w3-hover-black" style="width:100px"  href="{% url 'EditSRTKit' pk=item.pk %}">Edit</a>
                <a class="w3-button w3-theme-d4 w3-hover-black" style="width:100px"  href="{% url 'DeleteSRTKit' pk=item.pk %}">Delete</a>
@@ -223,8 +229,9 @@
           <td class="w3-right">
             {% if perms.Gear.hire_self %}
             <div class="w3-dropdown-hover w3-mobile" style="width:100px; min-width:100px">
-             <input type="submit" class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px" value="Sign Out" formaction="{% url 'HarnessSignOut' pk=item.pk %}">
+              <span class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px">Sign Out <i class="fas fa-caret-down"></i></span>
              <div class="w3-dropdown-content w3-card-4" style="width:100px; min-width:100px">
+               <input type="submit" class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px" value="Sign Out" formaction="{% url 'HarnessSignOut' pk=item.pk %}">
                {% if perms.Gear.register_gear %}
                <a class="w3-button w3-theme-d4 w3-hover-black" style="width:100px"  href="{% url 'EditHarness' pk=item.pk %}">Edit</a>
                <a class="w3-button w3-theme-d4 w3-hover-black" style="width:100px"  href="{% url 'DeleteHarness' pk=item.pk %}">Delete</a>
@@ -243,8 +250,9 @@
           <td class="w3-right">
             {% if perms.Gear.hire_self %}
             <div class="w3-dropdown-hover w3-mobile" style="width:100px; min-width:100px">
-             <input type="submit" class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px" value="Sign In" formaction="{% url 'HarnessSignIn' pk=item.pk %}">
+              <span class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px">Sign In <i class="fas fa-caret-down"></i></span>
              <div class="w3-dropdown-content w3-card-4" style="width:100px; min-width:100px">
+               <input type="submit" class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px" value="Sign In" formaction="{% url 'HarnessSignIn' pk=item.pk %}">
                {% if perms.Gear.register_gear %}
                <a class="w3-button w3-theme-d4 w3-hover-black" style="width:100px"  href="{% url 'EditHarness' pk=item.pk %}">Edit</a>
                <a class="w3-button w3-theme-d4 w3-hover-black" style="width:100px"  href="{% url 'DeleteHarness' pk=item.pk %}">Delete</a>
@@ -281,8 +289,9 @@
           <td class="w3-right">
             {% if perms.Gear.hire_self %}
             <div class="w3-dropdown-hover w3-mobile" style="width:100px; min-width:100px">
-             <input type="submit" class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px" value="Sign Out" formaction="{% url 'UndersuitSignOut' pk=item.pk %}">
+              <span class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px">Sign Out <i class="fas fa-caret-down"></i></span>
              <div class="w3-dropdown-content w3-card-4" style="width:100px; min-width:100px">
+               <input type="submit" class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px" value="Sign Out" formaction="{% url 'UndersuitSignOut' pk=item.pk %}">
                {% if perms.Gear.register_gear %}
                <a class="w3-button w3-theme-d4 w3-hover-black" style="width:100px"  href="{% url 'EditUndersuit' pk=item.pk %}">Edit</a>
                <a class="w3-button w3-theme-d4 w3-hover-black" style="width:100px"  href="{% url 'DeleteUndersuit' pk=item.pk %}">Delete</a>
@@ -301,8 +310,9 @@
           <td class="w3-right">
             {% if perms.Gear.hire_self %}
             <div class="w3-dropdown-hover w3-mobile" style="width:100px; min-width:100px">
-             <input type="submit" class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px" value="Sign In" formaction="{% url 'UndersuitSignIn' pk=item.pk %}">
+              <span class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px">Sign In <i class="fas fa-caret-down"></i></span>
              <div class="w3-dropdown-content w3-card-4" style="width:100px; min-width:100px">
+               <input type="submit" class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px" value="Sign In" formaction="{% url 'UndersuitSignIn' pk=item.pk %}">
                {% if perms.Gear.register_gear %}
                <a class="w3-button w3-theme-d4 w3-hover-black" style="width:100px"  href="{% url 'EditUndersuit' pk=item.pk %}">Edit</a>
                <a class="w3-button w3-theme-d4 w3-hover-black" style="width:100px"  href="{% url 'DeleteUndersuit' pk=item.pk %}">Delete</a>
@@ -339,8 +349,9 @@
           <td class="w3-right">
             {% if perms.Gear.hire_self %}
             <div class="w3-dropdown-hover w3-mobile" style="width:100px; min-width:100px">
-             <input type="submit" class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px" value="Sign Out" formaction="{% url 'OversuitSignOut' pk=item.pk %}">
+              <span class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px">Sign Out <i class="fas fa-caret-down"></i></span>
              <div class="w3-dropdown-content w3-card-4" style="width:100px; min-width:100px">
+               <input type="submit" class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px" value="Sign Out" formaction="{% url 'OversuitSignOut' pk=item.pk %}">
                {% if perms.Gear.register_gear %}
                <a class="w3-button w3-theme-d4 w3-hover-black" style="width:100px"  href="{% url 'EditOversuit' pk=item.pk %}">Edit</a>
                <a class="w3-button w3-theme-d4 w3-hover-black" style="width:100px"  href="{% url 'DeleteOversuit' pk=item.pk %}">Delete</a>
@@ -359,8 +370,9 @@
           <td class="w3-right">
             {% if perms.Gear.hire_self %}
             <div class="w3-dropdown-hover w3-mobile" style="width:100px; min-width:100px">
-             <input type="submit" class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px" value="Sign In" formaction="{% url 'OversuitSignIn' pk=item.pk %}">
+              <span class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px">Sign In <i class="fas fa-caret-down"></i></span>
              <div class="w3-dropdown-content w3-card-4" style="width:100px; min-width:100px">
+               <input type="submit" class="w3-button w3-mobile w3-theme-d4 w3-hover-black" style="width:100px" value="Sign In" formaction="{% url 'OversuitSignIn' pk=item.pk %}">
                {% if perms.Gear.register_gear %}
                <a class="w3-button w3-theme-d4 w3-hover-black" style="width:100px"  href="{% url 'EditOversuit' pk=item.pk %}">Edit</a>
                <a class="w3-button w3-theme-d4 w3-hover-black" style="width:100px"  href="{% url 'DeleteOversuit' pk=item.pk %}">Delete</a>
