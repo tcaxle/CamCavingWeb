@@ -51,7 +51,15 @@
   <p>If you like the sound of caving and adventure, or are an experienced caver new to the Cambridge area, then you are more than welcome to join us. Contact details can be found in the links above, but the best way to get involved is to come to the pubmeet.</p>
   <p>We meet every Tuesday night at 21:00. Usually, we can be found in the Elm Tree (near Parkers Piece). Come along and join us for a drink, get to know the club, and see what we're up to!</p>
 
-  <div class="w3-content w3-section w3-card-4" style="max-width:800px">
+  <!-- Disable slideshow if no JS -->
+  <noscript>
+    <style>
+        #slideshow {display:none;}
+    </style>
+  </noscript>
+
+  <!-- Slideshow images -->
+  <div id="slideshow" class="w3-content w3-section w3-card-4" style="max-width:800px">
     <img class="mySlides" src="{% static "Images/HomeSlideShow/1.jpg" %}" style="width:100%">
     <img class="mySlides" src="{% static "Images/HomeSlideShow/2.jpg" %}" style="width:100%">
     <img class="mySlides" src="{% static "Images/HomeSlideShow/3.jpg" %}" style="width:100%">
@@ -93,6 +101,7 @@
     <img class="mySlides" src="{% static "Images/HomeSlideShow/39.jpg" %}" style="width:100%">
     <img class="mySlides" src="{% static "Images/HomeSlideShow/40.jpg" %}" style="width:100%">
   </div>
+
 
   <script>
     var myIndex = 0;

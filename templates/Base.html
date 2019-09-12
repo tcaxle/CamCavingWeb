@@ -57,6 +57,13 @@
         {% include 'NavBarContent.html' %}
       </div>
 
+      <!-- for those delicate wooks who don't like JS -->
+      <noscript>
+        <div class="w3-hide-large w3-hide-medium">
+          {% include 'NavBarContent.html' %}
+        </div>
+      </noscript>
+
     </div>
 
     <script>
