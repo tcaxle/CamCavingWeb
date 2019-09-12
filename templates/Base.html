@@ -76,10 +76,10 @@
         }
 
         var x = document.getElementById("hamburger_close");
-        if (x.className.indexOf("w3-hide") == -1) {
-          x.className += " w3-hide";
+        if (x.className.indexOf("w3-show") == -1) {
+          x.className += " w3-show";
         } else {
-          x.className = x.className.replace(" w3-hide", "");
+          x.className = x.className.replace(" w3-show", " w3-hide");
         }
       }
     </script>
