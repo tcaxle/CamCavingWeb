@@ -11,4 +11,11 @@
 {% endblock %}
 
 {% block side-content %}
+  <br>
+  <div class="w3-display-container">
+    <img class="w3-center" style="display: block; width:95%; margin-left: auto; margin-right: auto;" src="{% static 'Images/Misc/HAL9000.svg' %}" alt="Hal9000">
+    <div class="w3-display-middle w3-container">
+      <p class="w3-text-white w3-xxlarge w3-center" style="text-shadow:1px 1px 0 #444"><b>I'm sorry, {% if user.is_authenticated %}{{ user.full_name }}{% else %}Dave{% endif %}. I'm afraid I can't do that.</b></p>
+    </div>
+  </div>
 {% endblock %}

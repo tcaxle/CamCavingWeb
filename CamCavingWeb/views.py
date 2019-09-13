@@ -161,3 +161,9 @@ class ArdecheVarade(TemplateView):
     template_name = 'Ardeche/Varade.html'
 class ArdecheVigneClose(TemplateView):
     template_name = 'Ardeche/VigneClose.html'
+
+# Error Views
+class Error404(TemplateView):
+    template_name = '404.html'
+class Error500(TemplateView):
+    template_name = '500.html'

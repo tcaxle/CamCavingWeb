@@ -115,6 +115,10 @@ urlpatterns = [
     path('Ardeche/StMarcel/', views.ArdecheStMarcel.as_view(), name='ArdecheStMarcel'),
     path('Ardeche/Varade/', views.ArdecheVarade.as_view(), name='ArdecheVarade'),
     path('Ardeche/VigneClose/', views.ArdecheVigneClose.as_view(), name='ArdecheVigneClose'),
+
+    # Error Pages
+    path('404/', views.Error404.as_view(), name='Error404'),
+    path('500/', views.Error500.as_view(), name='Error500'),
 ]
 
 if settings.DEBUG:
