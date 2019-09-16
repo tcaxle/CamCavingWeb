@@ -3,19 +3,20 @@ from django.db import models
 from datetime import datetime
 import uuid
 
-ACCOUNT_TYPES = (
-    ('Bank', 'Bank'),
-    ('User', 'User'),
-    ('Pool', 'Pool')
-)
-
 class Account(models.Model):
     # Representitive of legal entities. This could be the actual club account, a retailer that the club purchases from, or a member of the club
-    account_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    # METADATA:
+    sort_name = models.CharField(max_length=100, blank=False, editable=False, default='-')
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    # DATA:
     owner = models.OneToOneField(CustomUser, blank=True, null=True, on_delete=models.SET_NULL, related_name='bank_account', help_text='If account is to be owned by a person, please select that user here.')
     name = models.CharField(max_length=100, blank=True, help_text='If account is unowned, please give it a sensible name.')
+    ACCOUNT_TYPES = (
+        ('Bank', 'Bank'),
+        ('User', 'User'),
+        ('Pool', 'Pool')
+    )
     type = models.CharField(max_length=100, blank=False, choices=ACCOUNT_TYPES)
-    sort_name = models.CharField(max_length=100, blank=False, editable=False, default='-')
 
     def __str__(self):
         if self.name:
@@ -39,7 +40,9 @@ class Account(models.Model):
 class CustomCurrency(models.Model):
     # Allows custom "currencies," which are rates to be charged
     # CustomCurrencies can only be credited to users, and always debit a pool (negative credits for a charge)
-    currency_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    # METADATA:
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    # DATA:
     name = models.CharField(max_length=100, blank=False)
     credit = models.DecimalField(max_digits=7, decimal_places=2, blank=False, help_text='The value of this currency in GBP. For a currency that will be a debit (charge), enter a negative number. For a currency that will be a credit, enter a positive number.') # "Rate" of currency; the amount to credit an account by per unit
     pool = models.ForeignKey(Account, blank=False, null=False, on_delete=models.PROTECT) # The pool to be debited when someone is credited with this currency
@@ -49,42 +52,61 @@ class CustomCurrency(models.Model):
 class CustomExpense(models.Model):
     # Allows custom "expenses," which are descriptive psuedonyms forr pools
     # CustomExpenses can only be credited to users, and always debit a pool (negative credits for a charge)
-    expense_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    # METADATA:
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    # DATA:
     name = models.CharField(max_length=100, blank=False)
     pool = models.ForeignKey(Account, blank=False, null=False, on_delete=models.PROTECT) # The pool to be debited when someone is credited with this expense
     def __str__(self):
         return self.name
 
-class TransactionGroup(models.Model):
-    # Holds multiple groups of Transaction objects, allowing single objects containing an entire set off accounts
-    group_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+class CommonData(models.Model):
+    # Data that is the same for a collection of financial objects
+    # Created:
     created_by = models.ForeignKey(CustomUser, blank=False, null=True, editable=False, on_delete=models.PROTECT, related_name='created_transaction_group_set') # Who created the object
-    created_on = models.DateTimeField(blank=False, default=datetime.now, editable=False) # When was the object created?
+    created_on = models.DateTimeField(blank=False, default=datetime.now, editable=False)
+    # Approved:
     is_approved = models.BooleanField(default=False, editable=False)
-    is_editable = models.BooleanField(default=False, editable=False)
     approved_by = models.ForeignKey(CustomUser, blank=True, null=True, editable=False, on_delete = models.PROTECT, related_name='approved_transaction_group_set') # Who approved the object
     approved_on = models.DateTimeField(blank=True, null=True, default=datetime.now, editable=False) # When was the object approved?
-    date = models.DateTimeField(blank=False, default=datetime.now) # When did the transaction occur?
-    notes = models.TextField(blank=True)
+    # Date:
+    date = models.DateTimeField(blank=False, default=datetime.now)
 
-    def SetApprove(self, by=None, on=None, status=True):
+class FinancialObject(models.Model):
+    # meta-model for financial objects comtaining shared fields (whose values differ from object to object)
+    # UUID:
+    uuid = models.UUIDField(default=uuid.uuid4, editable=False, unique=True, pk=True)
+    # Notes:
+    notes = models.TextField(blank=True)
+    # Editable:
+    is_editable = models.BooleanField(default=False, editable=False)
+    # Common Data:
+    common_data = models.ForeignKey(CommonData, on_delete=models.PROTECT, related_name='common_data')
+
+    class Meta:
+        abstract = True
+
+class TransactionGroup(FinancialObject):
+    # Held by multiple Transaction objects, allowing single objects containing an entire set off accounts
+    # Event
+    event = models.OneToOneField(TransactionGroup, blank=True, null=True, on_delete=models.CASCADE, related_name='transaction_group') # The transaction group tied to the event
+
+    def SetApprove(self, by=None, on=None, status=False):
         if status:
-            self.is_approved = True
-            self.approved_by = by
-            self.approved_on = on
+            self.common_data.is_approved = True
+            self.common_data.approved_by = by
+            self.common_data.approved_on = on
         else:
-            self.is_approved = False
-            self.approved_by = None
-            self.approved_on = None
-        for transaction in self.transaction_set.all():
-            transaction.SetApprove(by, on, status)
+            self.common_data.is_approved = False
+            self.common_data.approved_by = None
+            self.common_data.approved_on = None
         self.save()
 
     def ToggleApprove(self, by, on):
         if self.is_approved:
             self.SetApprove(status=False)
         else:
-            self.SetApprove(by, on)
+            self.SetApprove(by, on, status=True)
 
     def populate(self, t_g_list):
         # takes a list of tuples: [(creditor, dict{debtor: credit}), ...] \
@@ -117,57 +139,53 @@ class TransactionGroup(models.Model):
             ("approve__transactiongroup", "Can approve transaction groups"),
         ]
 
-class Transaction(models.Model):
-    # Parents the Entry model, allowing Many-To-One Transactions across multiple accounts
-    transaction_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
-    created_by = models.ForeignKey(CustomUser, blank=False, null=True, editable=False, on_delete=models.PROTECT) # Who created the object
-    created_on = models.DateTimeField(blank=False, default=datetime.now, editable=False) # When was the object created?
-    transaction_group = models.ForeignKey(TransactionGroup, blank=True, null=True, on_delete=models.PROTECT)
-    is_approved = models.BooleanField(default=False, editable=False)
-    is_editable = models.BooleanField(default=False, editable=False)
-    approved_by = models.ForeignKey(CustomUser, blank=True, null=True, editable=False, on_delete = models.PROTECT, related_name='approved_transaction_set') # Who approved the object
-    approved_on = models.DateTimeField(blank=True, null=True, default=datetime.now, editable=False) # When was the object approved?
-    date = models.DateTimeField(blank=False, default=datetime.now) # When did the transaction occur?
-    notes = models.TextField(blank=True)
+class Transaction(FinancialObject):
+    # Atomic unit of dataset, represents a one-to-one transaction
+    # SETUP:
+    account_a = models.ForeignKey(Account, blank=False, on_delete=models.PROTECT, related_name='transaction_set_a')
+    account_b = models.ForeignKey(Account, blank=False, on_delete=models.PROTECT, related_name='transaction_set_b')
+    # DATA:
+    credit_a = models.DecimalField(max_digits=7, decimal_places=2, blank=False) # Amount that account a has been credited by
+    credit_b = models.DecimalField(max_digits=7, decimal_places=2, blank=False) # Amount that account b has been credited by
+    # METADATA:
+    # Custom Currency Handling:
+    custom_currency = models.ForeignKey(CustomCurrency, on_delete=models.PROTECT, blank=True, null=True, editable=False)
+    currency_value_at_date = models.DecimalField(max_digits=7, decimal_places=2, blank=True, null=True, editable=False) # protects against case where value of currency changes over time
+    currency_quantity = models.IntegerField(blank=True, null=True, editable=False)
+    # Custom Expense Handling:
+    custom_expense = models.ForeignKey(CustomExpense, on_delete=models.PROTECT, blank=True, null=True, editable=False)
+    # Transaction Groups:
+    transaction_group = models.ForeignKey(TransactionGroup, on_delete=models.CASCADE, blank=True, null=True, editable=False)
 
-    def SetApprove(self, by=None, on=None, status=True):
-        if status:
-            self.is_approved = True
-            self.approved_by = by
-            self.approved_on = on
+    def save(self, *args, **kwargs):
+        self.date = datetime(self.date.year, self.date.month, self.date.day, 12, 0, 0)
+        if (self.account_a.type == 'Bank' and self.account_b.type != 'Bank') or(self.account_a.type != 'Bank' and self.account_b.type == 'Bank'):
+            # check if transaction is between bank and not a bank \
+            # and credit both
+            self.credit_a = self.credit_a # Credit Account A
+            self.credit_b = self.credit_a # Credit Account B
         else:
-            self.is_approved = False
-            self.approved_by = None
-            self.approved_on = None
-        for entry in self.entry_set.all():
-            entry.SetApprove(by, on, status)
+            # else credit one and debit other
+            self.credit_a = self.credit_a # Credit Account A
+            self.credit_b = -self.credit_a # Debit Account B
+        super().save(*args, **kwargs)
+
+    def SetApprove(self, by=None, on=None, status=False):
+        if status:
+            self.common_data.is_approved = True
+            self.common_data.pproved_by = by
+            self.common_data.pproved_on = on
+        else:
+            self.common_data.is_approved = False
+            self.common_data.approved_by = None
+            self.common_data.approved_on = None
         self.save()
 
     def ToggleApprove(self, by, on):
         if self.is_approved:
             self.SetApprove(status=False)
         else:
-            self.SetApprove(by, on)
-
-    def populate(self, creditor, dict):
-        # takes a creditor and a dict{debtor: credit} \
-        # and generates an entry for each item in the dictionary
-        # entries inherit the date, notes, and created data from the transaction
-        for debtor, credit in dict.items():
-            # create an entry, and make it inherit the transaction shared data as well as entry specific data
-            entry = Entry(account_a=creditor, account_b=debtor, credit_a=credit, date=self.date, notes=self.notes, created_by=self.created_by, created_on=self.created_on, transaction=self)
-            entry.save()
-
-    def depopulate(self):
-        # deletes entries owned by the transaction group
-        for entry in self.entry_set.all():
-            entry.delete()
-
-    def delete(self, orphan=False, *args, **kwargs):
-        # by default, deleting a transaction deletes its children
-        if not orphan:
-            self.depopulate()
-        super().delete(*args, **kwargs)
+            self.SetApprove(by, on, status=True)
 
     def __str__(self):
         return 'Transaction '+str(self.pk)
@@ -177,15 +195,12 @@ class Transaction(models.Model):
             ("approve__transaction", "Can approve transactions"),
         ]
 
+"""
 class Entry(models.Model):
     # The smallest unit of the transation family. Records an individual double-entry transaction
     entry_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
     created_by = models.ForeignKey(CustomUser, blank=False, null=True, editable=False, on_delete=models.PROTECT) # Who created the object
     created_on = models.DateTimeField(blank=False, default=datetime.now, editable=False) # When was the object created?
-    account_a = models.ForeignKey(Account, blank=False, on_delete=models.PROTECT, related_name='transaction_set_a')
-    account_b = models.ForeignKey(Account, blank=False, on_delete=models.PROTECT, related_name='transaction_set_b')
-    credit_a = models.DecimalField(max_digits=7, decimal_places=2, blank=False) # Amount that account a has been credited by
-    credit_b = models.DecimalField(max_digits=7, decimal_places=2, blank=False) # Amount that account b has been credited by
     date = models.DateTimeField(blank=False, default=datetime.now) # When did the transaction occur?
     notes = models.TextField(blank=True)
     is_approved = models.BooleanField(default=False, editable=False)
@@ -193,8 +208,6 @@ class Entry(models.Model):
     is_editable = models.BooleanField(default=False, editable=False)
     approved_by = models.ForeignKey(CustomUser, blank=True, null=True, editable=False, on_delete = models.PROTECT, related_name='approved_entry_set') # Who approved the object
     approved_on = models.DateTimeField(blank=True, null=True, default=datetime.now, editable=False) # When was the object approved?
-    custom_currency = models.ForeignKey(CustomCurrency, on_delete=models.PROTECT, blank=True, null=True, editable=False)
-    custom_expense = models.ForeignKey(CustomExpense, on_delete=models.PROTECT, blank=True, null=True, editable=False)
 
     def SetApprove(self, by=None, on=None, status=True):
         if status:
@@ -213,36 +226,6 @@ class Entry(models.Model):
         else:
             self.SetApprove(by, on)
 
-    def save(self, *args, **kwargs):
-        self.date = datetime(self.date.year, self.date.month, self.date.day, 12, 0, 0)
-        if self.account_a.type == 'Bank' and self.account_b.type == 'Bank':
-            self.credit_a = self.credit_a # Credit Account A
-            self.credit_b = -self.credit_a # Debit To Account B
-        elif self.account_a.type == 'Bank' and self.account_b.type == 'User':
-            self.credit_a = self.credit_a # Credit From Account
-            self.credit_b = self.credit_a # Credit To Account
-        elif self.account_a.type == 'User' and self.account_b.type == 'Bank':
-            self.credit_a = self.credit_a # Credit From Account
-            self.credit_b = self.credit_a # Credit To Account
-        elif self.account_a.type == 'User' and self.account_b.type == 'User':
-            self.credit_a = self.credit_a # Credit From Account
-            self.credit_b = -self.credit_a # Debit To Account
-        elif self.account_a.type == 'User' and self.account_b.type == 'Pool':
-            self.credit_a = self.credit_a # Credit From Account
-            self.credit_b = -self.credit_a # Debit To Account
-        elif self.account_a.type == 'Pool' and self.account_b.type == 'User':
-            self.credit_a = self.credit_a # Credit From Account
-            self.credit_b = -self.credit_a # Debit To Account
-        elif self.account_a.type == 'Pool' and self.account_b.type == 'Pool':
-            self.credit_a = self.credit_a # Credit From Account
-            self.credit_b = -self.credit_a # Debit To Account
-        elif self.account_a.type == 'Pool' and self.account_b.type == 'Bank':
-            self.credit_a = self.credit_a # Credit From Account
-            self.credit_b = self.credit_a # Credit To Account
-        elif self.account_a.type == 'Bank' and self.account_b.type == 'Pool':
-            self.credit_a = self.credit_a # Credit From Account
-            self.credit_b = self.credit_a # Credit To Account
-        super().save(*args, **kwargs)
 
     def __str__(self):
         if self.credit_a >= 0 and self.credit_b >= 0:
@@ -261,6 +244,7 @@ class Entry(models.Model):
         permissions = [
             ("approve__entry", "Can approve entries"),
         ]
+"""
 
 class FeeTemplate(models.Model):
     # A set of currencies to provide the flesh of an Event model
@@ -272,49 +256,32 @@ class FeeTemplate(models.Model):
     def __str__(self):
         return self.name
 
-class Event(models.Model):
+class Event(FinancialObject):
     # A wrapper for the TransactionGroup that integrates custom currecies \
     # to make doing the accounts for an event (a meet, a dinner, etc.) easier
-    event_key = models.UUIDField(default=uuid.uuid4, editable=False, unique=True)
+    # Fee Templates:
     fee_template = models.ForeignKey(FeeTemplate, blank=False, null=True, on_delete=models.PROTECT)
+    # Name
     name = models.CharField(max_length=100, blank=False)
-    date = models.DateTimeField(blank=False, default=datetime.now) # When did the transaction occur?
-    notes = models.TextField(blank=True)
-    users = models.ManyToManyField(Account, blank=True) # User Accounts that can be credited
-    transaction_group = models.OneToOneField(TransactionGroup, blank=False, null=True, on_delete=models.PROTECT, related_name='event') # The transaction group tied to the event
-    created_by = models.ForeignKey(CustomUser, blank=False, null=True, editable=False, on_delete=models.PROTECT) # Who created the object
-    created_on = models.DateTimeField(blank=False, default=datetime.now, editable=False) # When was the object created?
-    is_approved = models.BooleanField(default=False, editable=False)
-    is_editable = models.BooleanField(default=False, editable=False)
-    approved_by = models.ForeignKey(CustomUser, blank=True, null=True, editable=False, on_delete = models.PROTECT, related_name='approved_event_set') # Who approved the object
-    approved_on = models.DateTimeField(blank=True, null=True, default=datetime.now, editable=False) # When was the object approved?
+    # Creditors
+    creditors = models.ManyToManyField(Account, blank=True) # Accounts that can be credited
 
-    def SetApprove(self, by=None, on=None, status=True):
+    def SetApprove(self, by=None, on=None, status=False):
         if status:
-            self.is_approved = True
-            self.approved_by = by
-            self.approved_on = on
+            self.common_data.is_approved = True
+            self.common_data.approved_by = by
+            self.common_data.approved_on = on
         else:
-            self.is_approved = False
-            self.approved_by = None
-            self.approved_on = None
-        self.transaction_group.SetApprove(by, on, status)
+            self.common_data.is_approved = False
+            self.common_data.approved_by = None
+            self.common_data.approved_on = None
         self.save()
 
     def ToggleApprove(self, by, on):
         if self.is_approved:
             self.SetApprove(status=False)
         else:
-            self.SetApprove(by, on)
-
-    def delete(self, orphan=False, *args, **kwargs):
-        # by default, deleting an event deletes its child, grand-children and great-grand-children
-        if not orphan:
-            transaction_group = self.transaction_group
-            self.transaction_group = None
-            self.save()
-            transaction_group.delete()
-        super().delete(*args, **kwargs)
+            self.SetApprove(by, on, status=True)
 
     def __str__(self):
         return self.name
