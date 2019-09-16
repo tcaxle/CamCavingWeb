@@ -37,6 +37,7 @@ def BalanceAtDate(account, date=timezone.now(), all=False):
     else:
         return float(balance)
 
+"""
 @method_decorator(permission_required('Bank.add__entry'), name='dispatch')
 class CreateEntry(FormView):
     form_class = CreateEntry
@@ -54,7 +55,9 @@ class CreateEntry(FormView):
         return super().form_valid(form)
     def get_success_url(self, **kwargs):
         return reverse_lazy('UserPortalDashboard')
+"""
 
+"""
 @method_decorator(permission_required('Bank.change__entry'), name='dispatch')
 class EditEntry(UpdateView):
     model = Entry
@@ -65,7 +68,9 @@ class EditEntry(UpdateView):
         # unset approved status
         self.object.SetApprove(status=False)
         return reverse_lazy('ViewEntry', args=(self.object.entry_key,))
+"""
 
+"""
 @permission_required('Bank.approve__entry')
 def ToggleApproveEntry(request, slug):
     # retrieve entry object
@@ -73,6 +78,7 @@ def ToggleApproveEntry(request, slug):
     # toggle the bool
     entry.ToggleApprove(request.user, datetime.now())
     return redirect('ViewEntry', entry.entry_key)
+"""
 
 @permission_required('Bank.approve__transaction')
 def ToggleApproveTransaction(request, slug):
@@ -625,6 +631,9 @@ class ViewEntry(DetailView):
     context_object_name = 'entry'
     template_name = 'Bank/ViewEntry.html'
 
+"""
+### REMOVED AS OF V2.1 ###
+
 @method_decorator(permission_required('Bank.add__transaction'), name='dispatch')
 class CreateTransactionCreditor(TemplateView):
     # Allows the treasurer to create transactions
@@ -853,10 +862,13 @@ def EditTransactionAction(request):
         # populate the transaction
         transaction.populate(creditor, debtor_dict)
     return redirect('ViewTransaction', transaction.transaction_key)
+"""
+
+### CREATE TRANSACTION GROUPS ###
 
 @method_decorator(permission_required('Bank.add__transactiongroup'), name='dispatch')
-class CreateTransactionGroupCreditor(TemplateView):
-    template_name = 'Bank/AddTransactionGroup/SelectCreditor.html'
+class CreateTransactionGroupSetup(TemplateView):
+    template_name = 'Bank/AddTransactionGroup/Setup.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['account_list'] = Account.objects.all()
@@ -864,34 +876,8 @@ class CreateTransactionGroupCreditor(TemplateView):
         return context
 
 @method_decorator(permission_required('Bank.add__transactiongroup'), name='dispatch')
-class CreateTransactionGroupDebtor(TemplateView):
-    template_name = 'Bank/AddTransactionGroup/SelectDebtor.html'
-    def post(self, request, *args, **kwargs):
-        ## DATA RETRIEVAL
-        # extract the POST data
-        data = request.POST
-        # extract the date
-        date = datetime.strptime(data.get('date'), '%Y-%m-%d')
-        # extract the list of creditors
-        account_list = Account.objects.all()
-        creditor_list = []
-        for account in account_list:
-            key = account.account_key
-            if str(key) in data.keys() and data.get(str(key)) == 'creditor':
-                creditor_list.append(account)
-        if not creditor_list: # Check for no debtors selected
-            raise Http404('You must have creditors in your transaction.') # Complain
-        # DATA PROCESSING
-        # pass the data to the template
-        context = super().get_context_data(**kwargs)
-        context['account_list'] = account_list
-        context['creditor_list'] = creditor_list
-        context['date'] = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
-        return render(request, self.template_name, context)
-
-@method_decorator(permission_required('Bank.add__transactiongroup'), name='dispatch')
 class CreateTransactionGroupData(TemplateView):
-    template_name = 'Bank/AddTransactionGroup/InputData.html'
+    template_name = 'Bank/AddTransactionGroup/Data.html'
     def post(self, request, *args, **kwargs):
         ## DATA RETRIEVAL
         # extract the POST data
@@ -923,42 +909,55 @@ class CreateTransactionGroupData(TemplateView):
 @permission_required('Bank.add__transactiongroup')
 def CreateTransactionGroupAction(request):
     if request.method == 'POST':
-        ## DATA RETRIEVAL
+        ## DATA RETRIEVAL ##
         # extract the POST data
         data = request.POST
+
         # extract the date
         date = datetime.strptime(data.get('date'), '%Y-%m-%d')
         date = datetime(date.year, date.month, date.day, 12, 0, 0) # All transactions happen at Mid Day
+
+        # extract the name
+        name = data.get('name')
+
         # extract the notes
         notes = data.get('notes')
+
         # extract the lists of creditors and debtors
         account_list = Account.objects.all()
         creditor_list = []
         debtor_list = []
         for account in account_list:
-            key = account.account_key
+            key = account.uuid
             if 'CREDITOR:'+str(key) in data.keys() and data.get('CREDITOR:'+str(key)) == 'creditor':
                 creditor_list.append(account)
             if 'DEBTOR:'+str(key) in data.keys() and data.get('DEBTOR:'+str(key)) == 'debtor':
                 debtor_list.append(account)
-        ## DATA PROCESSING
-        # create a transaction group object
-        transaction_group = TransactionGroup(is_editable=True)
-        transaction_group.created_by = request.user
-        transaction_group.date = date
-        transaction_group.notes = notes
+
+        ## DATA PROCESSING ##
+        # setup objects:
+        common_data = CommonData(
+            date=date,
+            created_by = request.user,
+            )
+        transaction_group = TransactionGroup(
+            is_editable=True,
+            common_data=common_data,
+            notes = notes,
+            name = name,
+            )
         transaction_group.save()
-        # create transaction children and entry grand-children
+
+        # create transactions
         transaction_list = []
         for creditor in creditor_list:
-            debtor_dict = {}
             for debtor in debtor_list:
-                key = 'AMOUNT:'+str(debtor.account_key)+':'+str(creditor.account_key)
+                key = 'AMOUNT:'+str(debtor.uuid)+':'+str(creditor.uuid)
                 if key in data.keys() and data.get(key) and float(data.get(key)) != 0.0:
-                    debtor_dict[debtor] = float(data.get(key))
-            transaction_list.append((creditor, debtor_dict))
+                    transaction_list.append((creditor, debtor, float(data.get(key)), None, None))
         transaction_group.populate(transaction_list)
-    return redirect('ViewTransactionGroup', transaction_group.group_key)
+
+    return redirect('ViewTransactionGroup', transaction_group.uuid)
 
 @method_decorator(permission_required('Bank.change__transactiongroup'), name='dispatch')
 class EditTransactionGroupCreditor(DetailView):

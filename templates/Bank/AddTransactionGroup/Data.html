@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block form %}
-  <h2>Input Data</h2>
+  <h2>Transaction Group Data</h2>
   <form method="post" action="{% url 'CreateTransactionGroupAction' %}">
   {% csrf_token %}
   {% for creditor in creditor_list %}
