@@ -1,0 +1,61 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block title %}
+  <title>CUCC | Blog | Image</title>
+{% endblock %}
+
+{% block side-content %}
+  <h2>Navigation</h2>
+  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'AlbumView' pk=album.pk %}">Back to Album</a>
+  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'Album' %}">Album List</a>
+
+  {% if user.is_authenticated %}
+    <h2>Image Actions</h2>
+    {% if perms.Blog.change_image %}
+      <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'ImageEdit' pk=image.pk %}">Edit Image</a>
+    {% endif %}
+  {% endif %}
+{% endblock %}
+
+{% block main-content %}
+    <h2>{{album.title}}</h2>
+    {%if image.photographer%}
+    <span>Image by: {{image.photographer}}{%if image.timestamp%} taken {{image.timestamp|date:'Y/m/d H:m:s'}}{%endif%}</span>
+    {%elif image.timestamp%}
+    Taken {{image.timestamp|date:'Y/m/d H:i:s'}}
+    {%endif%}
+
+    <p></p>
+    <center>
+      <a href="{{image.get_url}}" target="_blank">
+        <img src="{{image.get_thumb_url}}">
+      </a>
+    </center>
+    <p></p>
+
+    {% if image.description %}
+    <div>{{image.description}}</div>
+    {% else %}
+      <div>Description has not been added.</div>
+    {% endif %}
+
+    <p></p>
+
+    <table class="w3-table w3-striped" style="font-size: smaller; table-layout:fixed;">
+      <thead>
+        <td>Field</td>
+        <td>Value</td>
+      </thead>
+      <tbody>
+        <tr></tr>
+        {% for key, value in image.metadata.items %}
+          <tr>
+            <td>{{key}}</td>
+            <td style="overflow: hidden;">{{value}}</td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+      
+{% endblock %}

@@ -1,0 +1,26 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block title %}
+  <title>CUCC | Meets | Blog</title>
+{% endblock %}
+
+{% block main-content %}
+  <h1>The CUCC Blog</h1>
+  {% include 'Blog/PostList.html' %}
+
+{% endblock %}
+
+{% block side-content %}
+  {% if user.is_authenticated %}
+  {% include 'ActionSets/Blog.html' %}
+  {% endif %}
+
+  {% if by_author%}
+	<h2>Navigation</h2>
+  	<a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'Blog' %}">All Posts</a>
+  {% endif%}
+
+  <h2>Legacy Logs</h2>
+  <p>All pages containing trip logs (among other things) from the old wiki have been preserved (complete with formatting) in the <a href="https://camcaving.uk/Documents/Legacy/">legacy section of the archive</a>.</p>
+{% endblock %}

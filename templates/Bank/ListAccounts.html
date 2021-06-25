@@ -1,0 +1,51 @@
+{% extends 'Base.html' %}
+{% load static %}
+{% load currency %}
+
+{% block title %}
+  <title>CUCC | Bank | List Accounts</title>
+{% endblock %}
+
+{% block main-content %}
+  <h1>Select an Account to View</h1>
+  <table class="w3-table-all w3-striped w3-card">
+    <tr>
+      <td colspan="2" class="w3-theme-d3"><b>User Accounts</b><span class="w3-right">Total: {{ total_dict.User|currency }}</span></td>
+    </tr>
+    {% for account, balance in account_dict.items %}
+      {% if account.type == 'User' %}
+        <tr class="w3-hover-black"><td><a class="w3-button w3-container w3-bar w3-hover-black" href="{% url 'ViewAccount' account.account_key %}">
+          <div class="w3-bar-item">{{ account }}</div>
+          <div class="w3-bar-item w3-right">{{ balance|currency }}</div>
+        </a></td></tr>
+      {% endif %}
+    {% endfor %}
+    <tr>
+      <td colspan="2" class="w3-theme-d3"><b>Pool Accounts</b><span class="w3-right">Total: {{ total_dict.Pool|currency }}</span</td>
+    </tr>
+    {% for account, balance in account_dict.items %}
+      {% if account.type == 'Pool' %}
+        <tr class="w3-hover-black"><td><a class="w3-button w3-container w3-bar w3-hover-black" href="{% url 'ViewAccount' account.account_key %}">
+          <div class="w3-bar-item">{{ account }}</div>
+          <div class="w3-bar-item w3-right">{{ balance|currency }}</div>
+        </a></td></tr>
+      {% endif %}
+    {% endfor %}
+    <tr>
+      <td colspan="2" class="w3-theme-d3"><b>Bank Accounts</b><span class="w3-right">Total: {{ total_dict.Bank|currency }}</span</td>
+    </tr>
+    {% for account, balance in account_dict.items %}
+      {% if account.type == 'Bank' %}
+        <tr class="w3-hover-black"><td><a class="w3-button w3-container w3-bar w3-hover-black" href="{% url 'ViewAccount' account.account_key %}">
+          <div class="w3-bar-item">{{ account }}</div>
+          <div class="w3-bar-item w3-right">{{ balance|currency }}</div>
+        </a></td></tr>
+      {% endif %}
+    {% endfor %}
+  </table>
+
+{% endblock %}
+
+{% block side-content %}
+  {% include 'ActionSets/Bank.html' %}
+{% endblock %}

@@ -1,0 +1,4 @@
+{% if user.is_authenticated and perms.UserPortal.add_committee %}
+  <h2>Committee Actions</h2>
+  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'CommitteeAdd' %}">Add a New Committee Entry</a>
+{% endif %}

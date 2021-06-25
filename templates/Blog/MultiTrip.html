@@ -1,0 +1,46 @@
+<h1>Trip List</h1>
+
+<table class="w3-table w3-striped">
+  {% for year, trips in by_year.items %}
+    <tr>
+      <td>
+        <h3>{{year}}</h3>
+      </td>
+    </tr>
+    {% for trip in trips %}
+      <tr>
+        <td>
+          <div class="single-trip" id="trip-{{trip.pk}}">
+            <div class="single-trip-title">
+              <b>{{ trip }}</b> for {{trip.days}} days
+            </div>
+            <div class="single-trip-leader">
+              Trip leader: {{trip.leader}}
+            </div>
+            <div>Attendees:</div>
+            <div class="single-trip-attendees">
+              {{trip.attendees}}
+            </div>
+            <div>
+              Reports:
+            </div>
+            <div class="single-trip-reports">
+              {% if trip.posts.all %}
+                {% for post in trip.posts.all %}{% if forloop.first %}<a href="{% url 'Blog' %}#post-{{post.pk}}">{{post.title}} by {{post.author}}</a>{%else%}, <a href="{% url 'Blog' %}#post-{{post.pk}}">{{post.title}} by {{post.author}}</a>{% endif %}{% endfor%}
+              {% else %}
+                No reports
+              {% endif %}
+            </div>
+            <div class="single-trip-album">
+              {% if trip.album %}
+                <a href="{% url 'AlbumView' pk=trip.album.pk %}">Album</a>
+              {% else %}
+                No album
+              {% endif %}
+            </div>
+          </div>
+        </td>
+      </tr>
+    {% endfor %}
+  {% endfor %}
+</table>

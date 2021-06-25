@@ -1,0 +1,61 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block title %}
+  <title>CUCC | Contact | Committee</title>
+{% endblock %}
+
+{% block main-content %}
+  <h1>Committee</h1>
+
+  {% for c in committee_list %}
+	  <h2>Year: {{ c.year }}</h2>
+	  <p><b>President:</b> {{ c.president }}</p>
+	  <p><b>Senior Treasurer:</b> {{ c.senior_treasurer }}</p>
+	  <p><b>Junior Treasurer:</b> {{ c.junior_treasurer }}</p>
+	  <p><b>(Membership) Secretary:</b> {{ c.secretary }}</p>
+	  <p><b>Tackle Master:</b> {{ c.tackle_master }}</p>
+	  <p><b>Meets Secretary:</b> {{ c.meets_secretary }}</p>
+	  <p><b>Social Secretary:</b> {{ c.social_secretary }}</p>
+	  <p><b>Training Secretary:</b> {{ c.training_secretary }}</p>
+	  <p><b>Webmaster:</b> {{ c.webmaster }}</p>
+	  <p><b>Librarian:</b> {{ c.librarian }}</p>
+	  <p><b>Lamp Post:</b> {{ c.lamp_post }}</p>
+	  {% if perms.UserPortal.change_committee and perms.UserPortal.delete_committee %}
+		  <span class="w3-container">
+			<a class="w3-button w3-block w3-theme-d4 w3-hover-black w3-half w3-center" style="text-align: left" href="{% url 'CommitteeEdit' pk=c.pk %}">Edit</a>
+			<a class="w3-button w3-block w3-theme-d4 w3-hover-black w3-half w3-center" style="text-align: left" href="{% url 'CommitteeDelete' pk=c.pk %}">Delete</a>
+		  </span>
+	  {% endif %}
+  {% endfor %}
+
+  <p></p>
+
+{% endblock %}
+
+{% block side-content %}
+  {% include 'ActionSets/Committee.html' %}
+  <h2>Committee Email Addresses</h2>
+  <p><b>President:</b> <i>president at camcaving.uk</i></p>
+  <p><b>Senior Treasurer:</b> <i>streasurer at camcaving.uk</i></p>
+  <p><b>Junior Treasurer:</b> <i>jtreasurer at camcaving.uk</i></p>
+  <p><b>Secretary:</b> <i>secretary at camcaving.uk</i></p>
+  <p><b>Tackle Master:</b> <i>tackle at camcaving.uk</i></p>
+  <p><b>Meets Secretary:</b> <i>meets at camcaving.uk</i></p>
+  <p><b>Social Secretary:</b> <i>social at camcaving.uk</i></p>
+  <p><b>Training Officer:</b> <i>training at camcaving.uk</i></p>
+  <p><b>Webmaster:</b> <i>webmaster at camcaving.uk</i></p>
+  <p><b>Librarian:</b> <i>librarian at camcaving.uk</i></p>
+  <h2>Committee Functions</h2>
+  <p><b>President:</b> the president deals with the overall running of the club. Contact them for general enquiries.</p>
+  <p><b>Senior Treasurer:</b> the senior treasurer oversees the running of the club's finances. Please not that enquiries about day-to-day transactions should go to the junior treasurer (bellow).</p>
+  <p><b>Junior Treasurer:</b> the junior treasurer deals with general club finances. Contact them for general enquiries about money.</p>
+  <p><b>(Membership) Secretary:</b> the secretary deals with club membership, BCA insurance, and general paperwork.</p>
+  <p><b>Tackle Master:</b> the tackle master is in charge of the tackle store and its contents. This includes purchasing, maintaining, and retiring gear.</p>
+  <p><b>Meets Secretary:</b> the meets secretary is in charge of club booking of huts and cave permits for meets.<p>
+  <p><b>Social Secretary:</b> the social secretary deals with the club's social calendar above ground. This includes nominating pubs for the weekly pub meets and organising any other social events that take their fancy.</p>
+  <p><b>Training Secretary:</b> the training secretary deals with instruction of caving techniques and organises training sessions.</p>
+  <p><b>Webmaster:</b> the webmaster is responsible for mainting the website. The current website was written in 2019 by Tom Crossley and improved throughout the following year by Wassil Janssen (wj266) and Tom Crossley (tcac2). They are most certainly to blame for anything that doesn't work. Contact them to complain about this.</p>
+  <p><b>Librarian:</b> the librarian looks after our library and its contents. This includes purchasing and cataloging of up-and-coming books in the world of cavig.</p>
+  <p>If you would like more information about the jobs of specific committee members, please follow <a href="{% url 'MiscCommitteeFunctions' %}">this link</a>.</p>
+{% endblock %}

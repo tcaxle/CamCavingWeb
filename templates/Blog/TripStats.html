@@ -1,0 +1,123 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block title %}
+  <title>CUCC | Blog | Trips</title>
+{% endblock %}
+
+{% block main-content %}
+	<h2>{{title}}</h2>
+	<p></p>
+    <div class="trip-stats">
+    	<div>
+    		<h3>Trip Attendance</h3>
+    		<table class="w3-table w3-striped">
+    			<thead>
+    				<td><b>Who</b></td>
+    				<td class="days"><b>Trips</b></td>
+    			</thead>
+    			<tbody>
+    				<tr></tr>
+    				{% for t in trip_attending %}
+    					<tr>
+    						<td>{{t.0}}</td>
+    						<td class="days">{{t.1}}</td>
+    					</tr>
+    				{% endfor %}
+    			</tbody>
+    		</table>
+    	</div>
+    	<div>
+    		<h3 title="Weighted by days">Weighted Trip Attendance</h3>
+    		<table class="w3-table w3-striped">
+    			<thead>
+    				<td><b>Who</b></td>
+    				<td class="days"><b>Trip Days</b></td>
+    			</thead>
+    			<tbody>
+    				<tr></tr>
+    				{% for t in trip_attending_weighted %}
+    					<tr>
+    						<td>{{t.0}}</td>
+    						<td class="days">{{t.1}}</td>
+    					</tr>
+    				{% endfor %}
+    			</tbody>
+    		</table>
+    	</div>
+    	<div>
+    		<h3>Trip Leaders</h3>
+    		<table class="w3-table w3-striped">
+    			<thead>
+    				<td><b>Who</b></td>
+    				<td class="days"><b>Trips</b></td>
+    			</thead>
+    			<tbody>
+    				<tr></tr>
+    				{% for t in trip_leading %}
+    					<tr>
+    						<td>{{t.0}}</td>
+    						<td class="days">{{t.1}}</td>
+    					</tr>
+    				{% endfor %}
+    			</tbody>
+    		</table>
+    	</div>
+    	<div>
+    		<h3>Trip Leaders Weighted</h3>
+    		<table class="w3-table w3-striped">
+    			<thead>
+    				<td><b>Who</b></td>
+    				<td class="days"><b>Trip Days</b></td>
+    			</thead>
+    			<tbody>
+    				<tr></tr>
+    				{% for t in trip_leading_weighted %}
+    					<tr>
+    						<td>{{t.0}}</td>
+    						<td class="days">{{t.1}}</td>
+    					</tr>
+    				{% endfor %}
+    			</tbody>
+    		</table>
+    	</div>
+    	<div style="grid-area: reports">
+    		<h3>Trip Reports</h3>
+    		<table class="w3-table w3-striped">
+    			<thead>
+    				<td><b>Who</b></td>
+    				<td class="days"><b>Reports</b></td>
+    			</thead>
+    			<tbody>
+    				<tr></tr>
+    				{% for t in report_writing %}
+    					<tr>
+    						<td><a href="{% url 'ReportListByAuthor' author=t.0 %}">{{t.0}}</a></td>
+    						<td class="days">{{t.1}}</td>
+    					</tr>
+    				{% endfor %}
+    			</tbody>
+    		</table>
+    	</div>
+    </div>
+{% endblock %}
+
+{% block side-content %}
+		<h2>Navigation</h2>
+		<a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'Trip' %}">Back to Trip List</a>
+		{%if title != "All Years"%}
+			<a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'TripStats' %}">All Years</a>
+		{%endif%}
+
+		<h4>By Years</h4>
+		{% for year in years %}
+			<a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'TripStatsByYear' year=year%}">{{year}}</a>
+		{% endfor %}
+
+		{% if later_years %}
+			<h4>By Ranges</h4>
+			{% for later_year in later_years %}
+				<a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'TripStatsByRange' year_start=year year_end=later_year%}">{{year}}-{{later_year}}</a>
+			{% endfor %}
+		{% endif %}
+{% endblock %}

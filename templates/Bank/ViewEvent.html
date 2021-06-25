@@ -1,0 +1,105 @@
+{% extends 'Base.html' %}
+{% load static %}
+{% load currency %}
+{% load divide %}
+
+{% block title %}
+  <title>CUCC | Bank | View Transaction Group</title>
+{% endblock %}
+
+{% block main-content %}
+  <h1>Viewing: {{ event }}</h1>
+
+  <p><i>Created on {{ event.created_on.date.isoformat }} at {{ event.created_on.time.isoformat }} by {{ event.created_by }}</i></p>
+  <p><b>Date:</b> {{ event.date.date.isoformat }}</p>
+  <p><b>Notes:</b> {{ event.notes }}</p>
+  <p><b>Approved:</b> <i>{% if event.is_approved %}Approved on {{ event.approved_on.date.isoformat }} at {{ event.approved_on.time.isoformat }} by {{ event.approved_by }}{% else %}Awaiting Approval{% endif %}</i></p>
+
+  <table class="w3-table w3-striped w3-card">
+    <tr>
+      <td class="w3-theme-d2"><b>Users:</b><br><i>(creditors)</i></td>
+      <td class="w3-theme-d1" colspan="{{ event.fee_template.custom_currency.all|length }}"><b>Charges/Credits:</b></td>
+      <td class="w3-theme-d2" colspan="{{ event.fee_template.custom_expense.all|length }}"><b>Expenses:</b></td>
+
+    </tr>
+    <tr>
+      <td class="w3-theme-d2"></td>
+      {% for currency in event.fee_template.custom_currency.all %}
+        <td class="w3-theme-d1" style="min-width:120px">{{ currency }} ({{ currency.credit|currency }})</td>
+      {% endfor %}
+      {% for expense in event.fee_template.custom_expense.all %}
+        <td class="w3-theme-d2" style="min-width:120px">{{ expense }}</td>
+      {% endfor %}
+    </tr>
+    {% for user in event.users.all %}
+      <tr>
+        <td class="w3-theme-d2">{{ user }}:</td>
+        {% for currency in event.fee_template.custom_currency.all %}
+          <td style="border-left:1px solid;">{% for entry in entry_list %}{% if entry.account_a == user and entry.account_b == currency.pool and currency == entry.custom_currency %}{{ entry.credit_a|ffdividei:currency.credit }} ({{ entry.credit_a|currency }}){% endif %}{% endfor %}</td>
+        {% endfor %}
+        {% for expense in event.fee_template.custom_expense.all %}
+          <td style="border-left:1px solid;">{% for entry in entry_list %}{% if entry.account_a == user and entry.account_b == expense.pool and expense == entry.custom_expense %}{{ entry.credit_a|currency }}{% endif %}{% endfor %}</td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
+  </table>
+
+<br>
+  <table class="w3-table w3-striped w3-card">
+    <tr class="w3-theme-d3">
+      <th>Account A</th>
+      <th>Credit A</th>
+      <th>Account B</th>
+      <th>Credit B</th>
+      <th>Approved?</th>
+      <th>Heritage</th>
+    </tr>
+    {% for transaction in event.transaction_group.transaction_set.all %}
+      <tr>
+        <td colspan="6"><b><a href="{% url 'ViewTransaction' transaction.transaction_key %}">{{ transaction }}</a></b></td>
+      </tr>
+      {% for entry in transaction.entry_set.all %}
+        <tr>
+          <td><a href="{% url 'ViewAccount' entry.account_a.account_key %}">{{ entry.account_a }}</a></td>
+          <td>{{ entry.credit_a|currency }}</td>
+          <td><a href="{% url 'ViewAccount' entry.account_b.account_key %}">{{ entry.account_b }}</a></td>
+          <td>{{ entry.credit_b|currency }}</td>
+          <td>{{ entry.is_approved }}</td>
+          {% if entry.transaction is not None %}
+            {% if entry.transaction.transaction_group is not None %}
+              {% if entry.transaction.transaction_group.event %}
+                <td><a href="{% url 'ViewEntry' entry.entry_key %}">{{ entry.short_id }}</a>, <a href="{% url 'ViewTransaction' entry.transaction.transaction_key %}">{{ entry.transaction }}</a>, <a href="{% url 'ViewTransactionGroup' entry.transaction.transaction_group.group_key %}">{{ entry.transaction.transaction_group }}</a>, <a href="{% url 'ViewEvent' entry.transaction.transaction_group.event.event_key %}">{{ entry.transaction.transaction_group.event }}</a></td>
+              {% else %}
+                <td><a href="{% url 'ViewEntry' entry.entry_key %}">{{ entry.short_id }}</a>, <a href="{% url 'ViewTransaction' entry.transaction.transaction_key %}">{{ entry.transaction }}</a>, <a href="{% url 'ViewTransactionGroup' entry.transaction.transaction_group.group_key %}">{{ entry.transaction.transaction_group }}</a></td>
+              {% endif %}
+            {% else %}
+              <td><a href="{% url 'ViewEntry' entry.entry_key %}">{{ entry.short_id }}</a>, <a href="{% url 'ViewTransaction' entry.transaction.transaction_key %}">{{ entry.transaction }}</a></td>
+            {% endif %}
+          {% else %}
+            <td><a href="{% url 'ViewEntry' entry.entry_key %}">{{ entry.short_id }}</a></td>
+          {% endif %}
+        </tr>
+      {% endfor %}
+    {% endfor %}
+  </table>
+{% endblock %}
+
+{% block side-content %}
+  <h2>Transaction Group Actions</h2>
+  {% if event.is_editable %}
+    {% if perms.Bank.approve__event %}
+      <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'ToggleApproveEvent' event.event_key %}">Toggle Approved Status</a>
+    {% endif %}
+    {% if perms.Bank.delete__event %}
+      <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'DeleteEvent' event.event_key %}">Delete This Event</a>
+    {% endif %}
+    {% if perms.Bank.change__event %}
+      <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditEventSetup' event.event_key %}">Edit Event Setup</a>
+      <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditEventData' event.event_key %}">Edit Event Data</a>
+    {% endif %}
+  {% else %}
+  <p><i>This transaction is owned by an event. You can only edit the highest level of a financial object. See the "heritage" section for the highest level of this object.</i></p>
+  {% endif %}
+
+  {% include 'ActionSets/Bank.html' %}
+{% endblock %}

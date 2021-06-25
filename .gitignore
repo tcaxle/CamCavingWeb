@@ -1,0 +1,9 @@
+*.cpython-35.pyc
+*.sqlite3
+*.cpython-36.pyc
+__pycache__
+**/__pycache__/
+/Media/Albums/*
+/data.json
+/CamCavingWeb/config.py
+

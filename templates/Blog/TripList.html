@@ -1,0 +1,39 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block title %}
+  <title>CUCC | Blog | Trips</title>
+{% endblock %}
+
+{% block main-content %}
+	<h2>{{title}}</h2>
+	<p></p>
+    {% include 'Blog/MultiTrip.html' %}
+{% endblock %}
+
+{% block side-content %}
+	{% if user.is_authenticated %}
+		<h2>Actions</h2>
+			{% if perms.Blog.add_trip %}
+				<a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'TripAdd' %}">Add a Trip</a>
+			{% endif %}
+	{% endif %}
+
+	<h2>Navigation</h2>
+	<a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'TripStats'%}">Trip Stats</a>
+	{%if title != "All Years"%}
+		<a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'Trip' %}">All Years</a>
+	{%endif%}
+
+	<h4>By Years</h4>
+	{% for year in years %}
+		<a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'TripListByYear' year=year%}">{{year}}</a>
+	{% endfor %}
+
+	{% if later_years %}
+		<h4>By Ranges</h4>
+		{% for later_year in later_years %}
+			<a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'TripListByRange' year_start=year year_end=later_year%}">{{year}}-{{later_year}}</a>
+		{% endfor %}
+	{% endif %}
+{% endblock %}

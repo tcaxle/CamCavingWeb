@@ -1,0 +1,23 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block title %}
+  <title>CUCC | 404 </title>
+{% endblock %}
+
+{% block main-content %}
+  <h1>Error: 404</h1>
+  <p>{{ request.error_404_message }}</p>
+
+{% endblock %}
+
+{% block side-content %}
+  <br>
+  <div class="speech-bubble w3-padding">
+   <p class="w3-large w3-serif w3-text-black">
+   <i>Hi! I'm Clippy, your browser assistant!<br>It looks like you're trying to access a page that doesn't exist!<br>Let me know if there is anything else I can help you with!</i></p>
+  </div>
+  <br>
+  <br>
+  <img class="w3-center" style="display: block; width:95%; margin-left: auto; margin-right: auto;" src="{% static 'Images/Misc/Clippy.png' %}" alt="Clippy">
+{% endblock %}

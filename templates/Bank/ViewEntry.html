@@ -1,0 +1,49 @@
+{% extends 'Base.html' %}
+{% load static %}
+{% load humanize %}
+{% load currency %}
+
+{% block title %}
+  <title>CUCC | Bank | View Account</title>
+{% endblock %}
+
+{% block main-content %}
+  <h1>Viewing: {{ entry.short_id }}</h1>
+  <p><i>Created on {{ entry.created_on.date.isoformat }} at {{ entry.created_on.time.isoformat }} by {{ entry.created_by }}</i></p>
+  <p><b>Date:</b> {{ entry.date.date.isoformat }}</p>
+  <p><b>Account A:</b> <a href="{% url 'ViewAccount' entry.account_a.account_key %}">{{ entry.account_a }}</a>, {{ entry.credit_a|currency }}</p>
+  <p><b>Account B:</b> <a href="{% url 'ViewAccount' entry.account_b.account_key %}">{{ entry.account_b }}</a>, {{ entry.credit_b|currency }}</p>
+  <p><b>Notes:</b> {{ entry.notes }}</p>
+  <p><b>Approved:</b> <i>{% if entry.is_approved %}Approved on {{ entry.approved_on.date.isoformat }} at {{ entry.approved_on.time.isoformat }} by {{ entry.approved_by }}{% else %}Awaiting Approval{% endif %}</i></p>
+  {% if entry.transaction is not None %}
+    {% if entry.transaction.transaction_group is not None %}
+      {% if entry.transaction.transaction_group.event %}
+        <p><b>Heritage:</b> <a href="{% url 'ViewEntry' entry.entry_key %}">{{ entry.short_id }}</a>, <a href="{% url 'ViewTransaction' entry.transaction.transaction_key %}">{{ entry.transaction }}</a>, <a href="{% url 'ViewTransactionGroup' entry.transaction.transaction_group.group_key %}">{{ entry.transaction.transaction_group }}</a>, <a href="{% url 'ViewEvent' entry.transaction.transaction_group.event.event_key %}">{{ entry.transaction.transaction_group.event }}</a></p>
+      {% else %}
+        <p><b>Heritage:</b> <a href="{% url 'ViewEntry' entry.entry_key %}">{{ entry.short_id }}</a>, <a href="{% url 'ViewTransaction' entry.transaction.transaction_key %}">{{ entry.transaction }}</a>, <a href="{% url 'ViewTransactionGroup' entry.transaction.transaction_group.group_key %}">{{ entry.transaction.transaction_group }}</a></p>
+      {% endif %}
+    {% else %}
+      <p><b>Heritage:</b> <a href="{% url 'ViewEntry' entry.entry_key %}">{{ entry.short_id }}</a>, <a href="{% url 'ViewTransaction' entry.transaction.transaction_key %}">{{ entry.transaction }}</a></p>
+    {% endif %}
+  {% else %}
+    <p><b>Heritage:</b> <a href="{% url 'ViewEntry' entry.entry_key %}">{{ entry.short_id }}</a></p>
+  {% endif %}
+{% endblock %}
+
+{% block side-content %}
+  <h2>Entry Actions</h2>
+  {% if entry.is_editable %}
+    {% if perms.Bank.approve__entry %}
+      <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'ToggleApproveEntry' entry.entry_key %}">Toggle Approved Status</a>
+    {% endif %}
+    {% if perms.Bank.delete__entry %}
+      <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'DeleteEntry' entry.entry_key %}">Delete This Entry</a>
+    {% endif %}
+    {% if perms.Bank.change__entry %}
+      <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditEntry' entry.entry_key %}">Edit This Entry</a>
+    {% endif %}
+  {% else %}
+    <p><i>This entry is part of a transaction. You can only edit the highest level of a financial object. See the "heritage" section for the highest level of this object.</i></p>
+  {% endif %}
+  {% include 'ActionSets/Bank.html' %}
+{% endblock %}

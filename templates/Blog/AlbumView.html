@@ -1,0 +1,84 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block title %}
+  <title>CUCC | Blog | Album</title>
+{% endblock %}
+
+{% block side-content %}
+  <h2>Navigation</h2>
+  {% if album.parent %}
+    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'AlbumView' pk=album.parent.pk %}">Parent Album</a>
+  {% endif %}
+  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'Album' %}">Album List</a>
+
+  {% if user.is_authenticated %}
+    <h2>Album Actions</h2>
+    {% if perms.Blog.add_album %}
+      <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'AlbumAdd' %}">Add an Album</a>
+    {% endif %}
+    {% if perms.Blog.edit_album %}
+      <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'AlbumCoverUpdateView' pk=album.pk %}">Edit Cover Image</a>
+    {% endif %}
+    {% if perms.Blog.edit_album %}
+      <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="todo">Edit Album Date</a>
+    {% endif %}
+    {% if perms.Blog.edit_album %}
+      <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="todo">Edit Album Title</a>
+    {% endif %}
+    {% if perms.Blog.edit_album %}
+      <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="todo">Edit Album Parent</a>
+    {% endif %}
+    <!-- {% if perms.Blog.edit_album %}
+      <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="todo">Regenerate Thumbnails</a>
+    {% endif %} -->
+    {% if perms.Blog.edit_album %}
+      <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'UpdateAlbumImages' pk=album.pk %}" title="This will not update sub albums.">Update Album Images</a>
+      <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'UpdateBDImages' pk=album.pk %}" title="This will not update sub albums. Makes sure that all images on the filesystem are present in the database as well.">Update Database Images</a>
+    {% endif %}
+  {% endif %}
+{% endblock %}
+
+{% block main-content %}
+    <h2>{{album.title}}</h2>
+
+    {% if album.trip_set.all%}
+      <p>
+      Referenced in the following trips:
+      {% for trip in album.trip_set.all %}{% if forloop.first %}<a href="{% url 'Trip' %}#trip-{{trip.pk}}">{{trip}}</a>{%else%}, <a href="{% url 'Trip' %}#trip-{{trip.pk}}">{{trip}}</a>{% endif %}{% endfor%}
+      </p>
+    {% endif %}
+
+    <p></p>
+    <div class="image-flexbox">
+      {% for path, album in child_albums %}
+          <a href="{% url 'AlbumView' pk=album.pk %}" style="text-decoration: none !important;">
+            <div style="background-image: url('{{ path }}');" class="album-cover w3-theme-d3 w3-display-container w3-card">
+              <span class="title w3-xxlarge" style="text-shadow:3px 3px 3px #000; text-align: center;"><b>{{ album.title }}</b></span>
+              <span class="w3-center date" style="text-shadow:2px 2px 2px #000"><b>{{ album.date|date:'d/m/Y' }}</b></span>
+            </div>
+          </a>
+      {% endfor %}
+    </div>
+    <p></p>
+
+    <p></p>
+    <div class="image-flexbox">
+      {% for path, image, db_entry in images %}
+          <div class="w3-col m12 l4 w3-responsive w3-mobile w3-third w3-padding">
+            <a href="{{path}}" target="_blank">
+              <img {%if db_entry%}title="{{db_entry.description}}"{%endif%} src="{{image}}" class="w3-image w3-card w3-theme-l3" style="max-height: 225px; max-width: 100%">
+              {% if db_entry %}
+              <div>
+                <a href="{%url 'ImageView' pk=db_entry.pk%}">Details</a>
+                {% if perms.Blog.change_image %}
+                  | <a href="{%url 'ImageEdit' pk=db_entry.pk%}">Edit</a>
+                {% endif %}
+              </div>
+              {% endif %}
+            </a>
+          </div>
+      {% endfor %}
+    </div>
+    <p></p>
+{% endblock %}

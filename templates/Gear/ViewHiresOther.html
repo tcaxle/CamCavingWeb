@@ -1,0 +1,53 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block title %}
+  <title>CUCC | Gear | View Hire Instances</title>
+{% endblock %}
+
+{% block main-content %}
+  <h1>Viewing Hire Instances</h1>
+
+  <h2>Sign Outs</h2>
+  <table class="w3-table w3-striped">
+    <thead class="w3-theme-d3">
+      <th>Hire ID</th>
+      <th>Quantity</th>
+      <th>Signed Out</th>
+    </thead>
+    {% for hire in sign_out_list %}
+      <tr {% if hire.open %}class="w3-red"{% endif %}>
+        <td>{{ hire }}</td>
+        <td>{{ hire.quantity }}</td>
+        <td>
+          {{ hire.signed_out_by.full_name }} ({{ hire.signed_out_by.username }}), {{ hire.signed_out.date }}
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+
+  <h2>Sign Ins</h2>
+  <table class="w3-table w3-striped">
+    <thead class="w3-theme-d3">
+      <th>Hire ID</th>
+      <th>Quantity</th>
+      <th>Signed Out</th>
+    </thead>
+    {% for hire in sign_in_list %}
+      <tr {% if hire.open %}class="w3-red"{% endif %}>
+        <td>{{ hire }}</td>
+        <td>{{ hire.quantity }}</td>
+        <td>
+          {{ hire.signed_in_by.full_name }} ({{ hire.signed_in_by.username }}), {{ hire.signed_in.date }}
+        </td>
+      </tr>
+    {% endfor %}
+  </table>
+
+{% endblock %}
+
+{% block side-content %}
+{% if perms.Gear.edit_hires %}
+  Editing and deleting of Hire Instances can be done through the <a href="/Admin/">Admin Interface</a> by staff users only.
+{% endif %}
+{% endblock %}

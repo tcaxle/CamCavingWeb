@@ -1,0 +1,73 @@
+{% extends 'Base.html' %}
+{% load static %}
+{% load humanize %}
+{% load currency %}
+
+{% block title %}
+  <title>CUCC | Bank | View Account</title>
+{% endblock %}
+
+{% block main-content %}
+  <h1>Viewing account: {{ account }}</h1>
+
+  <div class="w3-bar">
+    <form method="GET">
+      {% csrf_token %}
+      <div class="w3-bar-item w3-mobile w3-theme-d3">From:</div>
+      <input class="w3-input w3-bar-item w3-mobile" type="date" name="start_date" value="{{ start_date.date.isoformat }}">
+      <div class="w3-bar-item w3-mobile w3-theme-d3">To:</div>
+      <input class="w3-input w3-bar-item w3-mobile" type="date" name="end_date" value="{{ end_date.date.isoformat }}">
+      <input class="w3-button w3-block w3-theme-d4 w3-hover-black w3-bar-item w3-mobile" type="submit" name="account" value="Update" formaction="{% url 'ViewAccount' account.account_key %}">
+      <div class="w3-bar-item w3-mobile">(Leave blank to see all entrys)</div>
+    </form>
+  </div>
+
+  <p>Showing data between <b>{{ start_date.date.isoformat }} {% if view_earliest %}(Start of Records){% endif %}</b> and <b>{{ end_date.date.isoformat }} {% if view_latest %}(End of Records){% endif %}</b></p>
+  <p>End Balance: <b>{{ end_balance|currency }}</b></p>
+  <p>Start Balance: <b>{{ start_balance|currency }}</b></p>
+  <table class="w3-table w3-table-all w3-striped w3-card">
+    <tr class="w3-theme-d3">
+      <th>Date</th>
+      <th>Account A</th>
+      <th>Credit A</th>
+      <th>Account B</th>
+      <th>Credit B</th>
+      <th>Approved?</th>
+      <th>Heritage</th>
+    </tr>
+    {% for entry in entry_set %}
+    <tr>
+      <td>{{ entry.date.date.isoformat }}</td>
+      <td><a href="{% url 'ViewAccount' entry.account_a.account_key %}">{% if entry.account_a == account %}<b>{{ entry.account_a }}</b>{% else %}{{ entry.account_a }}{% endif %}</a></td>
+      <td>{{ entry.credit_a|currency }}</td>
+      <td><a href="{% url 'ViewAccount' entry.account_b.account_key %}">{% if entry.account_b == account %}<b>{{ entry.account_b }}</b>{% else %}{{ entry.account_b }}{% endif %}</a></td>
+      <td>{{ entry.credit_b|currency }}</td>
+      <td>{{ entry.is_approved }}</td>
+      {% if entry.transaction is not None %}
+        {% if entry.transaction.transaction_group is not None %}
+          {% if entry.transaction.transaction_group.event %}
+            <td><a href="{% url 'ViewEntry' entry.entry_key %}">{{ entry.short_id }}</a>, <a href="{% url 'ViewTransaction' entry.transaction.transaction_key %}">{{ entry.transaction }}</a>, <a href="{% url 'ViewTransactionGroup' entry.transaction.transaction_group.group_key %}">{{ entry.transaction.transaction_group }}</a>, <a href="{% url 'ViewEvent' entry.transaction.transaction_group.event.event_key %}">{{ entry.transaction.transaction_group.event }}</a></td>
+          {% else %}
+            <td><a href="{% url 'ViewEntry' entry.entry_key %}">{{ entry.short_id }}</a>, <a href="{% url 'ViewTransaction' entry.transaction.transaction_key %}">{{ entry.transaction }}</a>, <a href="{% url 'ViewTransactionGroup' entry.transaction.transaction_group.group_key %}">{{ entry.transaction.transaction_group }}</a></td>
+          {% endif %}
+        {% else %}
+          <td><a href="{% url 'ViewEntry' entry.entry_key %}">{{ entry.short_id }}</a>, <a href="{% url 'ViewTransaction' entry.transaction.transaction_key %}">{{ entry.transaction }}</a></td>
+        {% endif %}
+      {% else %}
+        <td><a href="{% url 'ViewEntry' entry.entry_key %}">{{ entry.short_id }}</a></td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+  </table>
+{% endblock %}
+
+{% block side-content %}
+  <h2>Account Actions</h2>
+  {% if perms.Bank.change__account %}
+    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditAccount' account.account_key %}">Edit This Account</a>
+  {% endif %}
+  {% if perms.Bank.delete__account %}
+    <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'DeleteAccount' account.account_key %}">Delete This Account</a>
+  {% endif %}
+  {% include 'ActionSets/Bank.html' %}
+{% endblock %}

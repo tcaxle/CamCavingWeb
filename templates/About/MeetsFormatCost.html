@@ -1,0 +1,131 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block title %}
+  <title>CUCC | About | Meets: Format & Cost</title>
+{% endblock %}
+
+{% block main-content %}
+  <h1>Caving Meets Format</h1>
+  <p>There are four main stages of a standard CUCC Caving Meet:</p>
+  <ul>
+    <li>Planning:</li>
+    <ul>
+      <li>The committe, meets secretary, or other members of the club decide they would like to go caving.</li>
+      <li>They decide on the dates and location of the meet.</li>
+      <li>They book a caving hut or other suitable accomodation.</li>
+      <li>They publish their intentions to the rest of the club.</li>
+      <li>Other club members sign up for the trip until the trip is full.</li>
+    </ul>
+    <li>Packing:</li>
+    <ul>
+      <li>The participating members meet at the Tackle Store, usually on the Thursday evening before the weekend of the trip.</li>
+      <li>They bring all of their necessary personal gear with them, and pack their bags at the Tackle Store ready to leave the following day.</li>
+      <li>They also pack any necessary club kit, such as ropes or ladders.</li>
+      <li>Committee members (defaults to the Tackle Master) issue gear for hire to people who do not possess their own.</li>
+      <li>All club-owned gear that is taken is logged in the relevant system.</li>
+    </ul>
+    <li>The Meet:</li>
+    <ul>
+      <li>The participating members arrive, once more, at the Tackle Store. This time, on Friday evening (usually around 18:00-19:00).</li>
+      <li>They gather their gear and pile it into the boot of whichever car they are travelling in.</li>
+      <li>Once everyone has finished faffing, they all set off in the relevant cars to drive across the country to the Caving Hut.</li>
+      <li>They arrive at the hut late on Friday night.</li>
+      <li>Most weekends consist of two trips: Saturday and Sunday.</li>
+      <li><b>Saturday:</b> this tends to be when longer and more daring trips take place. Members wake up, eat a large breakfast (to account for the difficulty of bringing lunch into caves), leave their callout, and head out to explore boundless caverns. They return to the hut after their trip and, once everyone is safely out of the cave and callouts cancelled, repeat the format of Friday night.</li>
+      <li><b>Sunday:</b> due to time limitations, Sunday is usually the day for shorter and more relaxed trips. This allows for a return to Cambridge at a not too unreasonable hour.</li>
+      <li>Once everyone is back in Cambridge (usually, we return to the Tackle Store), they part ways.</li>
+    </ul>
+    <li>The Aftermath</li>
+    <ul>
+      <li>On an evening soon after the weekend (usually Tuesday at 19:00 ish before the Pubmeet), the participating members (and anyone else they can persuade to turn up) gather once more at the Tackle Store.</li>
+      <li>Anyone who hired equipment brings it with them (all fabric items having been washed) to return to the Store.</li>
+      <li>All rope that was taken underground is uncoiled, inspected, washed, chained, and hung up on the pegs, as per the Tackle Store Guidelines.</li>
+      <li>Members who store peronal equipment in the Tackle Store Attic may put it back at their leisure.</li>
+    </ul>
+  </ul>
+
+  <h1>Costs</h1>
+  <p>Caving in the UK requires public liability insurance provided by the British caving association, who operate on the calendar year. As such club membership is also run Jan - Dec.</p>
+  <p>As a novice the club will generously subsidise you for your first term's insurance when you become a member. <b>This means that your first trip will cost £10 extra.</b></p>
+
+  <h2>Membership Fees</h2>
+  <div class="w3-responsive">
+    <table class="w3-table w3-striped">
+      <thead>
+        <tr class="w3-theme-d3">
+          <th>Type</th>
+          <th>Period</th>
+          <th>Student Rate</th>
+          <th>Non-Student Rate</th>
+        </tr>
+      </thead>
+      <tr>
+        <td>Newcomer Deal</td>
+        <td>3 Months Insurance (Oct - Dec)</td>
+        <td>£10</td>
+        <td>£10</td>
+      </tr>
+      <tr>
+        <td>Club Membership</td>
+        <td>1 Year (Jan - Dec)</td>
+        <td>£10</td>
+        <td>£10</td>
+      </tr>
+      <tr>
+        <td>Insurance</td>
+        <td>1 Year (Jan - Dec)</td>
+        <td>£8</td>
+        <td>£17</td>
+      </tr>
+    </table>
+  </div>
+
+  <h2>Meet Fees</h2>
+  <p>For caving (weekend) meets, <b>the cost is £35.00</b>. This includes transport, accomodation, two breakfasts, and tea on Saturday night.</p>
+  <p>For other meets, such as the Pubmeet or Climbing Socials, Members are expected to cover their own costs at their discretion.</p>
+
+  <h2>Equipment Hire Fees</h2>
+  <p>Gear renatl fees are per day of use underground. Access to communal club kit (rope, krabs, etc.) is included in your membership fee.</p>
+  <div class="w3-responsive">
+    <table class="w3-table w3-striped">
+      <thead class="w3-theme-d3">
+        <tr>
+          <th>Item</th>
+          <th>Cost</th>
+        </tr>
+      </thead>
+      <tr>
+        <td>Light</td>
+        <td>£0.50</td>
+      </tr>
+      <tr>
+        <td>Undersuit, Oversuit, Helmet, Wellies Kneepads, and Belt</td>
+        <td>£1.50 total</td>
+      </tr>
+      <tr>
+        <td>SRT kit with Harness</td>
+        <td>£1.00</td>
+      </tr>
+    </table>
+  </div>
+
+  <h2>Questions?</h2>
+  <p>Please contact the Junior Treasurer.</p>
+{% endblock %}
+
+{% block side-content %}
+  <h2>Checklists for Caving Meets</h2>
+  <p>Please read our <a href="{% static 'Documents/GuidesForNovices/GuideForNoviceCavers.pdf' %}">Guide for Novice Cavers (pdf)</a> for a comprehensive guide to caving weekends.</p>
+  <p>Please read our <a href="{% url 'MiscNoviceChecklist' %}">Novice Caver Checklist for a guide to what to pack for a weekend.</a></p>
+
+  <h2>FAQ</h2>
+  <ul>
+    <li><b>Q: How much will my first weekend meet cost me?</b><br> A: £49 (£35 Standard Fee + £10 Insurance + £1 Light + £3 Caving Clothing)</li>
+    <li><b>Q: How much time does a weekend meet take up?</b><br> A: The whole weekend (Friday night - Sunday night) plus two short evening sessions (half-hour to an hour) at The Tackle Store.</li>
+    <li><b>Q: How much will subsequent weekend meets cost me?</b><br> A: £39 (£35 Standard Fee + £1 Light + £3 Caving Clothing)</li>
+    <li><b>Q: Where do we stay for the weekend?</b><br> A: In Caving Huts. These are similar to youth hostels, but are situated near to popular caving areas in the UK.</li>
+    <li><b>Q: How do we get to the Caving Huts?</b><br> A: In Cars. Members of the club who own cars drive members of the club who do not. On rare occasions, when we don't have enough drivers, we hire vehicles.</li>
+    <li><b>Q: I'm a meet leader and don't know what to do!</b> A: Don't Panic. Read the <a href="{% url 'MiscLeaderChecklist' %}">Meet Leader Checklist</a>.</li>
+  </ul>
+{% endblock %}

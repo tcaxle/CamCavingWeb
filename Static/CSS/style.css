@@ -1,0 +1,197 @@
+
+
+.w3-theme-l5 {color:#000 !important; background-color:#f5f8fa !important}
+.w3-theme-l4 {color:#000 !important; background-color:#dde8ee !important}
+.w3-theme-l3 {color:#000 !important; background-color:#bcd1dc !important}
+.w3-theme-l2 {color:#000 !important; background-color:#9abacb !important}
+.w3-theme-l1 {color:#fff !important; background-color:#78a3ba !important}
+.w3-theme-d1 {color:#fff !important; background-color:#4e7e97 !important}
+.w3-theme-d2 {color:#fff !important; background-color:#457087 !important}
+.w3-theme-d3 {color:#fff !important; background-color:#3d6276 !important}
+.w3-theme-d4 {color:#fff !important; background-color:#345465 !important}
+.w3-theme-d5 {color:#fff !important; background-color:#2b4654 !important}
+
+.w3-theme-light {color:#000 !important; background-color:#f5f8fa !important}
+.w3-theme-dark {color:#fff !important; background-color:#2b4654 !important}
+.w3-theme-action {color:#fff !important; background-color:#2b4654 !important}
+
+.w3-theme {color:#fff !important; background-color:#578ca9 !important}
+.w3-text-theme {color:#578ca9 !important}
+.w3-border-theme {border-color:#578ca9 !important}
+
+.w3-hover-theme:hover {color:#fff !important; background-color:#578ca9 !important}
+.w3-hover-text-theme:hover {color:#578ca9 !important}
+.w3-hover-border-theme:hover {border-color:#578ca9 !important}
+
+.w3-earth {background: repeating-linear-gradient(
+  45deg,
+  #4CAF50,
+  #4CAF50 10px,
+  #ffeb3b 10px,
+  #ffeb3b 20px
+  )}
+
+body {background-color: #2b4654;}
+
+p {text-align: justify;}
+
+hr {
+  display: block;
+  margin-top: 0.5em;
+  margin-bottom: 0.5em;
+  margin-left: auto;
+  margin-right: auto;
+  border-style: inset;
+  border-width: 1px;
+}
+
+.speech-bubble {
+	position: relative;
+	background: #FAF9A6;
+	border-radius: .4em;
+}
+
+.speech-bubble:after {
+	content: '';
+	position: absolute;
+	bottom: 0;
+	left: 50%;
+	width: 0;
+	height: 0;
+	border: 25px solid transparent;
+	border-top-color: #FAF9A6;
+	border-bottom: 0;
+	margin-left: -25px;
+	margin-bottom: -25px;
+}
+
+.image-flexbox {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.image-flexbox > div {
+  display: grid;
+  grid-template-areas: 
+    "image"
+    "actions";
+  grid-row-gap: 0.5em;
+  justify-items: center;
+}
+
+.album-cover {
+  display: grid;
+  grid-template-areas: 
+    "title"
+    "date";
+  grid-template-rows: 0.5fr 0.5fr;
+  grid-row-gap: 1em;
+  margin: 0.5em;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  width: 300px;
+  height: 225px;
+}
+
+.album-cover > .title {
+  grid-area: title;
+  justify-self: center;
+  align-self: end;
+}
+
+.album-cover > .date {
+  grid-area: date;
+  justify-self: center;
+  align-self: start;
+}
+
+.album_image {
+  display: grid;
+  grid-template-areas: 
+    "title"
+    "date";
+  grid-template-rows: 0.5fr 0.5fr;
+  grid-row-gap: 1em;
+  margin: 0.5em;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  max-width: 300px;
+  max-height: 225px;
+}
+
+.image-flexbox-cover-set {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.image-flexbox-cover-set > div {
+  display: grid;
+  grid-template-areas: 
+    "image"
+    "button";
+  grid-template-rows: 225px 3em;
+  grid-row-gap: 1em;
+  margin: 0.5em;
+  width: 300px;
+  justify-items: center;
+  /*height: 225px;*/
+}
+
+.image-flexbox-cover-set > div > img {
+  align-self: end;
+}
+
+.single-trip {
+  display: grid;
+  grid-template-areas:
+  "title title leader"
+  "label-1 attendees attendees"
+  "label-2 posts album";
+  grid-column-gap: 1em;
+  grid-row-gap: 1em;
+  grid-template-columns: auto 1fr auto;
+  margin-bottom: 1em;
+}
+
+.single-trip-title {
+  grid-area: title;
+}
+
+.single-trip-leader {
+  grid-area: leader;
+  justify-self: end;
+}
+
+.single-trip-attendees {
+  grid-area: attendees;
+  justify-self: start;
+}
+
+.single-trip-album {
+  grid-area: album;
+  justify-self: end;
+}
+
+.trip-stats {
+  display: grid;
+  grid-template-areas:
+    "trips trips-weighted"
+    "leads leads-weighted"
+    "reports reports";
+  grid-template-columns: 0.5fr 0.5fr;
+  grid-column-gap: 2em;
+  grid-row-gap: 2em;
+}
+
+.trip-stats > div > table > * > tr > td.days {
+  text-align: right;
+  padding-right: 1em;
+}

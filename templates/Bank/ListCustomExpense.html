@@ -1,0 +1,33 @@
+{% extends 'Base.html' %}
+{% load static %}
+{% load humanize %}
+{% load currency %}
+
+{% block title %}
+  <title>CUCC | Bank | List Custom Espenses</title>
+{% endblock %}
+
+{% block main-content %}
+  <h1>Custom Espenses</h1>
+
+  <table class="w3-table w3-table-all w3-striped w3-card">
+    <tr class="w3-theme-d3">
+      <th>Name</th>
+      <th>Pool</th>
+      <th>Actions</th>
+    </tr>
+    {% for expense in expense_list %}
+    <tr>
+      <td>{{ expense.name }}</td>
+      <td>{{ expense.pool }}</td>
+      <td><a class="w3-button w3-theme-d4 w3-hover-black" href="{% url 'EditCustomExpense' expense.expense_key %}">Edit</a><a class="w3-button w3-theme-d4 w3-hover-black" href="{% url 'DeleteCustomExpense' expense.expense_key %}">Delete</a></td>
+    </tr>
+    {% endfor %}
+  </table>
+{% endblock %}
+
+{% block side-content %}
+  <h2>Custom Currency Actions</h2>
+  <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'CreateCustomExpense' %}">Add New Custom Expense</a>
+  {% include 'ActionSets/Bank.html' %}
+{% endblock %}

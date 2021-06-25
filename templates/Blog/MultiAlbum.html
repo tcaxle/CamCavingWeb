@@ -1,0 +1,17 @@
+{% if albums %}
+  <p></p>
+  <div class="image-flexbox">
+    {% for path, album in albums %}
+        <a href="{% url 'AlbumView' pk=album.pk %}" style="text-decoration: none !important;">
+          <div style='background-image: url("{{ path }}");' class="album-cover w3-theme-d3 w3-display-container w3-card">
+            <span class="title w3-xxlarge" style="text-shadow:3px 3px 3px #000; text-align: center;"><b>{{ album.title }}</b></span>
+            <span class="w3-center date" style="text-shadow:2px 2px 2px #000"><b>{{ album.date|date:'d/m/Y' }}</b></span>
+          </div>
+        </a>
+    {% endfor %}
+  </div>
+  <p></p>
+
+{% else %}
+  <p>No images found</p>
+{% endif %}

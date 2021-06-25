@@ -1,0 +1,15 @@
+{% load i18n %}
+
+<div id="CookielawBanner"  class="w3-card-4 w3-padding w3-red">
+    <div>
+        <h3>Cookies Disclaimer</h3>
+        <p>This site uses the following cookies, which are stored on your device:</p>
+        <ul>
+          <li><b>CSRF Token:</b> This protects you from <a href="https://en.wikipedia.org/wiki/Cross-site_request_forgery">Cross Site Request Forgeries</a></li>
+          <li><b>Session ID:</b> This allows the site to verify whether you are logged on</li>
+          <li><b>Cookie Acceptance Cookie:</b> This means that you only see this banner once by allowing the site to check if you have already clicked the accept button below.</li>
+        </ul>
+        <p>By continuing to use this site without modifying your browser settings to reject cookies, you grant us the right to store these cookies on your device.</p>
+        <a class="w3-button w3-mobile w3-hover-black w3-theme-d3" href="javascript:Cookielaw.createCookielawCookie();">{% trans "COOKIE_INFO_OK" %}</a>
+    </div>
+</div>

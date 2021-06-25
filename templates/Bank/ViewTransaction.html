@@ -1,0 +1,72 @@
+{% extends 'Base.html' %}
+{% load static %}
+{% load currency %}
+
+{% block title %}
+  <title>CUCC | Bank | View Transaction</title>
+{% endblock %}
+
+{% block main-content %}
+  <h1>Viewing: {{ transaction }}</h1>
+
+  <p><i>Created on {{ transaction.created_on.date.isoformat }} at {{ transaction.created_on.time.isoformat }} by {{ transaction.created_by }}</i></p>
+  <p><b>Date:</b> {{ transaction.date.date.isoformat }}</p>
+  <p><b>Notes:</b> {{ transaction.notes }}</p>
+  <p><b>Approved:</b> <i>{% if transaction.is_approved %}Approved on {{ transaction.approved_on.date.isoformat }} at {{ transaction.approved_on.time.isoformat }} by {{ transaction.approved_by }}{% else %}Awaiting Approval{% endif %}</i></p>
+  {% if transaction.transaction_group is not None %}
+    <p><b>Parent:</b> <a href="{% url 'ViewTransactionGroup' transaction.transaction_group.group_key %}">{{ transaction.transaction_group }}</a></p>
+  {% endif %}
+
+  <table class="w3-table w3-striped w3-card">
+    <tr class="w3-theme-d3">
+      <th>Account A</th>
+      <th>Credit A</th>
+      <th>Account B</th>
+      <th>Credit B</th>
+      <th>Approved?</th>
+      <th>Heritage</th>
+    </tr>
+    {% for entry in transaction.entry_set.all %}
+    <tr>
+      <td><a href="{% url 'ViewAccount' entry.account_a.account_key %}">{{ entry.account_a }}</a></td>
+      <td>{{ entry.credit_a|currency }}</td>
+      <td><a href="{% url 'ViewAccount' entry.account_b.account_key %}">{{ entry.account_b }}</a></td>
+      <td>{{ entry.credit_b|currency }}</td>
+      <td>{{ entry.is_approved }}</td>
+      {% if entry.transaction is not None %}
+        {% if entry.transaction.transaction_group is not None %}
+          {% if entry.transaction.transaction_group.event %}
+            <td><a href="{% url 'ViewEntry' entry.entry_key %}">{{ entry.short_id }}</a>, <a href="{% url 'ViewTransaction' entry.transaction.transaction_key %}">{{ entry.transaction }}</a>, <a href="{% url 'ViewTransactionGroup' entry.transaction.transaction_group.group_key %}">{{ entry.transaction.transaction_group }}</a>, <a href="{% url 'ViewEvent' entry.transaction.transaction_group.event.event_key %}">{{ entry.transaction.transaction_group.event }}</a></td>
+          {% else %}
+            <td><a href="{% url 'ViewEntry' entry.entry_key %}">{{ entry.short_id }}</a>, <a href="{% url 'ViewTransaction' entry.transaction.transaction_key %}">{{ entry.transaction }}</a>, <a href="{% url 'ViewTransactionGroup' entry.transaction.transaction_group.group_key %}">{{ entry.transaction.transaction_group }}</a></td>
+          {% endif %}
+        {% else %}
+          <td><a href="{% url 'ViewEntry' entry.entry_key %}">{{ entry.short_id }}</a>, <a href="{% url 'ViewTransaction' entry.transaction.transaction_key %}">{{ entry.transaction }}</a></td>
+        {% endif %}
+      {% else %}
+        <td><a href="{% url 'ViewEntry' entry.entry_key %}">{{ entry.short_id }}</a></td>
+      {% endif %}
+    </tr>
+    {% endfor %}
+  </table>
+{% endblock %}
+
+{% block side-content %}
+  <h2>Transaction Actions</h2>
+  {% if transaction.is_editable %}
+    {% if perms.Bank.approve__transaction %}
+      <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'ToggleApproveTransaction' transaction.transaction_key %}">Toggle Approved Status</a>
+    {% endif %}
+    {% if perms.Bank.delete__transaction %}
+      <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'DeleteTransaction' transaction.transaction_key %}">Delete This Transaction</a>
+    {% endif %}
+    {% if perms.Bank.change__transaction %}
+      <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditTransactionCreditor' transaction.transaction_key %}">Edit Transaction Creditor</a>
+      <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditTransactionDebtor' transaction.transaction_key %}">Edit Transaction Debtors</a>
+      <a class="w3-button w3-block w3-theme-d4 w3-hover-black" style="text-align: left" href="{% url 'EditTransactionData' transaction.transaction_key %}">Edit Transaction Data</a>
+    {% endif %}
+  {% else %}
+    <p><i>This transaction is part of a transaction group. You can only edit the highest level of a financial object. See the "heritage" section for the highest level of this object.</i></p>
+  {% endif %}
+  {% include 'ActionSets/Bank.html' %}
+{% endblock %}

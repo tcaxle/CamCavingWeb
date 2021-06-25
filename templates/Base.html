@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% load static %}
+  {% block title %}
+  {% load cookielaw_tags %}
+  {% endblock %}
+
+  <meta name="description" content="{% block meta %}{% endblock %}">
+
+  <!--favicon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="{% static "favicon/apple-touch-icon.png" %}">
+  <link rel="icon" type="image/png" sizes="32x32" href="{% static "favicon/favicon-32x32.png" %}">
+  <link rel="icon" type="image/png" sizes="16x16" href="{% static "favicon/favicon-16x16.png" %}">
+  <link rel="manifest" href="{% static "favicon/site.webmanifest" %}">
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- CSS Import -->
+  <link href="{% static "cookielaw/css/cookielaw.css"%}" rel="stylesheet" />
+  <link rel="stylesheet" type="text/css" href="{% static 'CSS/w3.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'CSS/fonts.css' %}">
+  <link rel="stylesheet" type="text/css" href="{% static 'CSS/style.css' %}">
+  <link rel="stylesheet" href="{% static 'CSS/all.css' %}">
+
+  <!-- JS Import -->
+  <script src="{% static "cookielaw/js/cookielaw.js"%}" type="text/javascript"></script>
+  <script defer src="{% static 'JS/all.js' %}"></script>
+
+  <style>
+  html,body,h1,h2,h3,h4,h5,h6 {font-family: "Roboto", sans-serif;}
+  .w3-sidebar {
+    z-index: 3;
+    width: 250px;
+    top: 43px;
+    bottom: 0;
+    height: inherit;
+  }
+  </style>
+</head>
+
+<body>
+  <!-- Navbar -->
+  <header>
+    <div class="w3-bar w3-theme-d4 w3-large w3-card-4 w3-mobile">
+
+      <!-- Home -->
+      <a href="{% url 'Home' %}" class="w3-bar-item w3-button w3-theme-d4 w3-hover-black"><i class="fas fa-home"></i> <span class=" w3-hide-medium">CUCC</span></a>
+
+      <div class="w3-hide-small">
+        {% include 'NavBarContent.html' %}
+      </div>
+
+      <!-- Hamburger -->
+      <a id="hamburger_open" href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hide-large w3-hide-medium w3-hover-black w3-show" onclick="HamburgerToggle()"><i class="fas fa-bars"></i></a>
+      <a id="hamburger_close" href="javascript:void(0)" class="w3-bar-item w3-button w3-right w3-hover-black w3-hide-large w3-hide-medium w3-hide" onclick="HamburgerToggle()"><i class="fas fa-times"></i></a>
+      <div id="navbar_mobile" class="w3-bar-block w3-hide w3-hide-large w3-hide-medium w3-card-4">
+        {% include 'NavBarContent.html' %}
+      </div>
+
+      <!-- for those delicate wooks who don't like JS -->
+      <noscript>
+        <div class="w3-hide-large w3-hide-medium">
+          {% include 'NavBarContent.html' %}
+        </div>
+      </noscript>
+
+    </div>
+
+    <script>
+      function HamburgerToggle() {
+        var x = document.getElementById("navbar_mobile");
+        if (x.className.indexOf("w3-show") == -1) {
+          x.className += " w3-show";
+        } else {
+          x.className = x.className.replace(" w3-show", "");
+        }
+
+        var x = document.getElementById("hamburger_open");
+        if (x.className.indexOf("w3-show") == -1) {
+          x.className += " w3-show";
+        } else {
+          x.className = x.className.replace(" w3-show", " w3-hide");
+        }
+
+        var x = document.getElementById("hamburger_close");
+        if (x.className.indexOf("w3-show") == -1) {
+          x.className += " w3-show";
+        } else {
+          x.className = x.className.replace(" w3-show", " w3-hide");
+        }
+      }
+    </script>
+
+
+  </header>
+
+  <!-- Main content. Side bars are hidden when medium and small. Content goes vertical when small. -->
+  <div class="w3-main w3-theme-dark">
+
+    <div class="w3-row">
+      <div class="w3-col w3-hide-medium w3-hide-small" style="width:100px">
+        <p></p>
+      </div>
+      <div class="w3-col w3-right w3-hide-medium w3-hide-small" style="width:100px">
+        <p></p>
+      </div>
+      <div class="w3-rest" style="overflow-x:auto;">
+        {% cookielaw_banner %}
+        <div class="w3-cell-row">
+          <div class="w3-cell w3-container w3-theme-d3 w3-card-4 w3-mobile" style="width:25%;">
+            {% block side-content %}
+            {% endblock %}
+            <br>
+          </div>
+
+          <div class="w3-cell w3-container w3-theme-l4 w3-card-4 w3-mobile" style="width:75%;">
+
+            {% block main-content %}
+            {% endblock %}
+            <br>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
+      <div class="w3-container w3-theme-d4 w3-padding-16 w3-center w3-card-4">
+        <h4><b>Cambridge University Caving Club 2020</b></h4>
+        <p style="text-align: center"><i>Powered by:</i><br><i class="fas fa-angle-double-left"></i> W3.CSS | django | FontAwesome | git <i class="fas fa-angle-double-right"></i></p>
+      </div>
+
+    </footer>
+
+  <!-- END MAIN -->
+  </div>
+
+</body>
+</html>

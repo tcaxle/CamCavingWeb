@@ -1,0 +1,54 @@
+{% extends 'Bank/AddTransactionGroup/AddTransactionGroupBase.html' %}
+{% load static %}
+
+{% block form %}
+  <h2>Input Data</h2>
+  <form method="post" action="{% url 'CreateTransactionGroupAction' %}">
+  {% csrf_token %}
+  {% for creditor in creditor_list %}
+    <input type="hidden" name="CREDITOR:{{ creditor.account_key }}" value="creditor">
+  {% endfor %}
+  {% for debtor in debtor_list %}
+    <input type="hidden" name="DEBTOR:{{ debtor.account_key }}" value="debtor">
+  {% endfor %}
+  <table class="w3-table w3-striped">
+    <tr>
+      <td>Date:</td>
+      <td><input class="w3-input" type="date" name="date" value="{{ date.date.isoformat }}"></td>
+    </tr>
+  </table>
+  <div class="w3-panel w3-yellow w3-card-4">
+    <p><b>Tip</b> - The amount entered into each cell of the table is the amount that the creditor account should be credited by. The corresponding credit/debit to the debtors will be calculated automatically. Each row represents a many-to-one transaction.</p>
+  </div>
+  <table class="w3-table w3-striped">
+    <tr>
+      <td class="w3-theme-d2"><b>Creditors:</b></td>
+      <td class="w3-theme-d1" colspan="{{ debtor_list|length }}"><b>Debtors:</b></td>
+    </tr>
+    <tr>
+      <td class="w3-theme-d2" style="min-width:120px"></td>
+      {% for debtor in debtor_list %}
+        <td class="w3-theme-d1" style="min-width:120px">{{ debtor }}</td>
+      {% endfor %}
+    </tr>
+    {% for creditor in creditor_list %}
+      <tr>
+        <td class="w3-theme-d2">{{ creditor }}:</td>
+        {% for debtor in debtor_list %}
+          <td class="w3-theme-l3"><input class="w3-input" type="number" step="0.01" name="AMOUNT:{{ debtor.account_key }}:{{ creditor.account_key }}"></td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
+  </table>
+  <br>
+  <table class="w3-table w3-striped">
+    <tr>
+      <td>Notes:<br><i>Be consice</i></td>
+      <td><input class="w3-input" type="textarea" name="notes"></td>
+    </tr>
+  </table>
+  <div class="w3-padding-16">
+    <button class="w3-button w3-theme-d3 w3-hover-black w3-mobile" type="submit">Submit</button>
+  </div>
+  </form>
+{% endblock %}

@@ -1,0 +1,31 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block title %}
+  <title>CUCC | Portal | Dashboard</title>
+{% endblock %}
+
+{% block main-content %}
+  <h1>Welcome {{ user.full_name }}</h1>
+
+  <h2>Your Profile</h2>
+  <p><b>Username:</b> {{ user.username }}</p>
+  <p><b>Full Name:</b> {{ user.full_name }}</p>
+  <p><b>Email Address:</b> {{ user.email }}</p>
+  <p><b>Club Position:</b> {{ user.rank_display }}</p>
+  <p><b>Club Status:</b> {{ user.status }}</p>
+  <p><b>Gear Tape Colours:</b>
+    {% if user.tape_colour_1 != '' %}<span style="border:1px solid black" class="w3-padding w3-{{ user.tape_colour_1 }}">{{ user.tape_colour_1 }}</span>{% endif %}
+    {% if user.tape_colour_2 != '' %}<span style="border:1px solid black" class="w3-padding w3-{{ user.tape_colour_2 }}">{{ user.tape_colour_2 }}</span>{% endif %}
+    {% if user.tape_colour_3 != '' %}<span style="border:1px solid black" class="w3-padding w3-{{ user.tape_colour_3 }}">{{ user.tape_colour_3 }}</span>{% endif %}
+  </p>
+  <p><b>Bio:</b> {{ user.bio }}</p>
+{% endblock %}
+
+{% block side-content %}
+  {% include 'ActionSets/Profile.html' %}
+  {% include 'ActionSets/Blog.html' %}
+  {% include 'ActionSets/Committee.html' %}
+  {% include 'ActionSets/Gear.html' %}
+  {% include 'ActionSets/Bank.html' %}
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'Base.html' %}
+{% load static %}
+
+{% block title %}
+  <title>CUCC | Meets | Trip Logs</title>
+{% endblock %}
+
+{% block main-content %}
+  <h1>Caving Trip Logs</h1>
+  {% include 'Blog/PostList.html' %}
+
+{% endblock %}
+
+{% block side-content %}
+  {% include 'ActionSets/Blog.html' %}
+{% endblock %}

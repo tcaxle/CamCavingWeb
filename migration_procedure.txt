@@ -1,0 +1,6 @@
+0. created postgres account through SRCF control panel
+1. created file config.py in CamCavingWeb to store credentials for postgres
+2a. https://dev.to/coderasha/how-to-migrate-data-from-sqlite-to-postgresql-in-django-182h
+2b. https://www.vphventures.com/how-to-migrate-your-django-project-from-sqlite-to-postgresql/
+3. replace ' manage.py dumpdata > db.json' with 'manage.py dumpdata -e=Gear.hiresupport --indent=4 > data.json'
+4. made data.json file 'chmod o-r'
